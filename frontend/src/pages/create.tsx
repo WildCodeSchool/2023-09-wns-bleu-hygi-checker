@@ -1,3 +1,4 @@
+import Layout from "@/components/Layout";
 import { useAddTestMutation } from "@/types/graphql";
 import { useState } from "react";
 
@@ -23,7 +24,7 @@ export default function ReadPage() {
   // };
 
   return (
-    <main>
+    <Layout title="Create">
       <form onSubmit={handleSubmit}>
         <input
           className="border"
@@ -35,6 +36,6 @@ export default function ReadPage() {
         />
         <button type="submit">Send</button>
       </form>
-    </main>
+    </Layout>
   );
 }
