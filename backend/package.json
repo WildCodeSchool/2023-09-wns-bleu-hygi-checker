@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node-dev ./src/index.ts",
     "dev": "ts-node-dev --poll ./src/index.ts",
-    "resetDB": "ts-node-dev src/resetDb.ts"
+    "resetDB": "ts-node-dev src/lib/resetDb.ts"
   },
   "author": "",
   "license": "ISC",
