@@ -100,12 +100,12 @@ export function useAddTestMutation(
   baseOptions?: Apollo.MutationHookOptions<
     AddTestMutation,
     AddTestMutationVariables
-  >
+  >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<AddTestMutation, AddTestMutationVariables>(
     AddTestDocument,
-    options
+    options,
   );
 }
 export type AddTestMutationHookResult = ReturnType<typeof useAddTestMutation>;
@@ -139,30 +139,33 @@ export const TestsDocument = gql`
  * });
  */
 export function useTestsQuery(
-  baseOptions?: Apollo.QueryHookOptions<TestsQuery, TestsQueryVariables>
+  baseOptions?: Apollo.QueryHookOptions<TestsQuery, TestsQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<TestsQuery, TestsQueryVariables>(
     TestsDocument,
-    options
+    options,
   );
 }
 export function useTestsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<TestsQuery, TestsQueryVariables>
+  baseOptions?: Apollo.LazyQueryHookOptions<TestsQuery, TestsQueryVariables>,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<TestsQuery, TestsQueryVariables>(
     TestsDocument,
-    options
+    options,
   );
 }
 export function useTestsSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<TestsQuery, TestsQueryVariables>
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    TestsQuery,
+    TestsQueryVariables
+  >,
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<TestsQuery, TestsQueryVariables>(
     TestsDocument,
-    options
+    options,
   );
 }
 export type TestsQueryHookResult = ReturnType<typeof useTestsQuery>;
