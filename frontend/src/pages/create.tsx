@@ -1,3 +1,4 @@
+import CampaignCard from "@/components/CampaignCard";
 import Layout from "@/components/Layout";
 import { useAddTestMutation } from "@/types/graphql";
 import { useState } from "react";
@@ -5,6 +6,12 @@ import { useState } from "react";
 interface FormData {
   text: string;
 }
+
+const campaignTest = {
+  title: "titleTest",
+  url: "urlTest",
+  urlNumber: 3,
+};
 
 export default function ReadPage() {
   const [text, setText] = useState("");
@@ -36,6 +43,7 @@ export default function ReadPage() {
         />
         <button type="submit">Send</button>
       </form>
+      <CampaignCard campaign={campaignTest} />
     </Layout>
   );
 }

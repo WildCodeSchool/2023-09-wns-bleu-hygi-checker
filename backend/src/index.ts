@@ -10,7 +10,7 @@ import cors from "cors";
 import { buildSchema } from "type-graphql";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import "reflect-metadata";
-
+import axios from "axios";
 
 const app = express();
 const httpServer = http.createServer(app);
@@ -20,16 +20,11 @@ async function main() {
     resolvers: [TestResolver],
     validate: false,
   });
-  // const server = new ApolloServer({
-  //   schema,
-  // });
+
   const server = new ApolloServer({
     schema,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });
-  // const { url } = await startStandaloneServer(server, {
-  //   listen: { port: 4000 },
-  // });
   await server.start();
   app.use(
     "/",
@@ -44,6 +39,26 @@ async function main() {
       context: async ({ req, res }) => ({ req, res }),
     })
   );
+  app.post("/", async (req, res) => {
+    try {
+      console.log(req.body);
+      const { url } = req.body;
+      console.log("URL reçue:", url);
+      // console.log("Méthode reçue:", method);
+      // const response = await axios({
+      //   method: method || "GET", // Utilise GET par défaut si aucune méthode n'est fournie
+      //   url,
+      // });
+      const response = await axios.get(url);
+      res.status(response.status).send();
+    } catch (error: any) {
+      console.error("Erreur de proxy:", error.message);
+      res.status(500).json({ error: error.message });
+    }
+    // app.listen(4000, () => {
+    //   console.log(`Le serveur proxy est en écoute sur le port ${4000}`);
+    // });
+  });
   await datasource.initialize();
   await new Promise<void>((resolve) =>
     httpServer.listen({ port: 4001 }, resolve)
