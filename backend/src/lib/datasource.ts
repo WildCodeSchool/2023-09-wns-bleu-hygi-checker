@@ -10,7 +10,7 @@ export default new DataSource({
     database: process.env.DB_NAME || "postgres",
     entities: ["src/entities/*.ts"],
     synchronize: true,
-    // logging: true,
+    logging: true,
 });
 
 

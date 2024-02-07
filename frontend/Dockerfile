@@ -8,11 +8,9 @@ RUN npm i
 # RUN npm run generate
 
 COPY ./tsconfig.json ./tsconfig.json
-COPY ./next-env.d.ts ./next-env.d.ts
 COPY ./next.config.mjs ./next.config.mjs
 COPY ./tailwind.config.ts ./tailwind.config.ts
 COPY ./postcss.config.js ./postcss.config.js
-# COPY ./codegen.ts ./codegen.ts
 COPY ./public ./public
 COPY ./src ./src
 

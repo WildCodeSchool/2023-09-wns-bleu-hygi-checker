@@ -7,22 +7,17 @@ import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHt
 import express from "express";
 import http from "http";
 import cors from "cors";
-import { buildSchema } from "type-graphql";
 import { startStandaloneServer } from "@apollo/server/standalone";
 import "reflect-metadata";
+import schemaPromise from "./schema"; // schemaPromise is a alias of the buildSchema that is deported in backend/src/schema.ts
 
 
 const app = express();
 const httpServer = http.createServer(app);
 
 async function main() {
-  const schema = await buildSchema({
-    resolvers: [TestResolver],
-    validate: false,
-  });
-  // const server = new ApolloServer({
-  //   schema,
-  // });
+  const schema = await schemaPromise
+ 
   const server = new ApolloServer({
     schema,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
