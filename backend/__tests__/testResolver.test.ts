@@ -10,6 +10,21 @@ describe("TestRevsolver", () => {
     await Test.create({
       text: "2) texte du deuxième test d'intégration",
     }).save();
-    expect( await execute(getTest)).toMatchInlineSnapshot();
+    expect(await execute(getTest)).toMatchInlineSnapshot(`
+      {
+        "data": {
+          "tests": [
+            {
+              "id": "b84ba25f-edbf-4248-b229-c5a704e813cc",
+              "text": "1) texte du premier test d'intégration",
+            },
+            {
+              "id": "1ebd2d9a-a0c8-49d2-9bd3-0b691ff051e0",
+              "text": "2) texte du deuxième test d'intégration",
+            },
+          ],
+        },
+      }
+    `);
   });
 });
