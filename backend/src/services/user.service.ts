@@ -15,9 +15,20 @@ export default class UserService {
   async findUserByEmail(email: string) {
     return await this.db.findOneBy({ email });
   }
+  async findUserById(id: string) {
+    return await this.db.findOneBy({ id });
+  }
 
   async createUser({ email, password }: InputRegister) {
     const newUser = this.db.create({ email, password });
     return await this.db.save(newUser);
+  }
+
+  async upgradeRoleToAdmin(user: User){
+    const editedUser = this.db.create({...user});
+    editedUser.role = "ADMIN";
+
+    return await this.db.save(editedUser);
+
   }
 }

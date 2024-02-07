@@ -20,7 +20,7 @@ async function main() {
 
   // creation de resetTest dans la table Test
   const resetTest = Test.create({
-    text: "cleaaaar",
+    text: "Ceci est le premier test après le resetDB",
   });
 
   // sauvegarde

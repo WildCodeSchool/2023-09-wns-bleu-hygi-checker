@@ -1,7 +1,7 @@
 import * as argon2 from "argon2";
 import Cookies from "cookies";
 import { SignJWT } from "jose";
-import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import { Authorized, Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { MyContext } from "..";
 import User, {
   InputLogin,
@@ -65,5 +65,17 @@ export default class UserResolver {
     }
     const newUser = await new UserService().createUser(infos);
     return newUser;
+  }
+
+  @Authorized(["USER"])
+  @Mutation(() => [User])
+  // async addTest(@Arg("data") { text }: InputTest) {
+  async upgradeRole(@Arg("id") id: string) {
+    const user = await new UserService().findUserById(id);
+    if (!user) {
+      throw new Error("Cet utilisateur n'existe pas");
+    }
+    const newRole = await new UserService().upgradeRoleToAdmin(user);
+    return newRole;
   }
 }

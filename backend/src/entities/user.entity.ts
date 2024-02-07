@@ -1,13 +1,16 @@
 import * as argon2 from "argon2";
 import { Field, InputType, ObjectType } from "type-graphql";
 import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+type ROLE = "ADMIN" | "USER";
 
 @ObjectType()
 @Entity()
 export default class User {
   @BeforeInsert()
   protected async hashPassword() {
-    this.password = await argon2.hash(this.password);
+    if (!this.password.startsWith("$argon2")) {
+      this.password = await argon2.hash(this.password);
+    }
   }
 
   @Field()
@@ -21,6 +24,15 @@ export default class User {
   @Field()
   @Column()
   password: string;
+
+  @Field()
+  @Column({
+    type: "text",
+    enum: ["ADMIN", "USER"],
+    nullable: true,
+    default: "USER",
+  })
+  role: ROLE;
 }
 @ObjectType()
 export class UserWithoutPassword implements Omit<User, "password"> {
@@ -29,6 +41,9 @@ export class UserWithoutPassword implements Omit<User, "password"> {
 
   @Field()
   email: string;
+
+  @Field(() => String)
+  role: ROLE;
 }
 
 @ObjectType()
