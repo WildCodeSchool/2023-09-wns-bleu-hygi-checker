@@ -10,7 +10,7 @@ describe("TestRevsolver", () => {
     await Test.create({
       text: "2) texte du deuxième test d'intégration",
     }).save();
-    expect(await execute(getTest)).toMatchInlineSnapshot(`
+    expect(await execute(getTest)).toMatchSnapshot(`
       {
         "data": {
           "tests": [
