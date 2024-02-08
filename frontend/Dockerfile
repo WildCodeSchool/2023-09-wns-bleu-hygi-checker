@@ -5,7 +5,9 @@ WORKDIR /app
 COPY package*.json ./
 
 RUN npm i
-# RUN npm run generate
+
+# hot reload
+RUN apk --update --no-cache add curl 
 
 COPY ./tsconfig.json ./tsconfig.json
 COPY ./next.config.mjs ./next.config.mjs

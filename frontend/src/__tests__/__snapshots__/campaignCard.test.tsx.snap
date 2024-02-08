@@ -1,0 +1,25 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CampaignCard component renders correctly 1`] = `
+<body>
+  <div>
+    <div
+      class="[w-400] flex flex-column p-2 gap-2 rounded-lg border"
+    >
+      <h2>
+        teeeest
+      </h2>
+      <div
+        class="flex flex-column gap-1"
+      >
+        <p>
+          urllll
+        </p>
+        <p>
+          4
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+`;

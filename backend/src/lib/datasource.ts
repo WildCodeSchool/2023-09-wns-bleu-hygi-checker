@@ -1,9 +1,9 @@
 import { DataSource } from "typeorm";
-import dotenv from "dotenv";
+// import dotenv from "dotenv";
 
-dotenv.config()
+// dotenv.config()
 
-console.log("Exemple d'un .env :", process.env.DB_PORT);
+// console.log("Exemple d'un .env :", process.env.DB_PORT);
 
 export default new DataSource({
   type: "postgres",

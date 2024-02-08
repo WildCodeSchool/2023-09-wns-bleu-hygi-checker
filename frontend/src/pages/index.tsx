@@ -1,22 +1,20 @@
+import CampaignCard from "@/components/CampaignCard";
+import Layout from "@/components/Layout";
 import { Inter } from "next/font/google";
-import Link from "next/link";
 
 const inter = Inter({ subsets: ["latin"] });
 
+const campaignTest = {
+  title: "titleTest",
+  url: "urlTest",
+  urlNumber: 3,
+};
+
 export default function Home() {
   return (
-    <main className="">
-      <ul>
-        <li>
-          <Link href="/">Home</Link>
-        </li>
-        <li>
-          <Link href="/read">Read</Link>
-        </li>
-        <li>
-          <Link href="/create">Create</Link>
-        </li>
-      </ul>
-    </main>
+    <Layout title="Home">
+      <h1>Coucou</h1>
+      <CampaignCard campaign={campaignTest} />
+    </Layout>
   );
 }
