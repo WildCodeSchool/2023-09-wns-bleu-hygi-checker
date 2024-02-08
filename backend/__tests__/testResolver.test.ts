@@ -1,5 +1,7 @@
 import { execute } from "../jest.setup";
 import Test from "../src/entities/test.entity";
+import getAdminContext from "./helpers/getAdminContext";
+import addTest from "./operations/addTest";
 import getTest from "./operations/getTest";
 
 describe("TestRevsolver", () => {
@@ -26,5 +28,14 @@ describe("TestRevsolver", () => {
         },
       }
     `);
+  });
+
+  it("can create a test", async () => {
+    const res = await execute(
+      addTest,
+      { data: { name: "test" } },
+      await getAdminContext()
+    );
+    expect(res).toMatchSnapshot();
   });
 });

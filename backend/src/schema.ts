@@ -1,7 +1,10 @@
 import { buildSchema } from "type-graphql";
-import TestResolver  from "./resolvers/test.resolver";
+import { customAuthChecker } from "./lib/authChecker";
+import TestResolver from "./resolvers/test.resolver";
+import UserResolver from "./resolvers/user.resolver";
 
 export default buildSchema({
-  resolvers: [TestResolver],
+  resolvers: [TestResolver, UserResolver],
   validate: false,
+  authChecker: customAuthChecker,
 });

@@ -17,17 +17,17 @@ exports[`TestRevsolver Placeholder Test:
       }
      1`] = `
 {
-  "data": {
-    "tests": [
-      {
-        "id": "01668e08-9393-46ff-8d6f-df0d0063c26b",
-        "text": "1) texte du premier test d'intégration",
-      },
-      {
-        "id": "a4bc6a09-745d-4fa9-8e6c-81dd4e299ed0",
-        "text": "2) texte du deuxième test d'intégration",
-      },
-    ],
-  },
+  "data": null,
+  "errors": [
+    [GraphQLError: Access denied! You don't have permission for this action!],
+  ],
+}
+`;
+
+exports[`TestRevsolver can create a test 1`] = `
+{
+  "errors": [
+    [GraphQLError: Variable "$text" of required type "String!" was not provided.],
+  ],
 }
 `;
