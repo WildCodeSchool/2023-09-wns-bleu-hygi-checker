@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "generate": "graphql-codegen --config codegen.ts --watch",
+    "generate": "graphql-codegen --watch",
     "test": "jest"
   },
   "dependencies": {

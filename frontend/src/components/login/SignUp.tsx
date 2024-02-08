@@ -12,17 +12,25 @@ import {
   CardTitle,
 } from "../ui/card";
 
+import { LOGIN } from "@/requests/queries/auth.queries";
+import { InputLogin, LoginQuery, LoginQueryVariables } from "@/types/graphql";
+import { useLazyQuery } from "@apollo/client";
+
 export default function SignUp() {
   const [isLoading, setIsLoading] = useState(false);
 
-  async function onSubmit(event: React.SyntheticEvent) {
-    event.preventDefault();
-    setIsLoading(true);
+  const [login] = useLazyQuery<LoginQuery, LoginQueryVariables>(LOGIN);
 
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
-  }
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const formData = new FormData(e.currentTarget);
+    const data = Object.fromEntries(formData) as InputLogin;
+    if (data.email && data.password) {
+      login({
+        variables: { infos: { email: data.email, password: data.password } },
+      });
+    }
+  };
 
   return (
     <Card className="flex flex-col">
@@ -33,7 +41,7 @@ export default function SignUp() {
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4">
-        <form onSubmit={onSubmit} className="grid gap-2">
+        <form onSubmit={handleSubmit} className="grid gap-2">
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
             <Input
