@@ -1,7 +1,7 @@
 import SignUp from "@/components/login/SignUp";
-import CreateAccount from "@/components/login/CreateAccount";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
+import Register from "@/components/login/Register";
 
 export default function Login() {
   const [showSignUp, setShowSignUp] = useState(false);
@@ -11,7 +11,7 @@ export default function Login() {
   };
 
   const buttonText = showSignUp ? "Inscription" : "Connexion";
-  const CardComponent = showSignUp ? SignUp : CreateAccount;
+  const CardComponent = showSignUp ? SignUp : Register;
 
   return (
     <div className="grid md:grid-cols-2 h-screen">
