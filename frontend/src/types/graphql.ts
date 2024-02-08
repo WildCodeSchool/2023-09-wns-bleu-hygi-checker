@@ -1,83 +1,122 @@
-import * as Apollo from "@apollo/client";
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = {
-  [K in keyof T]: T[K];
-};
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]?: Maybe<T[SubKey]>;
-};
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
-  [SubKey in K]: Maybe<T[SubKey]>;
-};
-export type MakeEmpty<
-  T extends { [key: string]: unknown },
-  K extends keyof T,
-> = { [_ in K]?: never };
-export type Incremental<T> =
-  | T
-  | {
-      [P in keyof T]?: P extends " $fragmentName" | "__typename" ? T[P] : never;
-    };
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+export type MakeEmpty<T extends { [key: string]: unknown }, K extends keyof T> = { [_ in K]?: never };
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 const defaultOptions = {} as const;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: { input: string; output: string };
-  String: { input: string; output: string };
-  Boolean: { input: boolean; output: boolean };
-  Int: { input: number; output: number };
-  Float: { input: number; output: number };
+  ID: { input: string; output: string; }
+  String: { input: string; output: string; }
+  Boolean: { input: boolean; output: boolean; }
+  Int: { input: number; output: number; }
+  Float: { input: number; output: number; }
+};
+
+export type InputLogin = {
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+};
+
+export type InputRegister = {
+  email: Scalars['String']['input'];
+  password: Scalars['String']['input'];
+};
+
+export type Message = {
+  __typename?: 'Message';
+  message: Scalars['String']['output'];
+  success: Scalars['Boolean']['output'];
 };
 
 export type Mutation = {
-  __typename?: "Mutation";
+  __typename?: 'Mutation';
   addTest: Test;
+  deleteTest: Test;
+  register: UserWithoutPassword;
+  upgradeRole: Array<User>;
 };
 
+
 export type MutationAddTestArgs = {
-  text: Scalars["String"]["input"];
+  text: Scalars['String']['input'];
+};
+
+
+export type MutationDeleteTestArgs = {
+  id: Scalars['String']['input'];
+};
+
+
+export type MutationRegisterArgs = {
+  infos: InputRegister;
+};
+
+
+export type MutationUpgradeRoleArgs = {
+  id: Scalars['String']['input'];
 };
 
 export type Query = {
-  __typename?: "Query";
+  __typename?: 'Query';
+  login: Message;
+  logout: Message;
   tests: Array<Test>;
+  users: Array<User>;
+};
+
+
+export type QueryLoginArgs = {
+  infos: InputLogin;
 };
 
 export type Test = {
-  __typename?: "Test";
-  id: Scalars["String"]["output"];
-  text: Scalars["String"]["output"];
+  __typename?: 'Test';
+  id: Scalars['String']['output'];
+  text: Scalars['String']['output'];
+};
+
+export type User = {
+  __typename?: 'User';
+  email: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  password: Scalars['String']['output'];
+  role: Scalars['String']['output'];
+};
+
+export type UserWithoutPassword = {
+  __typename?: 'UserWithoutPassword';
+  email: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  role: Scalars['String']['output'];
 };
 
 export type AddTestMutationVariables = Exact<{
-  text: Scalars["String"]["input"];
+  text: Scalars['String']['input'];
 }>;
 
-export type AddTestMutation = {
-  __typename?: "Mutation";
-  addTest: { __typename?: "Test"; id: string; text: string };
-};
 
-export type TestsQueryVariables = Exact<{ [key: string]: never }>;
+export type AddTestMutation = { __typename?: 'Mutation', addTest: { __typename?: 'Test', id: string, text: string } };
 
-export type TestsQuery = {
-  __typename?: "Query";
-  tests: Array<{ __typename?: "Test"; text: string; id: string }>;
-};
+export type TestsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type TestsQuery = { __typename?: 'Query', tests: Array<{ __typename?: 'Test', text: string, id: string }> };
+
 
 export const AddTestDocument = gql`
-  mutation AddTest($text: String!) {
-    addTest(text: $text) {
-      id
-      text
-    }
+    mutation AddTest($text: String!) {
+  addTest(text: $text) {
+    id
+    text
   }
-`;
-export type AddTestMutationFn = Apollo.MutationFunction<
-  AddTestMutation,
-  AddTestMutationVariables
->;
+}
+    `;
+export type AddTestMutationFn = Apollo.MutationFunction<AddTestMutation, AddTestMutationVariables>;
 
 /**
  * __useAddTestMutation__
@@ -96,32 +135,21 @@ export type AddTestMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useAddTestMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    AddTestMutation,
-    AddTestMutationVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useMutation<AddTestMutation, AddTestMutationVariables>(
-    AddTestDocument,
-    options,
-  );
-}
+export function useAddTestMutation(baseOptions?: Apollo.MutationHookOptions<AddTestMutation, AddTestMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<AddTestMutation, AddTestMutationVariables>(AddTestDocument, options);
+      }
 export type AddTestMutationHookResult = ReturnType<typeof useAddTestMutation>;
 export type AddTestMutationResult = Apollo.MutationResult<AddTestMutation>;
-export type AddTestMutationOptions = Apollo.BaseMutationOptions<
-  AddTestMutation,
-  AddTestMutationVariables
->;
+export type AddTestMutationOptions = Apollo.BaseMutationOptions<AddTestMutation, AddTestMutationVariables>;
 export const TestsDocument = gql`
-  query Tests {
-    tests {
-      text
-      id
-    }
+    query Tests {
+  tests {
+    text
+    id
   }
-`;
+}
+    `;
 
 /**
  * __useTestsQuery__
@@ -138,42 +166,19 @@ export const TestsDocument = gql`
  *   },
  * });
  */
-export function useTestsQuery(
-  baseOptions?: Apollo.QueryHookOptions<TestsQuery, TestsQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<TestsQuery, TestsQueryVariables>(
-    TestsDocument,
-    options,
-  );
-}
-export function useTestsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<TestsQuery, TestsQueryVariables>,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<TestsQuery, TestsQueryVariables>(
-    TestsDocument,
-    options,
-  );
-}
-export function useTestsSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    TestsQuery,
-    TestsQueryVariables
-  >,
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<TestsQuery, TestsQueryVariables>(
-    TestsDocument,
-    options,
-  );
-}
+export function useTestsQuery(baseOptions?: Apollo.QueryHookOptions<TestsQuery, TestsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<TestsQuery, TestsQueryVariables>(TestsDocument, options);
+      }
+export function useTestsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<TestsQuery, TestsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<TestsQuery, TestsQueryVariables>(TestsDocument, options);
+        }
+export function useTestsSuspenseQuery(baseOptions?: Apollo.SuspenseQueryHookOptions<TestsQuery, TestsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useSuspenseQuery<TestsQuery, TestsQueryVariables>(TestsDocument, options);
+        }
 export type TestsQueryHookResult = ReturnType<typeof useTestsQuery>;
 export type TestsLazyQueryHookResult = ReturnType<typeof useTestsLazyQuery>;
-export type TestsSuspenseQueryHookResult = ReturnType<
-  typeof useTestsSuspenseQuery
->;
-export type TestsQueryResult = Apollo.QueryResult<
-  TestsQuery,
-  TestsQueryVariables
->;
+export type TestsSuspenseQueryHookResult = ReturnType<typeof useTestsSuspenseQuery>;
+export type TestsQueryResult = Apollo.QueryResult<TestsQuery, TestsQueryVariables>;
