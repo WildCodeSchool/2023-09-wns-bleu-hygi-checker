@@ -1,20 +1,21 @@
-import CampaignCard from "@/components/CampaignCard";
 import Layout from "@/components/Layout";
-import { Inter } from "next/font/google";
-
-const inter = Inter({ subsets: ["latin"] });
-
-const campaignTest = {
-  title: "titleTest",
-  url: "urlTest",
-  urlNumber: 3,
-};
+import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/router";
 
 export default function Home() {
+  const router = useRouter();
+
   return (
     <Layout title="Home">
-      <h1>Coucou</h1>
-      <CampaignCard campaign={campaignTest} />
+      <Button
+        variant="outline"
+        onClick={() => {
+          router.push("/auth/login");
+        }}
+      >
+        Inscription/Connexion
+      </Button>
     </Layout>
   );
 }
