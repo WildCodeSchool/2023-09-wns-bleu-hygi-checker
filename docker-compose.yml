@@ -23,6 +23,7 @@ services:
       - ./backend/src:/app/src
     env_file:
       - ./backend/.env
+      - ./global.env
       - ./secret.env
     environment:
       - DB_HOST=db
@@ -34,3 +35,7 @@ services:
     volumes:
       - ./frontend/src:/app/src
       - ./frontend/public:/app/public
+    env_file:
+      - ./global.env
+      - ./secret.env
+      

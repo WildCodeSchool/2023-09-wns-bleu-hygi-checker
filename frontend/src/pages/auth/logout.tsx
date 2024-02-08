@@ -1,4 +1,4 @@
-import { LOGOUT } from "@/requetes/queries/auth.queries";
+import { LOGOUT } from "@/requests/queries/auth.queries";
 import { useQuery } from "@apollo/client";
 import { LogoutQuery, LogoutQueryVariables } from "@/types/graphql";
 
