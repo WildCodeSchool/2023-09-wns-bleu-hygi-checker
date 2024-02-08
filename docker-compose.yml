@@ -1,7 +1,7 @@
 services:
   db:
-    ports:
-      - 5432:5432
+    # ports:
+    #   - 5432:5432
     image: postgres:15-alpine
     environment:
       - POSTGRES_PASSWORD=postgres
@@ -21,6 +21,10 @@ services:
       - 4001:4001
     volumes:
       - ./backend/src:/app/src
+    env_file:
+      - ./backend/.env
+    environment:
+      - DB_HOST=db
 
   frontend:
     build: frontend
