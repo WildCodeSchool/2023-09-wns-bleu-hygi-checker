@@ -16,6 +16,14 @@ export default function Home() {
       >
         Inscription/Connexion
       </Button>
+      <Button
+        variant="outline"
+        onClick={() => {
+          router.push("/auth/logout");
+        }}
+      >
+        Deconnexion
+      </Button>
     </Layout>
   );
 }

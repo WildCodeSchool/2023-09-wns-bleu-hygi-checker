@@ -1,12 +1,12 @@
 import LayoutLogin from "@/components/login/Layout";
-import SignUp from "@/components/login/SignUp";
+import Register from "@/components/login/Register";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/router";
 
 export default function Login() {
   const router = useRouter();
   const toggleSignUp = () => {
-    router.push("register");
+    router.push("login");
   };
   return (
     <LayoutLogin title="Se connecter">
@@ -16,10 +16,10 @@ export default function Login() {
           className="absolute top-4 right-4"
           onClick={toggleSignUp}
         >
-          Inscription
+          Connexion
         </Button>
 
-        <SignUp />
+        <Register />
       </div>
     </LayoutLogin>
   );

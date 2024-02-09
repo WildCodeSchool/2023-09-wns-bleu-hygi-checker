@@ -1,6 +1,6 @@
 import * as argon2 from "argon2";
 import { Field, InputType, ObjectType } from "type-graphql";
-import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { BaseEntity, BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 type ROLE = "ADMIN" | "USER";
 
 @ObjectType()
@@ -35,7 +35,7 @@ export default class User {
   role: ROLE;
 }
 @ObjectType()
-export class UserWithoutPassword implements Omit<User, "password"> {
+export class UserWithoutPassword  {
   @Field()
   id: string;
 

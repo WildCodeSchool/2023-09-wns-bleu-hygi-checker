@@ -26,6 +26,7 @@ export default function SignUp() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData) as InputLogin;
+    console.log(data);
     if (data.email && data.password) {
       login({
         variables: { infos: { email: data.email, password: data.password } },
@@ -58,9 +59,15 @@ export default function SignUp() {
               autoComplete="email"
               autoCorrect="off"
               name="email"
+              data-testid="login-email"
             />
             <Label htmlFor="password">Mot de passe</Label>
-            <Input id="password" type="password" name="password" />
+            <Input
+              id="password"
+              type="password"
+              name="password"
+              data-testid="login-password"
+            />
           </div>
           <Button>Connexion</Button>
         </form>
