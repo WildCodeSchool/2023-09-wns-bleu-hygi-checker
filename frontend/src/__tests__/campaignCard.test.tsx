@@ -13,7 +13,7 @@ describe("CampaignCard component", () => {
         }}
       />,
     );
-    expect(screen.getByText(/teeest/)).toBeInTheDocument();
+    expect(screen.getByText(/teeeest/)).toBeInTheDocument();
     expect(screen.getByText(/4/)).toBeInTheDocument();
     expect(view.baseElement).toMatchSnapshot();
   });
