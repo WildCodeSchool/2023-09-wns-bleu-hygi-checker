@@ -21,9 +21,9 @@ services:
     ports:
       - 4001:4001
     volumes:
-      - ./backend/src:/app/src
+      - ./src:/app/src
     env_file:
-      - ./backend/.env
+      - ./.env
     environment:
       - DB_HOST=testDB
 
@@ -32,5 +32,5 @@ services:
     ports:
       - 3000:3000
     volumes:
-      - ./frontend/src:/app/src
-      - ./frontend/public:/app/public
+      - ./src:/app/src
+      - ./public:/app/public
