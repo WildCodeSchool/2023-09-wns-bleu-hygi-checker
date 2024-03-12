@@ -7,7 +7,9 @@
     "start": "ts-node-dev ./src/index.ts",
     "dev": "ts-node-dev --poll ./src/index.ts",
     "resetDB": "ts-node-dev src/lib/resetDb.ts",
-    "test": "jest"
+    "test": "jest",
+    "testDB:wait": "docker compose -f docker-compose.integration-test.yml up testDB --wait"
+
   },
   "author": "",
   "license": "ISC",
