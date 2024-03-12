@@ -6,6 +6,8 @@
   "scripts": {
     "start": "ts-node-dev ./src/index.ts",
     "dev": "ts-node-dev --poll ./src/index.ts",
+    "build": "tsc",
+    "start:prod": "node build/index.js",
     "resetDB": "ts-node-dev src/lib/resetDb.ts",
     "test": "jest",
     "testDB:wait": "docker compose -f docker-compose.integration-test.yml up testDB --wait"
