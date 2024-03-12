@@ -2,8 +2,6 @@ import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
 import datasource from "./lib/datasource";
-import TestResolver from "./resolvers/test.resolver";
-import UserResolver from "./resolvers/user.resolver";
 
 import Cookies from "cookies";
 import cors from "cors";
@@ -11,9 +9,8 @@ import express from "express";
 import http from "http";
 import { jwtVerify } from "jose";
 import "reflect-metadata";
-import { buildSchema } from "type-graphql";
 import User from "./entities/user.entity";
-import { customAuthChecker } from "./lib/authChecker";
+import schemaPromise from "./schema"; // schemaPromise is a alias of the buildSchema that is deported in backend/src/schema.ts
 import UserService from "./services/user.service";
 
 export interface MyContext {
@@ -29,13 +26,9 @@ const app = express();
 const httpServer = http.createServer(app);
 
 async function main() {
-  const schema = await buildSchema({
-    resolvers: [TestResolver, UserResolver],
-    validate: false,
-    authChecker: customAuthChecker,
-  });
+  const schema = await schemaPromise;
 
-  const server = new ApolloServer<MyContext>({
+  const server = new ApolloServer({
     schema,
     plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
   });

@@ -4,6 +4,7 @@ import User from "../entities/user.entity";
 
 dotenv.config();
 
+
 const db = new DataSource({
   type: "postgres",
   host: process.env.DB_HOST || "db" || "testDB",
@@ -25,3 +26,5 @@ export async function clearDB() {
 }
 
 export default db;
+
+
