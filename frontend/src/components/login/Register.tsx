@@ -29,7 +29,7 @@ export default function Register() {
   >(REGISTER, {
     onCompleted: (data) => {
       console.log(data);
-      router.push("/read");
+      router.push("/auth/login");
     },
     onError(error) {
       console.log(error);

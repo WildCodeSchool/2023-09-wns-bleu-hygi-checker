@@ -1,6 +1,6 @@
+import datasource from "../lib/datasource";
 import { Repository } from "typeorm";
 import User, { InputRegister } from "../entities/user.entity";
-import datasource from "../lib/datasource";
 
 export default class UserService {
   db: Repository<User>;
