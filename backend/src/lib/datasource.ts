@@ -1,4 +1,5 @@
 import * as dotenv from "dotenv";
+
 import { DataSource } from "typeorm";
 import User from "../entities/user.entity";
 
@@ -25,11 +26,3 @@ export async function clearDB() {
 }
 
 export default db;
-
-// export default new DataSource({
-//   type: "postgres",
-//   database: "./demo.sqlite",
-//   synchronize: true,
-//   entities: ["src/entities/*.ts"],
-//   logging: ["query", "error"],
-// });
