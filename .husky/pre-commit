@@ -1,19 +1,19 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-fileList=$(git diff --staged --name-only :^package-lock.json :^.husky/pre-commit :^frontend :^backend)
+fileList=$(git diff --cached --name-only :^package-lock.json :^.husky/pre-commit :^frontend :^backend)
 
 echo ' '
 echo '-------------  🔎  START THE PRE COMMIT CHECK PROCESS  🔍   -----------'
 echo ' '
-echo ' 1️⃣-- Checking staged files.'
+echo ' ➡️ Checking staged files.'
 
 
 if [ ! -z "$fileList" ]
 then
   echo "❌ error: Unauthorized modifications in staged files ❌"
 
-  echo "$fileList\n"
+  echo "$fileList"
 
   echo "use 'git restore --staged ...' to fix the problem"
 
@@ -23,11 +23,9 @@ fi
 echo ' ✅ Staged files checked successfully ! ✅'
 echo ' '
 echo ' '
-echo ' 2️⃣-- Start linting checks'
+echo ' ➡️ Start linting checks'
 echo "      [TIPS] if you have prettier issues, use 'npm run prettier:fix .' in the concerned folder to lint your code"
 echo ' '
-echo ' '
-
 
 npm run lint
 
