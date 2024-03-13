@@ -1,6 +1,7 @@
 import dotenv from "dotenv";
 import { DataSource } from "typeorm";
 import User from "../entities/user.entity";
+import Test from "../entities/test.entity"
 
 dotenv.config();
 
@@ -12,7 +13,7 @@ const db = new DataSource({
   username: process.env.DB_USER || "postgres",
   password: process.env.DB_PASS || "postgres",
   database: process.env.DB_NAME || "postgres",
-  entities: [User],
+  entities: [User, Test],
   synchronize: true,
   // logging: false,
 });
