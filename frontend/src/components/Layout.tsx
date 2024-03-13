@@ -12,7 +12,7 @@ export default function Layout({ children, title }: LayoutProps) {
     <>
       <Head>
         <title>{title}</title>
-        <meta name="description" content="petites annonces" />
+        <meta name="description" content="health-check" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="favicon.ico" />
       </Head>
@@ -22,10 +22,10 @@ export default function Layout({ children, title }: LayoutProps) {
             <Link href="/">Home</Link>
           </li>
           <li>
-            <Link href="/read">Read</Link>
+            <Link href="/auth/register">Inscription</Link>
           </li>
           <li>
-            <Link href="/create">Create</Link>
+            <Link href="/auth/login">Connexion</Link>
           </li>
         </ul>
       </header>
