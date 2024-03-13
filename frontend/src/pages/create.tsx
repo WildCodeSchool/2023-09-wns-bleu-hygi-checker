@@ -1,27 +1,21 @@
-import Layout from "@/components/Layout";
-import { useAddTestMutation } from "@/types/graphql";
-import { useState } from "react";
+import Layout from '@/components/Layout'
+import { useAddTestMutation } from '@/types/graphql'
+import { useState } from 'react'
 
 interface FormData {
-  text: string;
+  text: string
 }
 
 export default function ReadPage() {
-  const [text, setText] = useState("");
-  const [createTest] = useAddTestMutation();
+  const [text, setText] = useState('')
+  const [createTest] = useAddTestMutation()
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    createTest({ variables: { text: text } });
-  };
+    e.preventDefault()
+    createTest({ variables: { text: text } })
+  }
   const handleChangeText = (e: any) => {
-    setText(e.target.value);
-  };
-  // const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   const formData = new FormData(e.currentTarget);
-  //   const data = Object.fromEntries(formData) as FormData;
-  //   createTest({ variables: { text: data.text } });
-  // };
+    setText(e.target.value)
+  }
 
   return (
     <Layout title="Create">
@@ -37,5 +31,5 @@ export default function ReadPage() {
         <button type="submit">Send</button>
       </form>
     </Layout>
-  );
+  )
 }

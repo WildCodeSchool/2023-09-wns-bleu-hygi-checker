@@ -1,12 +1,12 @@
 export type CampaignType = {
-  title: string;
-  url: string;
-  urlNumber: number;
-};
+  title: string
+  url: string
+  urlNumber: number
+}
 
 type CampaignCardProps = {
-  campaign: CampaignType;
-};
+  campaign: CampaignType
+}
 
 export default function CampaignCard({
   campaign: { title, url, urlNumber },
@@ -19,5 +19,5 @@ export default function CampaignCard({
         <p>{urlNumber}</p>
       </div>
     </div>
-  );
+  )
 }

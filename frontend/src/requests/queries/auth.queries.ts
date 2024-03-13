@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client'
 
 export const LOGIN = gql`
   query Login($infos: InputLogin!) {
@@ -7,7 +7,7 @@ export const LOGIN = gql`
       message
     }
   }
-`;
+`
 
 export const LOGOUT = gql`
   query Logout {
@@ -16,4 +16,4 @@ export const LOGOUT = gql`
       message
     }
   }
-`;
+`
