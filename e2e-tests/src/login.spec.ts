@@ -1,7 +1,6 @@
 import { connect, disconnect} from './helpers';
-import db, { clearDB } from "../../backend/src/lib/datasource";
+import { clearDB } from "../../backend/src/lib/datasource";
 import { test, expect } from '@playwright/test';
-import * as argon2 from "argon2";
 import UserService from "../../backend/src/services/user.service";
 
 test.beforeAll(connect);
@@ -13,7 +12,6 @@ const password = "test";
 
 async function createUser() {
   const userService = new UserService();
-  const passwordHash = await argon2.hash(password);
   await userService.createUser({email, password});
 }
 

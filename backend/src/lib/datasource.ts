@@ -1,4 +1,4 @@
-import dotenv from "dotenv";
+import * as dotenv from "dotenv";
 import { DataSource } from "typeorm";
 import User from "../entities/user.entity";
 import Test from "../entities/test.entity"
@@ -15,7 +15,6 @@ const db = new DataSource({
   database: process.env.DB_NAME || "postgres",
   entities: [User, Test],
   synchronize: true,
-  // logging: false,
 });
 
 export async function clearDB() {
