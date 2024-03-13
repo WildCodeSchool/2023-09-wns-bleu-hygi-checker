@@ -1,8 +1,6 @@
 import Layout from "@/components/Layout";
-import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/router";
-import FormCheck from "@/components/check_url/FormCheck";
 
 export default function Home() {
   const router = useRouter();
@@ -26,7 +24,14 @@ export default function Home() {
       >
         Deconnexion
       </Button>
-      <FormCheck />
+      <Button
+        variant="outline"
+        onClick={() => {
+          router.push("/response");
+        }}
+      >
+        Réponse
+      </Button>
     </Layout>
   );
 }

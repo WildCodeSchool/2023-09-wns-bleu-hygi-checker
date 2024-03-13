@@ -27,6 +27,9 @@ export default function Layout({ children, title }: LayoutProps) {
           <li>
             <Link href="/auth/login">Connexion</Link>
           </li>
+          <li>
+            <Link href="/response">Réponse</Link>
+          </li>
         </ul>
       </header>
       <main className="main-content">{children}</main>
