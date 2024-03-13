@@ -15,7 +15,6 @@ const db = new DataSource({
   database: process.env.DB_NAME || "postgres",
   entities: [User, Test],
   synchronize: true,
-  // logging: false,
 });
 
 export async function clearDB() {
