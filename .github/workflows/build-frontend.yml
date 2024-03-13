@@ -29,3 +29,5 @@ jobs:
           context: "{{defaultContext}}:frontend"
           file: "Dockerfile.production"
           tags: hygichecker/hygi-checker:dev
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
