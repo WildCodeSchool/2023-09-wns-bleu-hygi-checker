@@ -1,13 +1,13 @@
-import LayoutLogin from '@/components/login/Layout'
-import SignUp from '@/components/login/SignUp'
-import { Button } from '@/components/ui/button'
-import { useRouter } from 'next/router'
+import LayoutLogin from "@/components/login/Layout";
+import SignUp from "@/components/login/SignUp";
+import { Button } from "@/components/ui/button";
+import { useRouter } from "next/router";
 
 export default function Login() {
-  const router = useRouter()
+  const router = useRouter();
   const toggleSignUp = () => {
-    router.push('register')
-  }
+    router.push("register");
+  };
   return (
     <LayoutLogin title="Se connecter">
       <div className="flex justify-center items-center md:bg-gray-300 bg-primary relative">
@@ -22,5 +22,5 @@ export default function Login() {
         <SignUp />
       </div>
     </LayoutLogin>
-  )
+  );
 }

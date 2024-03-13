@@ -1,17 +1,17 @@
-import { execute } from '../jest.setup'
-import Test from '../src/entities/test.entity'
-import getAdminContext from './helpers/getAdminContext'
-import addTest from './operations/addTest'
-import getTest from './operations/getTest'
+import { execute } from "../jest.setup";
+import Test from "../src/entities/test.entity";
+import getAdminContext from "./helpers/getAdminContext";
+import addTest from "./operations/addTest";
+import getTest from "./operations/getTest";
 
-describe('TestRevsolver', () => {
-  it('Placeholder Test', async () => {
+describe("TestRevsolver", () => {
+  it("Placeholder Test", async () => {
     await Test.create({
       text: "1) texte du premier test d'intégration",
-    }).save()
+    }).save();
     await Test.create({
       text: "2) texte du deuxième test d'intégration",
-    }).save()
+    }).save();
     expect(await execute(getTest)).toMatchSnapshot(`
       {
         "data": {
@@ -27,15 +27,15 @@ describe('TestRevsolver', () => {
           ],
         },
       }
-    `)
-  })
+    `);
+  });
 
-  it('can create a test', async () => {
+  it("can create a test", async () => {
     const res = await execute(
       addTest,
-      { data: { name: 'test' } },
+      { data: { name: "test" } },
       await getAdminContext()
-    )
-    expect(res).toMatchSnapshot()
-  })
-})
+    );
+    expect(res).toMatchSnapshot();
+  });
+});

@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client'
+import { gql } from "@apollo/client";
 
 export const REGISTER = gql`
   mutation Register($infos: InputRegister!) {
@@ -7,4 +7,4 @@ export const REGISTER = gql`
       email
     }
   }
-`
+`;

@@ -1,9 +1,9 @@
-import Head from 'next/head'
-import { ReactNode } from 'react'
+import Head from "next/head";
+import { ReactNode } from "react";
 
 interface LayoutProps {
-  children: ReactNode
-  title: string
+  children: ReactNode;
+  title: string;
 }
 
 export default function LayoutLogin({ children, title }: LayoutProps) {
@@ -22,5 +22,5 @@ export default function LayoutLogin({ children, title }: LayoutProps) {
         {children}
       </div>
     </>
-  )
+  );
 }
