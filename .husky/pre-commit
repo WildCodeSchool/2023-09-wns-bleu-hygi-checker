@@ -33,6 +33,13 @@ echo ' '
 echo ' ✅ No error found, your code is well linted. Good job !!! ✅'
 echo ' '
 
+echo ' ➡️ Start unit tests'
 
+cd ./frontend && npm run test
+
+echo ' '
+echo ' ✅ All tests passed ! your code works fine ✅'
+echo ' '
 echo ' Congrats !! 🔥 Your code is clean, you can push it on Github 🚀'
 
+echo '-------------  🔎 PRE COMMIT CHECK PROCESS FINISHED 🔍   -----------'
