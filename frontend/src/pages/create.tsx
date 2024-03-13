@@ -16,7 +16,6 @@ export default function ReadPage() {
   const handleChangeText = (e: any) => {
     setText(e.target.value)
   }
-
   return (
     <Layout title="Create">
       <form onSubmit={handleSubmit}>
