@@ -24,7 +24,7 @@ echo ' ✅ Staged files checked successfully ! ✅'
 echo ' '
 echo ' '
 echo ' ➡️  Start linting checks'
-echo " [TIPS] if you have prettier issues, use 'npm run prettier:fix .' in the concerned folder to lint your code"
+echo " [TIPS] if you have Prettier or ESlint issues, use 'npm run prettier-fix-all' or 'npm run eslint-fix-all' in the root folder to lint your code"
 echo ' '
 
 npm run lint
@@ -43,3 +43,4 @@ echo ' '
 echo ' 🚀🔥 Congrats !! Your code is clean, you can push it on Github 🔥🚀'
 echo ' '
 echo '-------------  🔎 PRE COMMIT CHECK PROCESS FINISHED 🔍   -----------'
+echo ' '
