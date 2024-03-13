@@ -27,7 +27,7 @@ export default function ReadPage() {
           required
           placeholder="Placeholder"
         />
-        <button type="submit">Send</button>
+        <button type="submit">Sennd</button>
       </form>
     </Layout>
   )

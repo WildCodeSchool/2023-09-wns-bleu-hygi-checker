@@ -24,7 +24,7 @@ echo ' ✅ Staged files checked successfully ! ✅'
 echo ' '
 echo ' '
 echo ' ➡️  Start linting checks'
-echo "      [TIPS] if you have prettier issues, use 'npm run prettier:fix .' in the concerned folder to lint your code"
+echo " [TIPS] if you have prettier issues, use 'npm run prettier:fix .' in the concerned folder to lint your code"
 echo ' '
 
 npm run lint
@@ -38,7 +38,7 @@ echo ' ➡️  Start unit tests'
 cd ./frontend && npm run test
 
 echo ' '
-echo ' ✅ All tests passed ! your code works fine ✅'
+echo ' ✅ All tests passed, your code works fine !!! ✅'
 echo ' '
 echo ' 🚀🔥 Congrats !! Your code is clean, you can push it on Github 🔥🚀'
 echo ' '
