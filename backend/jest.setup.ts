@@ -1,23 +1,23 @@
-import { ASTNode, graphql, GraphQLSchema, print } from "graphql";
+import { ASTNode, graphql, GraphQLSchema, print } from 'graphql'
 
-import db from "./src/lib/datasource";
-import getSchema from "./src/schema";
-import { Maybe } from "type-graphql";
+import db from './src/lib/datasource'
+import getSchema from './src/schema'
+import { Maybe } from 'type-graphql'
 
 async function clearDB() {
-  const entities = db.entityMetadatas;
+  const entities = db.entityMetadatas
   const tableNames = entities
     .map((entity) => `"${entity.tableName}"`)
-    .join(", ");
-  await db.query(`TRUNCATE ${tableNames} RESTART IDENTITY CASCADE;`);
+    .join(', ')
+  await db.query(`TRUNCATE ${tableNames} RESTART IDENTITY CASCADE;`)
 }
 
-export let schema: GraphQLSchema;
+export let schema: GraphQLSchema
 
 export async function execute(
   operation: ASTNode,
   variableValues?: Maybe<{
-    readonly [variable: string]: unknown;
+    readonly [variable: string]: unknown
   }>,
   contextValue = {}
 ) {
@@ -26,18 +26,18 @@ export async function execute(
     source: print(operation),
     variableValues,
     contextValue,
-  });
+  })
 }
 
 beforeAll(async () => {
-  await db.initialize();
-  schema = await getSchema;
-});
+  await db.initialize()
+  schema = await getSchema
+})
 
 beforeEach(async () => {
-  await clearDB();
-});
+  await clearDB()
+})
 
 afterAll(async () => {
-  await db.destroy();
-});
+  await db.destroy()
+})

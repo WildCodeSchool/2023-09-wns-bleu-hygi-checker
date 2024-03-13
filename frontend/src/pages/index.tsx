@@ -1,17 +1,16 @@
-import Layout from "@/components/Layout";
-import { useToast } from "@/components/ui/use-toast";
-import { Button } from "@/components/ui/button";
-import { useRouter } from "next/router";
+import Layout from '@/components/Layout'
+import { Button } from '@/components/ui/button'
+import { useRouter } from 'next/router'
 
 export default function Home() {
-  const router = useRouter();
+  const router = useRouter()
 
   return (
     <Layout title="Home">
       <Button
         variant="outline"
         onClick={() => {
-          router.push("/auth/login");
+          router.push('/auth/login')
         }}
       >
         Inscription/Connexion
@@ -19,11 +18,11 @@ export default function Home() {
       <Button
         variant="outline"
         onClick={() => {
-          router.push("/auth/logout");
+          router.push('/auth/logout')
         }}
       >
         Deconnexion
       </Button>
     </Layout>
-  );
+  )
 }

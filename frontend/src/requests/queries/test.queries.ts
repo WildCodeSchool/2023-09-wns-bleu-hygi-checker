@@ -1,4 +1,4 @@
-import { gql } from "@apollo/client";
+import { gql } from '@apollo/client'
 
 export const READ_TEST = gql`
   query Tests {
@@ -7,4 +7,4 @@ export const READ_TEST = gql`
       id
     }
   }
-`;
+`

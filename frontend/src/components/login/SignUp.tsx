@@ -1,6 +1,6 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import {
   Card,
   CardContent,
@@ -8,34 +8,34 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "../ui/card";
+} from '../ui/card'
 
-import { LOGIN } from "@/requests/queries/auth.queries";
-import { InputLogin, LoginQuery, LoginQueryVariables } from "@/types/graphql";
-import { useLazyQuery } from "@apollo/client";
-import { useRouter } from "next/router";
+import { LOGIN } from '@/requests/queries/auth.queries'
+import { InputLogin, LoginQuery, LoginQueryVariables } from '@/types/graphql'
+import { useLazyQuery } from '@apollo/client'
+import { useRouter } from 'next/router'
 
 export default function SignUp() {
-  const router = useRouter();
+  const router = useRouter()
 
-  const [login] = useLazyQuery<LoginQuery, LoginQueryVariables>(LOGIN);
+  const [login] = useLazyQuery<LoginQuery, LoginQueryVariables>(LOGIN)
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData) as InputLogin;
-    console.log(data);
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    const data = Object.fromEntries(formData) as InputLogin
+    console.log(data)
     if (data.email && data.password) {
       login({
         variables: { infos: { email: data.email, password: data.password } },
         onCompleted(data) {
           if (data.login.success) {
-            router.push("/");
+            router.push('/')
           }
         },
-      });
+      })
     }
-  };
+  }
 
   return (
     <Card className="flex flex-col">
@@ -78,5 +78,5 @@ export default function SignUp() {
         </div>
       </CardFooter>
     </Card>
-  );
+  )
 }

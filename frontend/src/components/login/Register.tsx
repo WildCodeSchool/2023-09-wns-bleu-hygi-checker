@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -6,45 +6,45 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useRouter } from "next/router";
-import { useMutation } from "@apollo/client";
-import { REGISTER } from "@/requests/mutations/auth.mutations";
+} from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
+import { useRouter } from 'next/router'
+import { useMutation } from '@apollo/client'
+import { REGISTER } from '@/requests/mutations/auth.mutations'
 import {
   InputRegister,
   RegisterMutation,
   RegisterMutationVariables,
-} from "@/types/graphql";
-import { useToast } from "@/components/ui/use-toast";
+} from '@/types/graphql'
+import { useToast } from '@/components/ui/use-toast'
 
 export default function Register() {
-  const router = useRouter();
-  const { toast } = useToast();
+  const router = useRouter()
+  const { toast } = useToast()
 
   const [register, { error }] = useMutation<
     RegisterMutation,
     RegisterMutationVariables
   >(REGISTER, {
     onCompleted: (data) => {
-      console.log(data);
-      router.push("/auth/login");
+      console.log(data)
+      router.push('/auth/login')
     },
     onError(error) {
-      console.log(error);
+      console.log(error)
     },
-  });
+  })
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData) as InputRegister;
+    e.preventDefault()
+    const formData = new FormData(e.currentTarget)
+    const data = Object.fromEntries(formData) as InputRegister
     if (data.email && data.password) {
       register({
         variables: { infos: { email: data.email, password: data.password } },
-      });
+      })
     }
-  };
+  }
 
   return (
     <Card className="flex flex-col">
@@ -73,7 +73,7 @@ export default function Register() {
             type="submit"
             className="w-full bg-primary"
             onClick={() => {
-              console.log("Inscription");
+              console.log('Inscription')
             }}
           >
             Créer un compte
@@ -84,5 +84,5 @@ export default function Register() {
         </form>
       </CardContent>
     </Card>
-  );
+  )
 }
