@@ -40,6 +40,6 @@ cd ./frontend && npm run test
 echo ' '
 echo ' ✅ All tests passed ! your code works fine ✅'
 echo ' '
-echo ' Congrats !! 🔥 Your code is clean, you can push it on Github 🚀'
+echo ' 🚀🔥 Congrats !! Your code is clean, you can push it on Github 🔥🚀'
 echo ' '
 echo '-------------  🔎 PRE COMMIT CHECK PROCESS FINISHED 🔍   -----------'
