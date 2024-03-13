@@ -3,11 +3,15 @@
 
 fileList=$(git diff --staged --name-only :^package-lock.json :^.husky/pre-commit :^frontend :^backend)
 
-echo '----- Checking Root...'
+echo ' '
+echo '-------------  🔎  START THE PRE COMMIT CHECK PROCESS  🔍   -----------'
+echo ' '
+echo ' 1️⃣-- Checking staged files.'
+
 
 if [ ! -z "$fileList" ]
 then
-  echo "error: Unauthorized modifications\n"
+  echo "❌ error: Unauthorized modifications in staged files ❌"
 
   echo "$fileList\n"
 
@@ -16,7 +20,21 @@ then
   exit 1
 fi
 
-echo '----- Done!'
+echo ' ✅ Staged files checked successfully ! ✅'
+echo ' '
+echo ' '
+echo ' 2️⃣-- Start linting checks'
+echo "      [TIPS] if you have prettier issues, use 'npm run prettier:fix .' in the concerned folder to lint your code"
+echo ' '
+echo ' '
 
 
 npm run lint
+
+echo ' '
+echo ' ✅ No error found, your code is well linted. Good job !!! ✅'
+echo ' '
+
+
+echo ' Congrats !! 🔥 Your code is clean, you can push it on Github 🚀'
+
