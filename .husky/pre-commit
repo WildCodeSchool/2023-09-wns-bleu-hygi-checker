@@ -6,7 +6,7 @@ fileList=$(git diff --staged --name-only :^package-lock.json :^.husky/pre-commit
 echo ' '
 echo '-------------  🔎  START THE PRE COMMIT CHECK PROCESS  🔍   -----------'
 echo ' '
-echo ' ➡️ Checking staged files.'
+echo ' ➡️  Checking staged files.'
 
 
 if [ ! -z "$fileList" ]
