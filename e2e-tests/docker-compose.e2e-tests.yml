@@ -33,4 +33,3 @@ services:
       - 3000:3000
     volumes:
       - ../frontend/src:/app/src
-      - ./public:/app/public

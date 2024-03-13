@@ -1,64 +1,64 @@
-import * as argon2 from "argon2";
-import { Field, InputType, ObjectType } from "type-graphql";
+import * as argon2 from 'argon2'
+import { Field, InputType, ObjectType } from 'type-graphql'
 import {
   BaseEntity,
   BeforeInsert,
   Column,
   Entity,
   PrimaryGeneratedColumn,
-} from "typeorm";
-type ROLE = "ADMIN" | "USER";
+} from 'typeorm'
+type ROLE = 'ADMIN' | 'USER'
 
 @ObjectType()
 @Entity()
 export default class User extends BaseEntity {
   @BeforeInsert()
   protected async hashPassword() {
-    if (!this.password.startsWith("$argon2")) {
-      this.password = await argon2.hash(this.password);
+    if (!this.password.startsWith('$argon2')) {
+      this.password = await argon2.hash(this.password)
     }
   }
 
   @Field()
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
+  @PrimaryGeneratedColumn('uuid')
+  id: string
 
   @Field()
   @Column({ unique: true })
-  email: string;
+  email: string
 
   @Field()
   @Column()
-  password: string;
+  password: string
 
   @Field()
   @Column({
-    type: "text",
-    enum: ["ADMIN", "USER"],
+    type: 'text',
+    enum: ['ADMIN', 'USER'],
     nullable: true,
-    default: "USER",
+    default: 'USER',
   })
-  role: ROLE;
+  role: ROLE
 }
 @ObjectType()
 export class UserWithoutPassword {
   @Field()
-  id: string;
+  id: string
 
   @Field()
-  email: string;
+  email: string
 
   @Field(() => String)
-  role: ROLE;
+  role: ROLE
 }
 
 @ObjectType()
 export class Message {
   @Field()
-  success: boolean;
+  success: boolean
 
   @Field()
-  message: string;
+  message: string
 }
 
 /**----------------------
@@ -67,17 +67,17 @@ export class Message {
 @InputType()
 export class InputRegister {
   @Field()
-  email: string;
+  email: string
 
   @Field()
-  password: string;
+  password: string
 }
 
 @InputType()
 export class InputLogin {
   @Field()
-  email: string;
+  email: string
 
   @Field()
-  password: string;
+  password: string
 }

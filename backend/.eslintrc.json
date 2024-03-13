@@ -3,12 +3,17 @@
     "node": true,
     "es2021": true
   },
-  "extends": ["standard-with-typescript", "prettier"],
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier"
+  ],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": "latest",
+    "ecmaVersion": 2021,
     "sourceType": "module"
   },
-  "plugins": ["prettier"],
+  "plugins": ["@typescript-eslint", "prettier"],
   "rules": {
     "prettier/prettier": "error"
   }
