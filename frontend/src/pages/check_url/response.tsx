@@ -1,4 +1,4 @@
-import Layout from "@/components/Layout";
+import Layout from "@/components/Layout/Layout";
 import CardResponse from "@/components/check_url/CardResponse";
 import { Button } from "@/components/ui/button";
 
@@ -9,18 +9,18 @@ export default function Response() {
 
   return (
     <Layout title="Read">
-      <div className="flex justify-center gap-4 mt-4">
+      <div className="flex justify-center gap-4 mt-5">
         <CardResponse />
       </div>
-      <div className="flex justify-center gap-4 mt-4">
-        <p>
-          sed viverra tellus in hac habitasse platea dictumst vestibulum rhoncus
+      <div className="flex justify-center mt-5 text-white">
+        <p className="text-center">
+          Sed viverra tellus in hac habitasse platea dictumst vestibulum rhoncus
           est pellentesque elit ullamcorper dignissim
         </p>
       </div>
-      <div className="flex justify-center gap-4 mt-4">
+      <div className="flex justify-center gap-4 mt-5">
         <Button
-          variant="secondary"
+          variant={"white"}
           onClick={() => {
             router.push("/");
           }}
