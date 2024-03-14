@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 
 export default function FormCheck() {
   const router = useRouter();
+
   return (
     <form className="flex flex-col gap-2">
       <Input id="url" placeholder="enter URL" className="w-[300px]" />
@@ -12,7 +13,7 @@ export default function FormCheck() {
         <Button
           variant={"white"}
           onClick={() => {
-            router.push("/check_url/response");
+            router.push("/check/response");
           }}
         >
           Start checking URL
