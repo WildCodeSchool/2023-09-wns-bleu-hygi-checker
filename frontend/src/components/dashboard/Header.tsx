@@ -10,7 +10,7 @@ export default function Nav() {
   return (
     <header className="bg-primary p-4 flex justify-center mb-12 text-align ">
       <div>
-        <Image src="./logo_medium.svg" width={400} height={0} alt="logo" />
+        <Image src="../../logo_small.svg" width={150} height={0} alt="logo" />
       </div>
       <div className="ml-auto">
         <Button

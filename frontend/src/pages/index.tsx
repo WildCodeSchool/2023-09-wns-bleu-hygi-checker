@@ -1,4 +1,4 @@
-import Layout from "@/components/Layout/Layout";
+import Layout from "@/components/check/Layout";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/router";
 import FormCheck from "@/components/FormCheck";
