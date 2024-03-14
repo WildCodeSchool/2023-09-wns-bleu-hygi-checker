@@ -13,7 +13,6 @@ const SECRET_KEY = process.env.SECRET_KEY || "";
 export default async function middleware(request: NextRequest) {
   const { cookies } = request;
   const token = cookies.get("token");
-
   return await checkToken(token?.value, request);
 }
 
@@ -33,6 +32,7 @@ async function checkToken(token: string | undefined, request: NextRequest) {
       response = NextResponse.redirect(new URL("/", request.url));
     } else {
       response = NextResponse.next();
+      // response = NextResponse.redirect(new URL("/auth/login", request.url));
     }
     response.cookies.delete("email");
     response.cookies.delete("role");
@@ -41,6 +41,9 @@ async function checkToken(token: string | undefined, request: NextRequest) {
 
   try {
     const payload = await verify(token);
+
+    // console.log(payload);
+    // console.log(token);
 
     if (payload.email) {
       response = NextResponse.next();
