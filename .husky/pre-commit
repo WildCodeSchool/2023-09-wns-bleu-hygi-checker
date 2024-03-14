@@ -1,0 +1,46 @@
+#!/bin/sh
+. "$(dirname "$0")/_/husky.sh"
+
+fileList=$(git diff --staged --name-only :^package.json :^.husky/pre-commit :^frontend :^backend :^e2e-tests :^.github)
+
+echo ' '
+echo '-------------  🔎  START THE PRE COMMIT CHECK PROCESS  🔍   -----------'
+echo ' '
+echo ' ➡️  Checking staged files.'
+
+
+if [ ! -z "$fileList" ]
+then
+  echo "❌ error: Unauthorized modifications in staged files ❌"
+
+  echo "$fileList"
+
+  echo "use 'git restore --staged ...' to fix the problem"
+
+  exit 1
+fi
+
+echo ' ✅ Staged files checked successfully ! ✅'
+echo ' '
+echo ' '
+echo ' ➡️  Start linting checks'
+echo " [TIPS] if you have Prettier or ESlint issues, use 'npm run prettier-fix-all' or 'npm run eslint-fix-all' in the root folder to lint your code"
+echo ' '
+
+npm run lint
+
+echo ' '
+echo ' ✅ No error found, your code is well linted. Good job !!! ✅'
+echo ' '
+
+echo ' ➡️  Start unit tests'
+
+cd ./frontend && npm run test
+
+echo ' '
+echo ' ✅ All tests passed, your code works fine !!! ✅'
+echo ' '
+echo ' 🚀🔥 Congrats !! Your code is clean, you can push it on Github 🔥🚀'
+echo ' '
+echo '-------------  🔎 PRE COMMIT CHECK PROCESS FINISHED 🔍   -----------'
+echo ' '

@@ -13,11 +13,9 @@ import {
 import { LOGIN } from "@/requests/queries/auth.queries";
 import { InputLogin, LoginQuery, LoginQueryVariables } from "@/types/graphql";
 import { useLazyQuery } from "@apollo/client";
-import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/router";
 
 export default function SignUp() {
-  const { toast } = useToast();
   const router = useRouter();
 
   const [login] = useLazyQuery<LoginQuery, LoginQueryVariables>(LOGIN);
@@ -26,7 +24,6 @@ export default function SignUp() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData) as InputLogin;
-    console.log(data);
     if (data.email && data.password) {
       login({
         variables: { infos: { email: data.email, password: data.password } },
