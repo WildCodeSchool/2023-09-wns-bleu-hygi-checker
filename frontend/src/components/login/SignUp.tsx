@@ -24,7 +24,6 @@ export default function SignUp() {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData) as InputLogin;
-    console.log(data);
     if (data.email && data.password) {
       login({
         variables: { infos: { email: data.email, password: data.password } },

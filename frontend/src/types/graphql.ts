@@ -178,12 +178,12 @@ export function useRegisterMutation(
   baseOptions?: Apollo.MutationHookOptions<
     RegisterMutation,
     RegisterMutationVariables
-  >,
+  >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<RegisterMutation, RegisterMutationVariables>(
     RegisterDocument,
-    options,
+    options
   );
 }
 export type RegisterMutationHookResult = ReturnType<typeof useRegisterMutation>;
@@ -226,12 +226,12 @@ export function useAddTestMutation(
   baseOptions?: Apollo.MutationHookOptions<
     AddTestMutation,
     AddTestMutationVariables
-  >,
+  >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useMutation<AddTestMutation, AddTestMutationVariables>(
     AddTestDocument,
-    options,
+    options
   );
 }
 export type AddTestMutationHookResult = ReturnType<typeof useAddTestMutation>;
@@ -266,33 +266,30 @@ export const LoginDocument = gql`
  * });
  */
 export function useLoginQuery(
-  baseOptions: Apollo.QueryHookOptions<LoginQuery, LoginQueryVariables>,
+  baseOptions: Apollo.QueryHookOptions<LoginQuery, LoginQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<LoginQuery, LoginQueryVariables>(
     LoginDocument,
-    options,
+    options
   );
 }
 export function useLoginLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<LoginQuery, LoginQueryVariables>,
+  baseOptions?: Apollo.LazyQueryHookOptions<LoginQuery, LoginQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<LoginQuery, LoginQueryVariables>(
     LoginDocument,
-    options,
+    options
   );
 }
 export function useLoginSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    LoginQuery,
-    LoginQueryVariables
-  >,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<LoginQuery, LoginQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<LoginQuery, LoginQueryVariables>(
     LoginDocument,
-    options,
+    options
   );
 }
 export type LoginQueryHookResult = ReturnType<typeof useLoginQuery>;
@@ -329,33 +326,33 @@ export const LogoutDocument = gql`
  * });
  */
 export function useLogoutQuery(
-  baseOptions?: Apollo.QueryHookOptions<LogoutQuery, LogoutQueryVariables>,
+  baseOptions?: Apollo.QueryHookOptions<LogoutQuery, LogoutQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<LogoutQuery, LogoutQueryVariables>(
     LogoutDocument,
-    options,
+    options
   );
 }
 export function useLogoutLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<LogoutQuery, LogoutQueryVariables>,
+  baseOptions?: Apollo.LazyQueryHookOptions<LogoutQuery, LogoutQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<LogoutQuery, LogoutQueryVariables>(
     LogoutDocument,
-    options,
+    options
   );
 }
 export function useLogoutSuspenseQuery(
   baseOptions?: Apollo.SuspenseQueryHookOptions<
     LogoutQuery,
     LogoutQueryVariables
-  >,
+  >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<LogoutQuery, LogoutQueryVariables>(
     LogoutDocument,
-    options,
+    options
   );
 }
 export type LogoutQueryHookResult = ReturnType<typeof useLogoutQuery>;
@@ -392,33 +389,30 @@ export const TestsDocument = gql`
  * });
  */
 export function useTestsQuery(
-  baseOptions?: Apollo.QueryHookOptions<TestsQuery, TestsQueryVariables>,
+  baseOptions?: Apollo.QueryHookOptions<TestsQuery, TestsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useQuery<TestsQuery, TestsQueryVariables>(
     TestsDocument,
-    options,
+    options
   );
 }
 export function useTestsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<TestsQuery, TestsQueryVariables>,
+  baseOptions?: Apollo.LazyQueryHookOptions<TestsQuery, TestsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useLazyQuery<TestsQuery, TestsQueryVariables>(
     TestsDocument,
-    options,
+    options
   );
 }
 export function useTestsSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    TestsQuery,
-    TestsQueryVariables
-  >,
+  baseOptions?: Apollo.SuspenseQueryHookOptions<TestsQuery, TestsQueryVariables>
 ) {
   const options = { ...defaultOptions, ...baseOptions };
   return Apollo.useSuspenseQuery<TestsQuery, TestsQueryVariables>(
     TestsDocument,
-    options,
+    options
   );
 }
 export type TestsQueryHookResult = ReturnType<typeof useTestsQuery>;

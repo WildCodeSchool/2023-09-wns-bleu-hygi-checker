@@ -20,7 +20,7 @@ export default async function middleware(request: NextRequest) {
 export async function verify(token: string): Promise<Payload> {
   const { payload } = await jwtVerify<Payload>(
     token,
-    new TextEncoder().encode(SECRET_KEY),
+    new TextEncoder().encode(SECRET_KEY)
   );
   return payload;
 }
