@@ -8,8 +8,13 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
+import { useRouter } from "next/router";
 
 export default function CardResponse() {
+  const router = useRouter();
+
+  const { url } = router.query;
+
   const responses = [
     {
       type: "Url",
@@ -21,7 +26,7 @@ export default function CardResponse() {
   return (
     <Card className="flex flex-col justify-center">
       <CardContent className="grid gap-4">
-        <Input className="mt-4" />
+        <Input className="mt-4" placeholder="enter URL" value={url} disabled />
         <Table>
           <TableHeader>
             <TableRow>

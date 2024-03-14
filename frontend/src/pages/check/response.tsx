@@ -1,14 +1,14 @@
 import Layout from "@/components/Layout/Layout";
-import CardResponse from "@/components/check_url/CardResponse";
+import CardResponse from "@/components/check/CardResponse";
 import { Button } from "@/components/ui/button";
 
 import { useRouter } from "next/router";
 
 export default function Response() {
   const router = useRouter();
-
   return (
     <Layout title="Read">
+      <div className="text-white"></div>
       <div className="flex justify-center gap-4 mt-5">
         <CardResponse />
       </div>
