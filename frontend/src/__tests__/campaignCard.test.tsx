@@ -11,7 +11,7 @@ describe("CampaignCard component", () => {
           url: "urllll",
           urlNumber: 4,
         }}
-      />,
+      />
     );
     expect(screen.getByText(/teeeest/)).toBeInTheDocument();
     expect(screen.getByText(/4/)).toBeInTheDocument();

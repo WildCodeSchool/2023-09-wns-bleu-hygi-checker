@@ -1,13 +1,14 @@
+import http from "http";
+
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
-import datasource from "./lib/datasource";
-
 import Cookies from "cookies";
 import cors from "cors";
 import express from "express";
-import http from "http";
 import { jwtVerify } from "jose";
+
+import datasource from "./lib/datasource";
 import "reflect-metadata";
 import User from "./entities/user.entity";
 import schemaPromise from "./schema"; // schemaPromise is a alias of the buildSchema that is deported in backend/src/schema.ts
@@ -59,7 +60,7 @@ async function main() {
               verify.payload.email
             );
           } catch (err) {
-            console.log(err);
+            console.error(err);
             //potentiellement gérer l'erreur, est ce que l'erreur est liée au fait que le token soit expiré? est ce qu'on le renouvelle? ou est ce autre chose? etc...
           }
         }
@@ -71,7 +72,7 @@ async function main() {
   await new Promise<void>((resolve) =>
     httpServer.listen({ port: 4001 }, resolve)
   );
-  console.log(`🚀 Server lancé sur http://localhost:4001/`);
+  console.info(`🚀 Server lancé sur http://localhost:4001/`);
 }
 
 main();

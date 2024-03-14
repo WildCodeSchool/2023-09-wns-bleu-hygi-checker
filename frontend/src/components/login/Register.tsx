@@ -3,7 +3,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -17,22 +16,19 @@ import {
   RegisterMutation,
   RegisterMutationVariables,
 } from "@/types/graphql";
-import { useToast } from "@/components/ui/use-toast";
 
 export default function Register() {
   const router = useRouter();
-  const { toast } = useToast();
 
   const [register, { error }] = useMutation<
     RegisterMutation,
     RegisterMutationVariables
   >(REGISTER, {
-    onCompleted: (data) => {
-      console.log(data);
+    onCompleted: () => {
       router.push("/auth/login");
     },
     onError(error) {
-      console.log(error);
+      console.error(error);
     },
   });
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -69,13 +65,7 @@ export default function Register() {
             <Label htmlFor="password">Mot de passe</Label>
             <Input id="password" type="password" name="password" />
           </div>
-          <Button
-            type="submit"
-            className="w-full bg-primary"
-            onClick={() => {
-              console.log("Inscription");
-            }}
-          >
+          <Button type="submit" className="w-full bg-primary">
             Créer un compte
           </Button>
           <div>
