@@ -42,6 +42,9 @@ async function checkToken(token: string | undefined, request: NextRequest) {
   try {
     const payload = await verify(token);
 
+    // console.log(payload);
+    // console.log(token);
+
     if (payload.email) {
       response = NextResponse.next();
 
