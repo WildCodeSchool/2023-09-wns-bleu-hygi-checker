@@ -1,5 +1,5 @@
-import LayoutLogin from "@/components/login/Layout";
-import Register from "@/components/login/Register";
+import LayoutLogin from "@/components/auth/Layout";
+import Register from "@/components/auth/Register";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/router";
 
