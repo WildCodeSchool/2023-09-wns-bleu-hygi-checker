@@ -2,6 +2,7 @@ import * as argon2 from "argon2";
 import Cookies from "cookies";
 import { SignJWT } from "jose";
 import { Authorized, Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
+
 import { MyContext } from "..";
 import User, {
   InputLogin,
@@ -31,7 +32,7 @@ export default class UserResolver {
         .setExpirationTime("2h")
         .sign(new TextEncoder().encode(`${process.env.SECRET_KEY}`));
 
-      let cookies = new Cookies(ctx.req, ctx.res);
+      const cookies = new Cookies(ctx.req, ctx.res);
       cookies.set("token", token, { httpOnly: true });
 
       m.message = "Bienvenue!";
@@ -46,7 +47,7 @@ export default class UserResolver {
   @Query(() => Message)
   async logout(@Ctx() ctx: MyContext) {
     if (ctx.user) {
-      let cookies = new Cookies(ctx.req, ctx.res);
+      const cookies = await new Cookies(ctx.req, ctx.res);
       cookies.set("token"); //sans valeur, le cookie token sera supprimé
     }
     const m = new Message();
@@ -58,7 +59,6 @@ export default class UserResolver {
 
   @Mutation(() => UserWithoutPassword)
   async register(@Arg("infos") infos: InputRegister) {
-    console.log("Mes infos => ", infos);
     const user = await new UserService().findUserByEmail(infos.email);
     if (user) {
       throw new Error("Cet email est déjà pris!");

@@ -16,7 +16,7 @@ function Logout() {
       <Button
         variant="outline"
         onClick={() => {
-          router.push("/auth/login");
+          router.push("/");
         }}
       >
         Connexion

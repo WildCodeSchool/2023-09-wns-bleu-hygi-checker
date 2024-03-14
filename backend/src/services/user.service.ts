@@ -1,5 +1,6 @@
-import datasource from "../lib/datasource";
 import { Repository } from "typeorm";
+
+import datasource from "../lib/datasource";
 import User, { InputRegister } from "../entities/user.entity";
 
 export default class UserService {
@@ -24,11 +25,10 @@ export default class UserService {
     return await this.db.save(newUser);
   }
 
-  async upgradeRoleToAdmin(user: User){
-    const editedUser = this.db.create({...user});
+  async upgradeRoleToAdmin(user: User) {
+    const editedUser = this.db.create({ ...user });
     editedUser.role = "ADMIN";
 
     return await this.db.save(editedUser);
-
   }
 }
