@@ -1,21 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
-import Cookies from "js-cookie";
+import Image from "next/image";
+import { useState } from "react";
 
 export default function Nav() {
   const router = useRouter();
-  const [isConnected, setIsConnected] = useState<string | undefined>("");
-
-  useEffect(() => {
-    const email = Cookies.get("email");
-    setIsConnected(email);
-  }, [Cookies.get("email")]);
+  const [isConnected] = useState<boolean>(false);
 
   return (
-    <header className="bg-primary p-4 flex justify-between text-align">
-      <p className="text-white">Hygi-Checker</p>
+    <header className="bg-primary p-4 flex justify-center mb-12 text-align ">
       <div>
+        <Image src="../../logo_small.svg" width={150} height={0} alt="logo" />
+      </div>
+      <div className="ml-auto">
         <Button
           variant={isConnected ? "destructive" : "outline"}
           onClick={() =>

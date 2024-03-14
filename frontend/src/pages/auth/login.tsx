@@ -1,5 +1,5 @@
-import LayoutLogin from "@/components/login/Layout";
-import SignUp from "@/components/login/SignUp";
+import LayoutLogin from "@/components/auth/Layout";
+import SignUp from "@/components/auth/SignUp";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/router";
 
