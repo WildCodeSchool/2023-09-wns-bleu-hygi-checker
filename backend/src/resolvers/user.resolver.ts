@@ -2,7 +2,6 @@ import * as argon2 from "argon2";
 import Cookies from "cookies";
 import { SignJWT } from "jose";
 import { Authorized, Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
-
 import { MyContext } from "..";
 import User, {
   InputLogin,
@@ -11,6 +10,7 @@ import User, {
   UserWithoutPassword,
 } from "../entities/user.entity";
 import UserService from "../services/user.service";
+import { ContextType } from "../types";
 
 @Resolver()
 export default class UserResolver {
@@ -78,4 +78,11 @@ export default class UserResolver {
     const newRole = await new UserService().upgradeRoleToAdmin(user);
     return newRole;
   }
+
+  @Authorized(["USER", "ADMIN"])
+  @Query(() => User)
+  async profile(@Ctx() ctx: ContextType): Promise<User> {
+    return ctx.currentUser as User;
+  }
+
 }

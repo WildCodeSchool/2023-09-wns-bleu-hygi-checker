@@ -1,26 +1,38 @@
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/router";
-import { useState, useEffect } from "react";
-import Cookies from "js-cookie";
+import {
+  useProfileQuery,
+} from "@/types/graphql";
 
 export default function Nav() {
   const router = useRouter();
-  const [isConnected, setIsConnected] = useState<string | undefined>("");
 
-  useEffect(() => {
-    const email = Cookies.get("email");
-    setIsConnected(email);
-  }, [Cookies.get("email")]);
+  const { data: currentUser, client } = useProfileQuery({
+    errorPolicy: "ignore",
+  });
+
+  const isConnected = !!currentUser?.profile.email;
+
+  const handleLog = async () => {
+    if (isConnected) {
+      router.push("/auth/logout");
+    } else {
+      router.push("/auth/login");
+    }
+  };
 
   return (
     <header className="bg-primary p-4 flex justify-between text-align">
       <p className="text-white">Hygi-Checker</p>
+      <div className="flex justify-center gap-6">
+        <Button onClick={() => router.push("/lists")}>Campaign</Button>
+        <Button>Analytics</Button>
+        <Button>Settings</Button>
+      </div>
       <div>
         <Button
           variant={isConnected ? "destructive" : "outline"}
-          onClick={() =>
-            router.push(isConnected ? "auth/logout" : "auth/login")
-          }
+          onClick={handleLog}
         >
           {isConnected ? "Déconnexion" : "Connexion"}
         </Button>
