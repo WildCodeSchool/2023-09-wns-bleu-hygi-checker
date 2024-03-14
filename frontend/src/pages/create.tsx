@@ -1,4 +1,4 @@
-import Layout from "@/components/Layout";
+import Layout from "@/components/Layout/Layout";
 import { useAddTestMutation } from "@/types/graphql";
 import { useState } from "react";
 
