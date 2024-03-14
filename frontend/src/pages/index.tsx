@@ -21,7 +21,7 @@ export default function Home() {
           repudiandae voluptatibus libero consectetur.
         </div>
 
-        <div className="flex justify-center">
+        <div className="flex justify-center text-black">
           <FormCheck />
         </div>
         <Button

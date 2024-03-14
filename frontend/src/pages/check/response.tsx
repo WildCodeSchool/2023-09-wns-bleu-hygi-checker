@@ -1,5 +1,5 @@
 import Layout from "@/components/Layout/Layout";
-import CardResponse from "@/components/check_url/CardResponse";
+import CardResponse from "@/components/check/CardResponse";
 import { Button } from "@/components/ui/button";
 
 import { useRouter } from "next/router";
