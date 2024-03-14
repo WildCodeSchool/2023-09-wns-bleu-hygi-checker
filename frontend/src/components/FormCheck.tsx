@@ -9,8 +9,13 @@ export default function FormCheck() {
       <Input id="url" placeholder="enter URL" className="w-[300px]" />
       <div>
         {/* push vers la page response */}
-        <Button variant={"white"} onClick={() => router.push("/")}>
-          Check
+        <Button
+          variant={"white"}
+          onClick={() => {
+            router.push("/check_url/response");
+          }}
+        >
+          Start checking URL
         </Button>
       </div>
     </form>
