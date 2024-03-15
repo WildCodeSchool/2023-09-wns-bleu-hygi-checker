@@ -17,7 +17,7 @@ export default function Layout({ children, title }: LayoutProps) {
         <link rel="icon" href="favicon.ico" />
       </Head>
       <Nav />
-      <main className="main-content p-4 h-screen bg-primary">{children}</main>
+      <main className="main-content p-4 bg-primary">{children}</main>
     </>
   );
 }
