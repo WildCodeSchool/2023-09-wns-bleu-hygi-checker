@@ -1,0 +1,25 @@
+{
+  "name": "hygi-checker",
+  "version": "1.0.0",
+  "description": "hygi-checker",
+  "main": "index.js",
+  "scripts": {
+    "dev": "docker compose up --build",
+    "prod": "docker compose -f docker-compose.production.yml up --build",
+    "e2e": "docker compose -f docker-compose.e2e-tests.yml up",
+    "lint": "lint-staged",
+    "prettier-fix-all": "cd ./backend && npm run prettier:fix && cd ../frontend && npm run prettier:fix",
+    "eslint-fix-all": "cd ./backend && npm run eslint:fix && cd ../frontend && npm run eslint:fix",
+    "prepare": "husky"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^7.2.0",
+    "@typescript-eslint/parser": "^7.2.0"
+  }
+}
