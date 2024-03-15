@@ -73,4 +73,5 @@
 
 body {
   background-color: #303e33;
+  overflow: hidden;
 }
