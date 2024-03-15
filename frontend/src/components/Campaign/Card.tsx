@@ -20,7 +20,7 @@ export default function CampaignCard({ data }: { data: DataCardProps }) {
   return (
     <Card className="flex flex-col text-white w-[350px]">
       <img src="/card.jpg" alt="image" className="w-full rounded-t-lg" />
-      <CardContent className="flex justify-between bg-card p-6">
+      <CardContent className="flex justify-between bg-card p-6 items-center">
         <CardTitle className="text-2xl">Campaign #{data.id}</CardTitle>
         <Switch />
       </CardContent>

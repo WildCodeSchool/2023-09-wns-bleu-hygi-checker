@@ -2,21 +2,30 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useRouter } from "next/router";
 
-export default function FormCheck() {
+interface FormCheckProps {
+  checkText: string;
+  className: string;
+  variant: "outline" | "white";
+}
+
+export default function FormCheck({
+  checkText,
+  className,
+  variant,
+}: FormCheckProps) {
   const router = useRouter();
 
   return (
-    <form className="flex flex-col gap-2">
+    <form className={`flex gap-2 ${className}`}>
       <Input id="url" placeholder="enter URL" className="w-[300px]" />
       <div>
-        {/* push vers la page response */}
         <Button
-          variant={"white"}
+          variant={variant}
           onClick={() => {
             router.push("/check/response");
           }}
         >
-          Start checking URL
+          {checkText}
         </Button>
       </div>
     </form>

@@ -4,6 +4,8 @@ import {
   useProfileQuery,
 } from "@/types/graphql";
 import Image from "next/image";
+import FormCheck from "../FormCheck";
+import Link from "next/link";
 
 export default function Nav() {
   const router = useRouter();
@@ -22,18 +24,26 @@ export default function Nav() {
     }
   };
 
+  const isActiveLink = (href: string) => {
+    return router.pathname === href ? "bg-secondary rounded text-black" : "";
+  };
+
+  console.log(router.pathname);
+
   return (
-    <header className="bg-primary p-4 flex justify-between text-align">
-      <p className="text-white">Hygi-Checker</p>
-      <div className="flex justify-center gap-6">
-        <Button onClick={() => router.push("/lists")}>Campaign</Button>
-        <Button>Analytics</Button>
-        <Button>Settings</Button>
+    <header className="bg-primary p-4 flex justify-between border-b items-center">
+      <Link href="/">
+        <Image src="../../logo_small.svg" width={150} height={0} alt="logo" />
+      </Link>
+      <div className="flex justify-center gap-6 text-white">
+        <Link className={`p-2 ${isActiveLink("/dashboard/campaign/lists")}`} href="/dashboard/campaign/lists">Campaign</Link>
+        <Link className={`p-2 ${isActiveLink("/analytics")}`} href="/analytics">Analytics</Link>
+        <Link className={`p-2 ${isActiveLink("/settings")}`} href="/settings">Settings</Link>
       </div>
       <div>
-        <Image src="../../logo_small.svg" width={150} height={0} alt="logo" />
+        <FormCheck checkText="Check" className="flex-row" variant="outline"/>
       </div>
-      <div className="ml-auto">
+      <div className="">
         <Button
           variant={isConnected ? "destructive" : "outline"}
           onClick={handleLog}

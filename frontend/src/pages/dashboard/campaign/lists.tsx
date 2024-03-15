@@ -1,5 +1,5 @@
-import CampaignCard, { DataCardProps } from "@/components/Campaign/Card";
-import Layout from "@/components/Layout/Layout";
+import CampaignCard, { DataCardProps } from "@/components/campaign/Card";
+import Layout from "@/components/dashboard/Layout";
 
 export default function Campaign() {
   const datas: DataCardProps[] = [
@@ -37,7 +37,7 @@ export default function Campaign() {
 
   return (
     <Layout title="Campaign">
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 justify-items-center">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 justify-items-center xl:mx-24">
         {datas.map((data) => (
           <CampaignCard key={data.id} data={data} />
         ))}
