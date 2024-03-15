@@ -1,5 +1,6 @@
 import Head from "next/head";
 import { ReactNode } from "react";
+import Image from "next/image";
 
 interface LayoutProps {
   children: ReactNode;
@@ -17,7 +18,7 @@ export default function LayoutLogin({ children, title }: LayoutProps) {
       </Head>
       <div className="grid md:grid-cols-2 h-screen">
         <div className="md:flex hidden justify-center items-center bg-primary">
-          <p className="text-white font-bold text-4xl">Hygi-Checker</p>
+          <Image src="/logo_large.svg" width={350} height={0} alt="logo" />
         </div>
         {children}
       </div>
