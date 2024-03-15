@@ -35,8 +35,7 @@ export default function Layout({ children, title }: LayoutProps) {
           <Image
             className="block sm:hidden"
             src={
-              `${router.pathname === "/" ? "." : "../.."}/favicon.svg`
-              //   router.pathname === "/" ? "./favicon.svg" : "../../favicon.svg"
+              router.pathname === "/" ? "./favicon.svg" : "../../favicon.svg"
             }
             width={60}
             height={0}
@@ -45,10 +44,9 @@ export default function Layout({ children, title }: LayoutProps) {
           <Image
             className="hidden sm:block fixed top-5 left-1/2 transform -translate-x-1/2"
             src={
-              `${router.pathname === "/" ? "." : "../.."}/logo_medium.svg`
-              //   router.pathname === "/"
-              //     ? "./logo_medium.svg"
-              //     : "../../logo_medium.svg"
+              router.pathname === "/"
+                ? "./logo_medium.svg"
+                : "../../logo_medium.svg"
             }
             width={350}
             height={0}
