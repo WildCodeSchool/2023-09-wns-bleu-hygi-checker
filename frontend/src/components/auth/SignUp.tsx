@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "../ui/card";
@@ -66,16 +65,11 @@ export default function SignUp() {
               data-testid="login-password"
             />
           </div>
-          <Button>Connexion</Button>
+          <Button type="submit" className="w-full bg-primary">
+            Connexion
+          </Button>
         </form>
       </CardContent>
-      <CardFooter className="flex flex-col gap-2">
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t" />
-          </div>
-        </div>
-      </CardFooter>
     </Card>
   );
 }
