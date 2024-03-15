@@ -20,17 +20,17 @@ import {
 export default function Register() {
   const router = useRouter();
 
-  const [register, { error }] = useMutation<
-    RegisterMutation,
-    RegisterMutationVariables
-  >(REGISTER, {
-    onCompleted: () => {
-      router.push("/auth/login");
-    },
-    onError(error) {
-      console.error(error);
-    },
-  });
+  const [register] = useMutation<RegisterMutation, RegisterMutationVariables>(
+    REGISTER,
+    {
+      onCompleted: () => {
+        router.push("/auth/login");
+      },
+      onError(error) {
+        console.error(error);
+      },
+    }
+  );
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -51,7 +51,7 @@ export default function Register() {
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4">
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="grid gap-2">
           <div className="grid gap-2">
             <Label htmlFor="email">Email</Label>
             <Input
@@ -68,9 +68,6 @@ export default function Register() {
           <Button type="submit" className="w-full bg-primary">
             Créer un compte
           </Button>
-          <div>
-            <span className="text-red-500">{error?.message}</span>
-          </div>
         </form>
       </CardContent>
     </Card>
