@@ -19,7 +19,7 @@ export default function CampaignCard({ data }: { data: DataCardProps }) {
         src="https://source.unsplash.com/random?wallpapers"
         alt="image"
         className="w-full rounded-t-lg"
-        width={250}
+        width={350}
         height={0}
       />
       <CardContent className="flex justify-between p-6 items-center">
