@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import {
   useProfileQuery,
 } from "@/types/graphql";
+import Image from "next/image";
 
 export default function Nav() {
   const router = useRouter();
@@ -30,6 +31,9 @@ export default function Nav() {
         <Button>Settings</Button>
       </div>
       <div>
+        <Image src="../../logo_small.svg" width={150} height={0} alt="logo" />
+      </div>
+      <div className="ml-auto">
         <Button
           variant={isConnected ? "destructive" : "outline"}
           onClick={handleLog}
