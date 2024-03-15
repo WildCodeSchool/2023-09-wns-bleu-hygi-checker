@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  images: {
+    domains: ["images.unsplash.com"],
+  },
   reactStrictMode: true,
   webpackDevMiddleware: (config) => {
     // options de surveillance pour activer le hot reload
