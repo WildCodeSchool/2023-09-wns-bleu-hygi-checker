@@ -45,6 +45,10 @@ const config = {
           DEFAULT: "#33D072",
           foreground: "hsl(var(--secondary-foreground))",
         },
+        card: {
+          DEFAULT: "#3B403C",
+          foreground: "hsl(var(--card-foreground))",
+        },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
           foreground: "hsl(var(--destructive-foreground))",
@@ -60,10 +64,6 @@ const config = {
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
-        },
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
         },
       },
       borderRadius: {

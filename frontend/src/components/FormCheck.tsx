@@ -3,7 +3,17 @@ import { Button } from "./ui/button";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
-export default function FormCheck() {
+interface FormCheckProps {
+  checkText: string;
+  className: string;
+  variant: "outline" | "white";
+}
+
+export default function FormCheck({
+  checkText,
+  className,
+  variant,
+}: FormCheckProps) {
   const router = useRouter();
   const [url, setUrl] = useState("");
 
@@ -12,7 +22,7 @@ export default function FormCheck() {
     router.push(`/check/response?url=${encodeURIComponent(url)}`);
   };
   return (
-    <form className="flex flex-col gap-2" onSubmit={handleSubmit}>
+    <form className={`flex gap-2 ${className}`} onSubmit={handleSubmit}>
       <Input
         id="url"
         placeholder="enter URL"
@@ -21,8 +31,8 @@ export default function FormCheck() {
         onChange={(e) => setUrl(e.target.value)}
       />
       <div>
-        <Button variant={"white"} type="submit">
-          Start checking URL
+        <Button variant={variant} type="submit">
+          {checkText}
         </Button>
       </div>
     </form>
