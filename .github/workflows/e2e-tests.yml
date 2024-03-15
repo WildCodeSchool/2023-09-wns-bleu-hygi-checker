@@ -2,9 +2,8 @@ name: e2e-tests
 
 on:
   pull_request:
-      branches:
+    branches:
       - main
-      - dev
   workflow_call:
 
 jobs:
