@@ -22,7 +22,11 @@ export default function Home() {
         </div>
 
         <div className="flex justify-center text-black">
-          <FormCheck checkText="Start checking URL" className="flex-col" variant="white"/>
+          <FormCheck
+            checkText="Start checking URL"
+            className="flex-col"
+            variant="white"
+          />
         </div>
         <Button
           variant="outline"
