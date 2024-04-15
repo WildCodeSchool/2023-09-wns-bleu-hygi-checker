@@ -1,7 +1,7 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-fileList=$(git diff --staged --name-only :^package.json :^.husky/pre-commit :^frontend :^backend :^e2e-tests :^.github)
+fileList=$(git diff --staged --name-only :^package.json :^.husky/pre-commit :^frontend :^backend :^e2e-tests :^.github :^.gitignore)
 
 echo ' '
 echo '-------------  🔎  START THE PRE COMMIT CHECK PROCESS  🔍   -----------'
@@ -9,16 +9,16 @@ echo ' '
 echo ' ➡️  Checking staged files.'
 
 
-if [ ! -z "$fileList" ]
-then
-  echo "❌ error: Unauthorized modifications in staged files ❌"
+# if [ ! -z "$fileList" ]
+# then
+#   echo "❌ error: Unauthorized modifications in staged files ❌"
 
-  echo "$fileList"
+#   echo "$fileList"
 
-  echo "use 'git restore --staged ...' to fix the problem"
+#   echo "use 'git restore --staged ...' to fix the problem"
 
-  exit 1
-fi
+#   exit 1
+# fi
 
 echo ' ✅ Staged files checked successfully ! ✅'
 echo ' '

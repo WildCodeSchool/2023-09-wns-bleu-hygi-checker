@@ -1,5 +1,5 @@
 global.env
 
-secret.env
+sec.env
 
 node_modules
