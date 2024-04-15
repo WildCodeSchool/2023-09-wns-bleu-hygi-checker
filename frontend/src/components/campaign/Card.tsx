@@ -29,6 +29,7 @@ export default function CampaignCard({ data }: { data: DataCardProps }) {
       <CardFooter className="flex justify-between">
         <Badge>{data.url} URLs</Badge>
         <Button
+          data-testid="watch-button"
           onClick={() => {
             router.push("/dashboard/campaign/details");
           }}
