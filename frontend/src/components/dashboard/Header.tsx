@@ -38,10 +38,16 @@ export default function Nav() {
         >
           Campaign
         </Link>
-        <Link className={`p-2 ${isActiveLink("/analytics")}`} href="/analytics">
+        <Link
+          className={`p-2 ${isActiveLink("/dashboard/analytics")}`}
+          href="/dashboard/analytics"
+        >
           Analytics
         </Link>
-        <Link className={`p-2 ${isActiveLink("/settings")}`} href="/settings">
+        <Link
+          className={`p-2 ${isActiveLink("/dashboard/settings")}`}
+          href="/dashboard/settings"
+        >
           Settings
         </Link>
       </div>
