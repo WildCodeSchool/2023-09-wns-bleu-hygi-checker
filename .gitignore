@@ -3,5 +3,3 @@ global.env
 secret.env
 
 node_modules
-
-.env.prod
