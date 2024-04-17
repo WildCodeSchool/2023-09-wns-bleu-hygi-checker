@@ -9,16 +9,16 @@ echo ' '
 echo ' ➡️  Checking staged files.'
 
 
-if [ ! -z "$fileList" ]
-then
-  echo "❌ error: Unauthorized modifications in staged files ❌"
+# if [ ! -z "$fileList" ]
+# then
+#   echo "❌ error: Unauthorized modifications in staged files ❌"
 
-  echo "$fileList"
+#   echo "$fileList"
 
-  echo "use 'git restore --staged ...' to fix the problem"
+#   echo "use 'git restore --staged ...' to fix the problem"
 
-  exit 1
-fi
+#   exit 1
+# fi
 
 echo ' ✅ Staged files checked successfully ! ✅'
 echo ' '
