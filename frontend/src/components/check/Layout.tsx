@@ -3,15 +3,7 @@ import { ReactNode } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import DropdownMenuTest from "../DropdownMenu";
 
 interface LayoutProps {
   children: ReactNode;
@@ -55,39 +47,7 @@ export default function Layout({ children, title }: LayoutProps) {
         </div>
 
         <div className="mr-4 sm:fixed top-8 right-8">
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Avatar>
-                <AvatarImage
-                  src={
-                    isConnected
-                      ? "https://github.com/shadcn.png"
-                      : "https://i.stack.imgur.com/vaDPM.png?s=256&g=1"
-                  }
-                />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-            </DropdownMenuTrigger>
-            {isConnected ? (
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Billing</DropdownMenuItem>
-                <DropdownMenuItem>Team</DropdownMenuItem>
-                <DropdownMenuItem>Subscription</DropdownMenuItem>
-              </DropdownMenuContent>
-            ) : (
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel
-                  className="cursor-pointer"
-                  onClick={() => router.push("/auth/login")}
-                >
-                  Login
-                </DropdownMenuLabel>
-              </DropdownMenuContent>
-            )}
-          </DropdownMenu>
+          <DropdownMenuTest isConnected={isConnected} />
         </div>
       </header>
       <main className="main-content p-4 h-screen bg-primary">{children}</main>
