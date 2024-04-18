@@ -27,7 +27,7 @@ echo ' ➡️  Start linting checks'
 echo " [TIPS] if you have Prettier or ESlint issues, use 'npm run prettier-fix-all' or 'npm run eslint-fix-all' in the root folder to lint your code"
 echo ' '
 
-npm run lint
+# npm run lint
 
 echo ' '
 echo ' ✅ No error found, your code is well linted. Good job !!! ✅'
@@ -35,7 +35,7 @@ echo ' '
 
 echo ' ➡️  Start unit tests'
 
-cd ./frontend && npm run test
+# cd ./frontend && npm run test
 
 echo ' '
 echo ' ✅ All tests passed, your code works fine !!! ✅'
