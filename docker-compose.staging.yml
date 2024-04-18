@@ -1,5 +1,5 @@
 services:
-  db:
+  staging-db:
     image: postgres:15-alpine
     stop_grace_period: 0s
     environment:
@@ -13,7 +13,7 @@ services:
     volumes:
       - stagingDB:/var/lib/postgresql/data
 
-  backend:
+  staging-backend:
     environment:
       DB_HOST: db
       DB_PASS: ${DB_PASS-postgres}
@@ -26,13 +26,13 @@ services:
         condition: service_healthy
     image: hygichecker/hygi-checker-back
 
-  frontend:
+  staging-frontend:
     environment:
       JWT_PRIVATE_KEY: ${JWT_PRIVATE_KEY:-changeme}
     stop_grace_period: 0s
     image: hygichecker/hygi-checker-front
 
-  gateway:
+  staging-gateway:
     stop_grace_period: 0s
     restart: always
     build:
