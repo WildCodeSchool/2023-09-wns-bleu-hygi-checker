@@ -15,8 +15,8 @@ export default function Home() {
         </h1>
 
         <div className="md:w-1/2">
-          TEST STAGING 2 Lorem ipsum dolor sit amet consectetur adipisicing
-          elit. Totam magni odit illo rem incidunt officia pariatur excepturi
+          Victory ?Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          Totam magni odit illo rem incidunt officia pariatur excepturi
           voluptatum et minima, molestiae necessitatibus ad perferendis alias
           fugiat repudiandae voluptatibus libero consectetur.
         </div>
