@@ -1,9 +1,16 @@
 name: build and push production client to dockerhub
 
 on:
-  pull_request:
-    branches:
-      - main
+  workflow_call:
+    inputs:
+      image_name:
+        type: string
+        required: true
+    secrets:
+      DOCKERHUB_USERNAME:
+        required: true
+      DOCKERHUB_TOKEN:
+        required: true
 
 jobs:
   build-and-push-client:
@@ -22,11 +29,8 @@ jobs:
         uses: docker/build-push-action@v4
         with:
           push: true
-          build-args: |
-            NEXT_PUBLIC_GRAPHQL_API_URL=http://localhost:4001
-            NEXT_PUBLIC_UPLOAD_API_ENDPOINT=http://localhost:8000/uploads
           context: "{{defaultContext}}:frontend"
           file: "Dockerfile.production"
-          tags: hygichecker/hygi-checker:dev
+          tags: ${{ inputs.image_name }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
