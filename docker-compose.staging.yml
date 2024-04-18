@@ -22,7 +22,7 @@ services:
       CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-https://staging.0923-bleu-2.wns.wilders.dev/}
     stop_grace_period: 0s
     depends_on:
-      db:
+      staging-db:
         condition: service_healthy
     image: hygichecker/hygi-checker-back
 
