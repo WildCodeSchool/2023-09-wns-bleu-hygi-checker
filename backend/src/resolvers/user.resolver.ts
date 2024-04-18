@@ -84,5 +84,4 @@ export default class UserResolver {
   async profile(@Ctx() ctx: ContextType): Promise<User> {
     return ctx.currentUser as User;
   }
-
 }

@@ -19,7 +19,7 @@ function Logout() {
           router.push("/");
         }}
       >
-        Connexion
+        Accueil
       </Button>
     </main>
   );
