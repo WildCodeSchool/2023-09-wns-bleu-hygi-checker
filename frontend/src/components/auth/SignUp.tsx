@@ -13,9 +13,17 @@ import { LOGIN } from "@/requests/queries/auth.queries";
 import { InputLogin, LoginQuery, LoginQueryVariables } from "@/types/graphql";
 import { useLazyQuery } from "@apollo/client";
 import { useRouter } from "next/router";
+import { useToast } from "../ui/use-toast";
 
 export default function SignUp() {
   const router = useRouter();
+  const { toast } = useToast();
+
+  // verification de l'email
+  const validateEmail = (email: string) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(email);
+  };
 
   const [login] = useLazyQuery<LoginQuery, LoginQueryVariables>(LOGIN);
 
@@ -24,13 +32,42 @@ export default function SignUp() {
     const formData = new FormData(e.currentTarget);
     const data = Object.fromEntries(formData) as InputLogin;
     if (data.email && data.password) {
-      login({
-        variables: { infos: { email: data.email, password: data.password } },
-        onCompleted(data) {
-          if (data.login.success) {
-            router.push("/dashboard/campaign/lists");
-          }
-        },
+      if (validateEmail(data.email)) {
+        login({
+          variables: { infos: { email: data.email, password: data.password } },
+          onCompleted(data) {
+            if (data.login.success) {
+              router.push("/dashboard/campaign/lists");
+              setTimeout(() => {
+                toast({
+                  title: data.login.message,
+                  variant: "success",
+                });
+              }, 500);
+            } else {
+              toast({
+                title: data.login.message,
+                variant: "destructive",
+              });
+            }
+          },
+          onError(error) {
+            toast({
+              title: error.message,
+              variant: "destructive",
+            });
+          },
+        });
+      } else {
+        toast({
+          title: "Veuillez saisir une adresse email valide !",
+          variant: "destructive",
+        });
+      }
+    } else {
+      toast({
+        title: "Champ incomplet !",
+        variant: "destructive",
       });
     }
   };
