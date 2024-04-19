@@ -15,10 +15,10 @@ export default function Home() {
         </h1>
 
         <div className="md:w-1/2">
-          Finally won the game !Lorem ipsum dolor sit amet consectetur
-          adipisicing elit. Totam magni odit illo rem incidunt officia pariatur
-          excepturi voluptatum et minima, molestiae necessitatibus ad
-          perferendis alias fugiat repudiandae voluptatibus libero consectetur.
+          modify staging ! Lorem ipsum dolor sit amet consectetur adipisicing
+          elit. Totam magni odit illo rem incidunt officia pariatur excepturi
+          voluptatum et minima, molestiae necessitatibus ad perferendis alias
+          fugiat repudiandae voluptatibus libero consectetur.
         </div>
 
         <div className="flex justify-center text-black">
