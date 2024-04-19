@@ -28,7 +28,11 @@ export default function DropdownMenuTest({ isConnected }: DropdownMenuProps) {
     logout({
       onCompleted: (data) => {
         if (data.logout.success) {
-          router.push("/");
+          if (router.pathname == "/") {
+            router.reload();
+          } else {
+            router.push("/");
+          }
           setTimeout(() => {
             toast({
               title: data.logout.message,

@@ -36,9 +36,11 @@ export default function Register() {
       onError(error) {
         if (error.message == "Cet email est déjà pris!") {
           router.push("/auth/login");
-          toast({
-            title: error.message,
-          });
+          setTimeout(() => {
+            toast({
+              title: error.message,
+            });
+          }, 500);
         }
         console.error(error);
       },

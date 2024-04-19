@@ -51,6 +51,12 @@ export default function SignUp() {
               });
             }
           },
+          onError(error) {
+            toast({
+              title: error.message,
+              variant: "destructive",
+            });
+          },
         });
       } else {
         toast({

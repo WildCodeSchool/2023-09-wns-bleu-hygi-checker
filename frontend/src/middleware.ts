@@ -28,8 +28,11 @@ async function checkToken(token: string | undefined, request: NextRequest) {
   let response: NextResponse<unknown>;
   // si token undefined
   if (!token) {
-    if (request.nextUrl.pathname.startsWith("/dashboard")) {
-      response = NextResponse.redirect(new URL("/login", request.url));
+    if (
+      request.nextUrl.pathname.startsWith("/dashboard") ||
+      request.nextUrl.pathname.startsWith("/check")
+    ) {
+      response = NextResponse.redirect(new URL("/auth/login", request.url));
     } else {
       response = NextResponse.next();
       // response = NextResponse.redirect(new URL("/", request.url));
@@ -41,9 +44,6 @@ async function checkToken(token: string | undefined, request: NextRequest) {
 
   try {
     const payload = await verify(token);
-
-    // console.log(payload);
-    // console.log(token);
 
     if (payload.email) {
       response = NextResponse.next();
@@ -58,7 +58,6 @@ async function checkToken(token: string | undefined, request: NextRequest) {
       response.cookies.set("role", payload.role);
       return response;
     }
-    // revoir le blocage des routes, auth/login
     return NextResponse.redirect(new URL("/", request.url));
   } catch (err) {
     if (request.nextUrl.pathname.startsWith("/")) {
@@ -69,7 +68,3 @@ async function checkToken(token: string | undefined, request: NextRequest) {
     return response;
   }
 }
-
-export const config = {
-  matcher: "/:path",
-};

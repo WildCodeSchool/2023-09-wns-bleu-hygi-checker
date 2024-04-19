@@ -16,7 +16,25 @@ export default function Nav() {
 
   const { toast } = useToast();
 
-  const isConnected = true;
+  const [isConnected, setIsConnected] = useState<boolean>(false);
+
+  const [mail, setMail] = useState("");
+
+  useEffect(() => {
+    const checkMail = () => {
+      const mail = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("email="));
+
+      setIsConnected(!!mail);
+      if (mail) {
+        const newMail = mail.split("=")[1];
+        setMail(decodeURIComponent(newMail));
+      }
+    };
+
+    checkMail();
+  }, []);
 
   const [openNavMobile, setOpenNavMobile] = useState(false);
 
@@ -45,18 +63,6 @@ export default function Nav() {
     { name: "Analytics", link: "/dashboard/analytics" },
     { name: "Settings", link: "/dashboard/settings" },
   ];
-
-  // const cookies = document.cookie.split(";").find((a) => a.startsWith("email"));
-
-  // let email: string;
-  // if (cookies) {
-  //   const [, emailValue] = cookies.split("=");
-  //   email = decodeURIComponent(emailValue);
-  // } else {
-  //   email = "BUG";
-  // }
-
-  const email = "toto@mail.com";
 
   const [logout] = useLazyQuery<LogoutQuery, LogoutQueryVariables>(LOGOUT);
 
@@ -140,7 +146,7 @@ export default function Nav() {
           <div className="flex-grow"></div>
           <hr />
           <div className="flex justify-between items-center">
-            <p className="text-white">{email}</p>
+            <p className="text-white">{mail}</p>
             <Button variant={"destructive"} onClick={handleLogout}>
               Déconnexion
             </Button>

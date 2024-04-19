@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { useState } from "react";
@@ -13,7 +13,19 @@ interface LayoutProps {
 
 export default function Layout({ children, title }: LayoutProps) {
   const router = useRouter();
-  const [isConnected] = useState<boolean>(false);
+  const [isConnected, setIsConnected] = useState<boolean>(false);
+
+  useEffect(() => {
+    const checkMail = () => {
+      const mail = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("email="));
+
+      setIsConnected(!!mail);
+    };
+
+    checkMail();
+  }, []);
 
   return (
     <>

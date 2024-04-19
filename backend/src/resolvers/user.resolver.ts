@@ -22,8 +22,9 @@ export default class UserResolver {
   async login(@Arg("infos") infos: InputLogin, @Ctx() ctx: MyContext) {
     const user = await new UserService().findUserByEmail(infos.email);
     if (!user) {
-      throw new Error("Vérifiez vos informations !");
+      throw new Error("Compte inconnu.");
     }
+
     const isPasswordValid = await argon2.verify(user.password, infos.password);
     const m = new Message();
     if (isPasswordValid) {
