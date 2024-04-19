@@ -15,7 +15,7 @@ export default function Home() {
         </h1>
 
         <div className="md:w-1/2">
-          Victory ?Lorem ipsum dolor sit amet consectetur adipisicing elit.
+          modify main ! Lorem ipsum dolor sit amet consectetur adipisicing elit.
           Totam magni odit illo rem incidunt officia pariatur excepturi
           voluptatum et minima, molestiae necessitatibus ad perferendis alias
           fugiat repudiandae voluptatibus libero consectetur.
