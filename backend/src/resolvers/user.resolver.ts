@@ -22,8 +22,9 @@ export default class UserResolver {
   async login(@Arg("infos") infos: InputLogin, @Ctx() ctx: MyContext) {
     const user = await new UserService().findUserByEmail(infos.email);
     if (!user) {
-      throw new Error("Vérifiez vos informations");
+      throw new Error("Compte inconnu.");
     }
+
     const isPasswordValid = await argon2.verify(user.password, infos.password);
     const m = new Message();
     if (isPasswordValid) {
@@ -38,7 +39,7 @@ export default class UserResolver {
       m.message = "Bienvenue!";
       m.success = true;
     } else {
-      m.message = "Vérifiez vos informations";
+      m.message = "Vérifiez vos informations !";
       m.success = false;
     }
     return m;
@@ -51,7 +52,7 @@ export default class UserResolver {
       cookies.set("token"); //sans valeur, le cookie token sera supprimé
     }
     const m = new Message();
-    m.message = "Vous avez été déconnecté";
+    m.message = "Vous avez été déconnecté.";
     m.success = true;
 
     return m;
@@ -73,7 +74,7 @@ export default class UserResolver {
   async upgradeRole(@Arg("id") id: string) {
     const user = await new UserService().findUserById(id);
     if (!user) {
-      throw new Error("Cet utilisateur n'existe pas");
+      throw new Error("Cet utilisateur n'existe pas.");
     }
     const newRole = await new UserService().upgradeRoleToAdmin(user);
     return newRole;
@@ -84,5 +85,4 @@ export default class UserResolver {
   async profile(@Ctx() ctx: ContextType): Promise<User> {
     return ctx.currentUser as User;
   }
-
 }
