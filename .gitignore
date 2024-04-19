@@ -3,3 +3,5 @@ global.env
 secret.env
 
 node_modules
+
+tasks.md
