@@ -1,7 +1,7 @@
 import { Repository } from "typeorm";
 
-import datasource from "../lib/datasource";
 import User, { InputRegister } from "../entities/user.entity";
+import datasource from "../lib/datasource";
 
 export default class UserService {
   db: Repository<User>;
@@ -16,6 +16,7 @@ export default class UserService {
   async findUserByEmail(email: string) {
     return await this.db.findOneBy({ email });
   }
+
   async findUserById(id: string) {
     return await this.db.findOneBy({ id });
   }
