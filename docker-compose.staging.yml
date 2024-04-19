@@ -11,7 +11,7 @@ services:
       timeout: 5s
       retries: 5
     volumes:
-      - prodDB:/var/lib/postgresql/data
+      - stagingDB:/var/lib/postgresql/data
 
   backend:
     environment:
@@ -19,7 +19,7 @@ services:
       DB_PASS: ${DB_PASS-postgres}
       DB_USER: ${DB_USER-postgres}
       NODE_ENV: ${NODE_ENV:-production}
-      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-https://0923-bleu-2.wns.wilders.dev/}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-https://staging.0923-bleu-2.wns.wilders.dev/}
     stop_grace_period: 0s
     depends_on:
       db:
@@ -46,4 +46,4 @@ services:
       - ./logs:/var/log/nginx
 
 volumes:
-  prodDB:
+  stagingDB:

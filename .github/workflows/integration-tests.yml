@@ -3,9 +3,8 @@ name: "integration-tests"
 on:
   pull_request:
     branches:
-      - main
       - dev
-
+  workflow_call:
 
 jobs:
   check_changes_back:

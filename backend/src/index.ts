@@ -38,7 +38,11 @@ async function main() {
   app.use(
     "/",
     cors<cors.CorsRequest>({
-      origin: ["http://localhost:3000", "https://studio.apollographql.com"],
+      origin: [
+        "http://localhost:3000",
+        "https://studio.apollographql.com",
+        "https://0923-bleu-2.wns.wilders.dev/",
+      ],
       credentials: true,
     }),
     express.json(),
