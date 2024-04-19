@@ -8,6 +8,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useRouter } from "next/router";
+import { useLazyQuery } from "@apollo/client";
+import { LogoutQuery, LogoutQueryVariables } from "@/types/graphql";
+import { LOGOUT } from "@/requests/queries/auth.queries";
+import { useToast } from "./ui/use-toast";
 
 interface DropdownMenuProps {
   isConnected: boolean;
@@ -15,6 +19,25 @@ interface DropdownMenuProps {
 
 export default function DropdownMenuTest({ isConnected }: DropdownMenuProps) {
   const router = useRouter();
+
+  const { toast } = useToast();
+
+  const [logout] = useLazyQuery<LogoutQuery, LogoutQueryVariables>(LOGOUT);
+
+  const handleLogout = () => {
+    logout({
+      onCompleted: (data) => {
+        if (data.logout.success) {
+          router.push("/");
+          setTimeout(() => {
+            toast({
+              title: data.logout.message,
+            });
+          }, 500);
+        }
+      },
+    });
+  };
 
   return (
     <DropdownMenu>
@@ -34,10 +57,12 @@ export default function DropdownMenuTest({ isConnected }: DropdownMenuProps) {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Profile</DropdownMenuItem>
-          <DropdownMenuItem>Billing</DropdownMenuItem>
-          <DropdownMenuItem>Team</DropdownMenuItem>
-          <DropdownMenuItem>Subscription</DropdownMenuItem>
+          <DropdownMenuItem
+            className="cursor-pointer text-destructive focus:text-destructive"
+            onClick={handleLogout}
+          >
+            Déconnexion
+          </DropdownMenuItem>
         </DropdownMenuContent>
       ) : (
         <DropdownMenuContent align="end">

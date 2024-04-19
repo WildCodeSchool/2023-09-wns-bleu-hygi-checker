@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import { useState } from "react";
 import DropdownMenuTest from "../DropdownMenu";
+import { Toaster } from "../ui/toaster";
 
 interface LayoutProps {
   children: ReactNode;
@@ -51,6 +52,7 @@ export default function Layout({ children, title }: LayoutProps) {
         </div>
       </header>
       <main className="main-content p-4 h-screen bg-primary">{children}</main>
+      <Toaster />
     </>
   );
 }

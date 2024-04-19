@@ -16,17 +16,30 @@ import {
   RegisterMutation,
   RegisterMutationVariables,
 } from "@/types/graphql";
+import { useToast } from "../ui/use-toast";
 
 export default function Register() {
   const router = useRouter();
+
+  const { toast } = useToast();
 
   const [register] = useMutation<RegisterMutation, RegisterMutationVariables>(
     REGISTER,
     {
       onCompleted: () => {
+        toast({
+          title: "Compte créé avec succès !",
+          variant: "success",
+        });
         router.push("/auth/login");
       },
       onError(error) {
+        if (error.message == "Cet email est déjà pris!") {
+          router.push("/auth/login");
+          toast({
+            title: error.message,
+          });
+        }
         console.error(error);
       },
     }
@@ -38,6 +51,11 @@ export default function Register() {
     if (data.email && data.password) {
       register({
         variables: { infos: { email: data.email, password: data.password } },
+      });
+    } else {
+      toast({
+        title: "Champ incomplet !",
+        variant: "destructive",
       });
     }
   };

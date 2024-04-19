@@ -4,19 +4,37 @@ import FormCheck from "../FormCheck";
 import Link from "next/link";
 import { AlignJustify, X } from "lucide-react";
 import DropdownMenuTest from "../DropdownMenu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
+import { useLazyQuery } from "@apollo/client";
+import { LogoutQuery, LogoutQueryVariables } from "@/types/graphql";
+import { LOGOUT } from "@/requests/queries/auth.queries";
+import { useToast } from "../ui/use-toast";
 
 export default function Nav() {
   const router = useRouter();
 
+  const { toast } = useToast();
+
   const isConnected = true;
 
-  const [testButton, setTestButton] = useState(true);
+  const [openNavMobile, setOpenNavMobile] = useState(false);
 
   const handleChangeButton = () => {
-    setTestButton(!testButton);
+    setOpenNavMobile(!openNavMobile);
   };
+
+  const handleCloseButton = () => {
+    setOpenNavMobile(false);
+  };
+
+  // ferme la nav mobile quand on resize l'écran
+  useEffect(() => {
+    window.addEventListener("resize", handleCloseButton);
+    return () => {
+      window.removeEventListener("resize", handleCloseButton);
+    };
+  }, []);
 
   const isActiveLink = (href: string) => {
     return router.pathname === href ? "bg-secondary rounded text-black" : "";
@@ -41,15 +59,40 @@ export default function Nav() {
   const email = "toto@mail.com";
 
   // taille du header
-  const size = 20;
+  const heightHeader = 20;
+
+  // largeur du logo + logo user à partir de md
+  const widthImg = 150;
+
+  const [logout] = useLazyQuery<LogoutQuery, LogoutQueryVariables>(LOGOUT);
+
+  const handleLogout = () => {
+    logout({
+      onCompleted: (data) => {
+        if (data.logout.success) {
+          router.push("/");
+          setTimeout(() => {
+            toast({
+              title: data.logout.message,
+            });
+          }, 500);
+        }
+      },
+    });
+  };
 
   return (
     <>
       <header
-        className={`bg-primary p-4 flex justify-between border-b items-center h-${size}`}
+        className={`bg-primary p-4 flex justify-between border-b items-center h-${heightHeader}`}
       >
         <Link href="/">
-          <Image src="../../logo_small.svg" width={150} height={0} alt="logo" />
+          <Image
+            src="../../logo_small.svg"
+            width={widthImg}
+            height={0}
+            alt="logo"
+          />
         </Link>
 
         <div className="hidden md:flex justify-center gap-6 text-white">
@@ -68,13 +111,15 @@ export default function Nav() {
           <FormCheck checkText="Check" className="flex-row" variant="outline" />
         </div>
 
-        <div className="md:flex hidden w-[150px] lg:w-auto justify-end">
+        <div
+          className={`md:flex hidden w-[${widthImg}px] lg:w-auto justify-end`}
+        >
           <DropdownMenuTest isConnected={isConnected} />
         </div>
 
         <div className="md:hidden flex">
           <button onClick={handleChangeButton}>
-            {testButton ? (
+            {!openNavMobile ? (
               <AlignJustify color="white" height={24} />
             ) : (
               <X color="white" height={24} />
@@ -84,8 +129,8 @@ export default function Nav() {
       </header>
 
       <div
-        className={`absolute top-${size} bottom-0 z-50 w-full transition-all duration-300 ease-in-out ${
-          testButton ? "left-full" : "left-0"
+        className={`absolute top-${heightHeader} bottom-0 z-50 w-full transition-all duration-300 ease-in-out ${
+          openNavMobile ? "left-0" : "left-full"
         }`}
       >
         <div className="h-full w-full bg-primary p-5 flex flex-col gap-10">
@@ -111,7 +156,7 @@ export default function Nav() {
           <hr />
           <div className="flex justify-between items-center">
             <p className="text-white">{email}</p>
-            <Button variant={"destructive"} onClick={() => router.push("/")}>
+            <Button variant={"destructive"} onClick={handleLogout}>
               Déconnexion
             </Button>
           </div>
