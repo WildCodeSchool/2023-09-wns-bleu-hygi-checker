@@ -28,11 +28,11 @@ async function checkToken(token: string | undefined, request: NextRequest) {
   let response: NextResponse<unknown>;
   // si token undefined
   if (!token) {
-    if (request.nextUrl.pathname.startsWith("/read")) {
-      response = NextResponse.redirect(new URL("/", request.url));
+    if (request.nextUrl.pathname.startsWith("/dashboard")) {
+      response = NextResponse.redirect(new URL("/login", request.url));
     } else {
       response = NextResponse.next();
-      // response = NextResponse.redirect(new URL("/auth/login", request.url));
+      // response = NextResponse.redirect(new URL("/", request.url));
     }
     response.cookies.delete("email");
     response.cookies.delete("role");

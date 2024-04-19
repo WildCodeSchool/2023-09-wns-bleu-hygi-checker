@@ -58,12 +58,6 @@ export default function Nav() {
 
   const email = "toto@mail.com";
 
-  // taille du header
-  const heightHeader = 20;
-
-  // largeur du logo + logo user à partir de md
-  const widthImg = 150;
-
   const [logout] = useLazyQuery<LogoutQuery, LogoutQueryVariables>(LOGOUT);
 
   const handleLogout = () => {
@@ -83,16 +77,9 @@ export default function Nav() {
 
   return (
     <>
-      <header
-        className={`bg-primary p-4 flex justify-between border-b items-center h-${heightHeader}`}
-      >
+      <header className="bg-primary p-4 flex justify-between border-b items-center h-20">
         <Link href="/">
-          <Image
-            src="../../logo_small.svg"
-            width={widthImg}
-            height={0}
-            alt="logo"
-          />
+          <Image src="../../logo_small.svg" width={150} height={0} alt="logo" />
         </Link>
 
         <div className="hidden md:flex justify-center gap-6 text-white">
@@ -111,9 +98,7 @@ export default function Nav() {
           <FormCheck checkText="Check" className="flex-row" variant="outline" />
         </div>
 
-        <div
-          className={`md:flex hidden w-[${widthImg}px] lg:w-auto justify-end`}
-        >
+        <div className="md:flex hidden w-[150px] lg:w-auto justify-end">
           <DropdownMenuTest isConnected={isConnected} />
         </div>
 
@@ -129,7 +114,7 @@ export default function Nav() {
       </header>
 
       <div
-        className={`absolute top-${heightHeader} bottom-0 z-50 w-full transition-all duration-300 ease-in-out ${
+        className={`absolute top-20 bottom-0 z-50 w-full transition-all duration-300 ease-in-out ${
           openNavMobile ? "left-0" : "left-full"
         }`}
       >
