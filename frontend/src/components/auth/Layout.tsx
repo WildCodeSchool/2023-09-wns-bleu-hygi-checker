@@ -2,6 +2,7 @@ import Head from "next/head";
 import { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Toaster } from "../ui/toaster";
 
 interface LayoutProps {
   children: ReactNode;
@@ -26,6 +27,7 @@ export default function LayoutLogin({ children, title }: LayoutProps) {
         </Link>
         {children}
       </div>
+      <Toaster />
     </>
   );
 }
