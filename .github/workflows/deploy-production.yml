@@ -1,9 +1,8 @@
 name: Test, compile and push client and server to production
 
 on:
-  pull_request:
-    branches:
-      - main
+  push:
+    branches: ["main"]
 
 jobs:
   notify-vps:
