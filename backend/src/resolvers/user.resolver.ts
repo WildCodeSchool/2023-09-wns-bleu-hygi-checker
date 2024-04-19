@@ -1,7 +1,7 @@
 import * as argon2 from "argon2";
 import Cookies from "cookies";
 import { SignJWT } from "jose";
-import { Authorized, Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { MyContext } from "..";
 import User, {
   InputLogin,
@@ -18,6 +18,7 @@ export default class UserResolver {
   async users() {
     return await new UserService().listUsers();
   }
+
   @Query(() => Message)
   async login(@Arg("infos") infos: InputLogin, @Ctx() ctx: MyContext) {
     const user = await new UserService().findUserByEmail(infos.email);
