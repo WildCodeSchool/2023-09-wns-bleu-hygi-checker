@@ -6,7 +6,7 @@ type URLString = string;
  * @param url La chaîne à valider comme URL.
  * @returns true si l'URL est valide, sinon false.
  */
-export default function validateUrl(url: URLString): boolean {
+export default function validateURL(url: URLString): boolean {
   const urlPattern =
     /^(https?:\/\/)?(www\.)?[\w-]+\.[\w-]+(?:\.[\w-]+)*(\/[\w-]*)*$/;
   return urlPattern.test(url);
