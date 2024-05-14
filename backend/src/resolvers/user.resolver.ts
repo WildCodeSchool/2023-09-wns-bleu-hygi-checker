@@ -28,14 +28,10 @@ export default class UserResolver {
     const isPasswordValid = await argon2.verify(user.password, infos.password);
     const m = new Message();
     if (isPasswordValid) {
-      // en local, on se base sur la secret_key mais en prod/staging, sur JWT_PRIVATE_KEY
-      const encode = process.env.SECRET_KEY
-        ? process.env.SECRET_KEY
-        : process.env.JWT_PRIVATE_KEY;
       const token = await new SignJWT({ email: user.email })
         .setProtectedHeader({ alg: "HS256", typ: "jwt" })
         .setExpirationTime("2h")
-        .sign(new TextEncoder().encode(`${encode}`));
+        .sign(new TextEncoder().encode(`${process.env.JWT_PRIVATE_KEY}`));
 
       const cookies = new Cookies(ctx.req, ctx.res);
       cookies.set("token", token, { httpOnly: true });
