@@ -1,7 +1,7 @@
 import Layout from "@/components/check/Layout";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/router";
-import FormCheck from "@/components/FormCheck";
+import FormCheck from "../components/FormCheck";
 
 export default function Home() {
   const router = useRouter();
