@@ -30,4 +30,6 @@ if (process.argv.length > 2) {
   console.error("Veuillez spécifier une URL comme argument.");
 }
 
+export default checkerURL;
+
 // Exemple d'utilisation: npm run check-url https://www.wildcodeschool.com/

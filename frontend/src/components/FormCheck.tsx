@@ -1,8 +1,8 @@
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
 import { useRouter } from "next/router";
 import { useState } from "react";
 import { Search } from "lucide-react";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 
 interface FormCheckProps {
   checkText: string;
@@ -18,10 +18,46 @@ export default function FormCheck({
   const router = useRouter();
   const [url, setUrl] = useState("");
 
-  const handleSubmit = (event: { preventDefault: () => void }) => {
-    event.preventDefault();
-    router.push(`/check/response?url=${encodeURIComponent(url)}`);
+  const checkURL = async (url: string) => {
+    try {
+      const response = await fetch("http://localhost:4001/api/check-url", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ url }),
+      });
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error(
+        "Une erreur s'est produite lors de la requête vers l'API:",
+        error
+      );
+      throw error;
+    }
   };
+  const handleSubmit = (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    // if (validateURL(url)) {
+    try {
+      checkURL(url);
+      router.push(`/check/response?url=${encodeURIComponent(url)}`);
+    } catch (error) {
+      console.error(
+        "Une erreur s'est produite lors de la vérification de l'URL:",
+        error
+      );
+    }
+    // } else {
+    //   alert("Invalid URL");
+    // }
+  };
+
+  // const handleSubmit = (event: { preventDefault: () => void }) => {
+  //   event.preventDefault();
+  //   router.push(`/check/response?url=${encodeURIComponent(url)}`);
+  // };
   return (
     <form className={`flex gap-2 ${className}`} onSubmit={handleSubmit}>
       <Input
