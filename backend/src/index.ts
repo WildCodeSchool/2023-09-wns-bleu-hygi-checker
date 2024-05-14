@@ -13,6 +13,7 @@ import User from "./entities/user.entity";
 import datasource from "./lib/datasource";
 import schemaPromise from "./schema"; // schemaPromise is a alias of the buildSchema that is deported in backend/src/schema.ts
 import UserService from "./services/user.service";
+import checkerURL from "./utils/checkerUrl";
 
 export interface MyContext {
   req: express.Request;
@@ -71,6 +72,36 @@ async function main() {
         return { req, res, user };
       },
     })
+  );
+  app.post(
+    "/api/check-url",
+    cors<cors.CorsRequest>({
+      origin: ["http://localhost:3000", "https://studio.apollographql.com"],
+      credentials: true,
+    }),
+    async (req, res) => {
+      const { url } = req.body;
+      console.info("Données reçues :", req.body); // Log pour vérifier les données reçues
+      if (!url) {
+        console.error("URL non fournie dans la requête");
+        return res
+          .status(400)
+          .json({ success: false, error: "URL non fournie" });
+      }
+      try {
+        const result = await checkerURL(url); // Utilisation de la fonction de vérification d'URL
+        res.json({ success: true, result });
+      } catch (error) {
+        console.error(
+          "Une erreur s'est produite lors de la vérification de l'URL:",
+          error
+        );
+        res.status(500).json({
+          success: false,
+          error: "Une erreur s'est produite lors de la vérification de l'URL.",
+        });
+      }
+    }
   );
   await datasource.initialize();
   await new Promise<void>((resolve) =>
