@@ -33,7 +33,6 @@ export default class UserResolver {
         .setExpirationTime("2h")
         .sign(new TextEncoder().encode(`${process.env.SECRET_KEY}`));
 
-      console.info(user.email);
       const cookies = new Cookies(ctx.req, ctx.res);
       cookies.set("token", token, { httpOnly: true });
 
