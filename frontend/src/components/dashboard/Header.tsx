@@ -121,7 +121,7 @@ export default function Nav() {
 
       <div
         className={`absolute top-20 bottom-0 z-50 w-full transition-all duration-300 ease-in-out ${
-          openNavMobile ? "left-0" : "left-full"
+          openNavMobile ? "left-0" : "left-full hidden"
         }`}
       >
         <div className="h-full w-full bg-primary p-5 flex flex-col gap-10">
