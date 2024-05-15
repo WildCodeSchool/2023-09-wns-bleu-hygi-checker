@@ -182,4 +182,48 @@ export default class UrlService {
       };
     }
   }
+
+  validateURL(url: string): boolean {
+    const urlPattern =
+      /^(https?:\/\/)?(www\.)?[\w-]+\.[\w-]+(?:\.[\w-]+)*(\/[\w-]*)*$/;
+    return urlPattern.test(url);
+  }
+
+  async checkURL(urlPath: string) {
+    if (!this.validateURL(urlPath)) {
+      return {
+        status: null,
+        statusText: null,
+        responseTime: null,
+        responseDate: null,
+        error: "URL non valide.",
+      };
+    }
+
+    const startTime = Date.now();
+
+    try {
+      const response = await fetch(urlPath);
+      const endTime = Date.now();
+
+      const responseTime = endTime - startTime;
+      const responseDate = response.headers.get("date") || "Non disponible";
+
+      return {
+        status: response.status,
+        statusText: response.statusText,
+        responseTime: responseTime,
+        responseDate: responseDate,
+        error: null,
+      };
+    } catch (error) {
+      return {
+        status: null,
+        statusText: null,
+        responseTime: null,
+        responseDate: null,
+        error: (error as Error).message,
+      };
+    }
+  }
 }
