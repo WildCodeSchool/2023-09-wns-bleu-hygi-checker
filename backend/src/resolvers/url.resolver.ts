@@ -57,4 +57,15 @@ export default class UrlResolver {
   ): Promise<Url> {
     return await this.urlService.removeUrlFromCampaign(urlId, campaignId);
   }
+
+  @Query(() => String)
+  async checkUrl(@Arg("urlPath") urlPath: string) {
+    const result = await new UrlService().checkURL(urlPath);
+
+    if (result.error) {
+      return `Erreur: ${result.error}`;
+    }
+
+    return `Statut: ${result.status}, Temps de réponse: ${result.responseTime} ms, Date de réponse: ${result.responseDate}`;
+  }
 }
