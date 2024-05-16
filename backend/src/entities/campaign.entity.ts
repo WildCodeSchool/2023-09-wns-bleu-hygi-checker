@@ -32,17 +32,15 @@ export default class Campaign extends BaseEntity {
   @Column({ nullable: true, default: true })
   isWorking?: boolean = true; // Indicates whether the campaign is active, enabled by default
 
+  @Field()
   @Column({ name: "user_id" })
-  userId: number;
+  userId: string;
 
   @ManyToOne(() => User)
   @JoinColumn({ name: "user_id" })
   user: User;
 }
 
-/**----------------------
- **      Input Types
- *------------------------**/
 @InputType()
 export class InputCreateCampaign {
   @Field()
@@ -58,5 +56,5 @@ export class InputCreateCampaign {
   isWorking?: boolean;
 
   @Field()
-  userId: number;
+  userId: string;
 }
