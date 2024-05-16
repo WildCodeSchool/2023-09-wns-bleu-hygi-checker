@@ -31,6 +31,15 @@ export default class CampaignService {
   }
 
   async createCampaign(input: InputCreateCampaign): Promise<Campaign> {
+    // const newPictureForProject = await fetch(
+    //   "https://source.unsplash.com/random?wallpapers&landscape"
+    // )
+    //   .then((res) => {
+    //     return res.request.responseURL;
+    //   })
+    //   .catch(() => {
+    //     throw new Error("Failed to get image");
+    //   });
     const newCampaign = this.db.create(input);
     return this.db.save(newCampaign);
   }
