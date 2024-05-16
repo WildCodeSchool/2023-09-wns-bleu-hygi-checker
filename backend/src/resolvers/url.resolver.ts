@@ -108,11 +108,27 @@ export default class UrlResolver {
 
   @Mutation(() => Url)
   async createUrl(@Arg("input") input: InputCreateUrl): Promise<Url> {
-    return await this.urlService.createUrl(input);
+    return this.urlService.createUrl(input);
   }
 
   @Mutation(() => Url)
   async deleteUrl(@Arg("id", () => Int) id: number): Promise<Url> {
     return await this.urlService.deleteUrl(id);
+  }
+
+  @Mutation(() => Url)
+  async addUrlToCampaign(
+    @Arg("urlId", () => Int) urlId: number,
+    @Arg("campaignId", () => Int) campaignId: number
+  ): Promise<Url> {
+    return await this.urlService.addUrlToCampaign(urlId, campaignId);
+  }
+
+  @Mutation(() => Url)
+  async removeUrlFromCampaign(
+    @Arg("urlId", () => Int) urlId: number,
+    @Arg("campaignId", () => Int) campaignId: number
+  ): Promise<Url> {
+    return await this.urlService.removeUrlFromCampaign(urlId, campaignId);
   }
 }
