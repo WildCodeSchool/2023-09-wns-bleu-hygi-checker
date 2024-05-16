@@ -3,7 +3,7 @@ import Image from "next/image";
 import FormCheck from "../FormCheck";
 import Link from "next/link";
 import { AlignJustify, X } from "lucide-react";
-import DropdownMenuTest from "../DropdownMenu";
+import DropdownMenuNav from "./DropdownMenuNav";
 import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { useLazyQuery } from "@apollo/client";
@@ -85,7 +85,12 @@ export default function Nav() {
     <>
       <header className="bg-primary p-4 flex justify-between border-b items-center h-20">
         <Link href="/">
-          <Image src="../../logo_small.svg" width={150} height={0} alt="logo" />
+          <Image
+            src="../../../logo_small.svg"
+            width={150}
+            height={0}
+            alt="logo"
+          />
         </Link>
 
         <div className="hidden md:flex justify-center gap-6 text-white">
@@ -105,7 +110,7 @@ export default function Nav() {
         </div>
 
         <div className="md:flex hidden w-[150px] lg:w-auto justify-end">
-          <DropdownMenuTest isConnected={isConnected} />
+          <DropdownMenuNav isConnected={isConnected} />
         </div>
 
         <div className="md:hidden flex">

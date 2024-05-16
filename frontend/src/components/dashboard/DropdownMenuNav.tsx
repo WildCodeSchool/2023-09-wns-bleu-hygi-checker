@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 import { useLazyQuery } from "@apollo/client";
 import { LogoutQuery, LogoutQueryVariables } from "@/types/graphql";
 import { LOGOUT } from "@/requests/queries/auth.queries";
-import { useToast } from "./ui/use-toast";
+import { useToast } from "../ui/use-toast";
 
 interface DropdownMenuProps {
   isConnected: boolean;

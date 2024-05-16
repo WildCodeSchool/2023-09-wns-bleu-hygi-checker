@@ -2,6 +2,7 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import { Search } from "lucide-react";
 
 interface FormCheckProps {
   checkText: string;
@@ -32,6 +33,7 @@ export default function FormCheck({
       />
       <div>
         <Button variant={variant} type="submit">
+          <Search className="mr-2 h-4 w-4" />
           {checkText}
         </Button>
       </div>

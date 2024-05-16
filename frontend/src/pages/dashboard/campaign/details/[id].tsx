@@ -1,5 +1,4 @@
 import Layout from "@/components/dashboard/Layout";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,
@@ -17,12 +16,15 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { ConfirmationModal } from "@/components/ConfirmationModal";
-import Dropdown from "@/components/Dropdown";
+import { CampaignForm } from "@/components/campaign/CampaignForm";
+import { UrlForm } from "@/components/campaign/UrlForm";
+import Dropdown from "@/components/dashboard/Dropdown";
+import { Badge } from "@/components/ui/badge";
 
 import { useRouter } from "next/router";
 import { useToast } from "@/components/ui/use-toast";
 
-export default function Response() {
+export default function CampaignDetail() {
   const router = useRouter();
   const { toast } = useToast();
 
@@ -56,7 +58,7 @@ export default function Response() {
 
   const deleteURL = () => {
     toast({
-      title: "This campaign has been deleted",
+      title: "This URL has been deleted",
       variant: "success",
     });
   };
@@ -64,26 +66,39 @@ export default function Response() {
   return (
     <Layout title="Read">
       <div className="w-full">
-        <div className="flex justify-end gap-4 mt-5">
-          <Button
-            variant="outline"
-            className="bg-blue-500 text-white"
-            onClick={() => {
-              router.push("/");
-            }}
-          >
-            Edit campaign
-          </Button>
-          <ConfirmationModal
-            buttonText={"Delete this campaign"}
-            buttonVariant={"destructive"}
-            title={"Delete this campaign"}
-            message={"WARNING : Datas will be delete forever"}
-            noText={"No, keep it"}
-            yesText={"Yes, delete it"}
-            action={deleteCampaign}
-          />
+        <div className="flex flex-col items-center  md:flex-row justify-between gap-4 mt-5">
+          <div className="flex flex-col text-white md:flex-row justify-center items-center">
+            <p className="font-bold text-xl md:text-2xl">Campaign #1</p>
+
+            <Badge variant="secondary" className="mt-2 ml-0 md:ml-4 mt-1">
+              Active
+            </Badge>
+          </div>
+          {/* **************  HEADER BUTTONS  *************** */}
+          <div>
+            <UrlForm />
+            <CampaignForm
+              isNewCampaign={false}
+              buttonText={"Edit campaign"}
+              buttonVariant={"outline"}
+              title={"Edit this campaign"}
+            />
+
+            <ConfirmationModal
+              forDelete={true}
+              buttonText={"Delete campaign"}
+              buttonVariant={"destructive"}
+              title={"Delete this campaign"}
+              message={"WARNING : Datas will be delete forever"}
+              noText={"No, keep it"}
+              yesText={"Yes, delete it"}
+              action={deleteCampaign}
+            />
+          </div>
         </div>
+        {/* *********************************************** */}
+        {/* **************  CHARTS *************** */}
+        {/* --------------------  Desktop  -------------------- */}
         <section className="hidden md:block">
           <div className="flex justify-center mt-5 gap-4">
             <Card className="flex justify-center p-10">
@@ -97,6 +112,8 @@ export default function Response() {
             </Card>
           </div>
         </section>
+        {/* --------------------  Mobile  -------------------- */}
+
         <section className="my-4 px-12 md:hidden">
           <Carousel className="flex justify-center items-center">
             <CarouselContent className="flex justify-center items-center">
@@ -120,6 +137,9 @@ export default function Response() {
             <CarouselNext />
           </Carousel>
         </section>
+        {/* *************************************** */}
+        {/* **************  RESPONSE TABLE *************** */}
+        {/* ----------------  Table Header  ------------- */}
         <div className="w-full flex justify-center gap-4 mt-5">
           <Table className="w-full text-white">
             <TableHeader className="bg-stone-500 text-white">
@@ -129,6 +149,7 @@ export default function Response() {
                 <TableHead className="text-right text-white">Actions</TableHead>
               </TableRow>
             </TableHeader>
+            {/* ----------------  Table Body  ------------- */}
             <TableBody>
               {responses.map((response) => (
                 <TableRow key={response.routes}>
@@ -141,17 +162,8 @@ export default function Response() {
                       <Dropdown />
                     </div>
                     <div className="hidden md:flex justify-end gap-4">
-                      <Button
-                        variant="outline"
-                        className="bg-blue-500 text-white"
-                        onClick={() => {
-                          router.push("/auth/register");
-                        }}
-                      >
-                        Change
-                      </Button>
-
                       <ConfirmationModal
+                        forDelete={true}
                         buttonText={"Delete"}
                         buttonVariant={"destructive"}
                         title={"Delete this URL"}
@@ -169,6 +181,7 @@ export default function Response() {
             </TableBody>
           </Table>
         </div>
+        {/* ********************************************** */}
       </div>
     </Layout>
   );
