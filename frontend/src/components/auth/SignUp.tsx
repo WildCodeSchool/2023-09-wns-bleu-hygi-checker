@@ -14,10 +14,13 @@ import { InputLogin, LoginQuery, LoginQueryVariables } from "@/types/graphql";
 import { useLazyQuery } from "@apollo/client";
 import { useRouter } from "next/router";
 import { useToast } from "../ui/use-toast";
+import { useState } from "react";
 
 export default function SignUp() {
   const router = useRouter();
   const { toast } = useToast();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   // verification de l'email
   const validateEmail = (email: string) => {
@@ -75,10 +78,8 @@ export default function SignUp() {
   return (
     <Card className="flex flex-col">
       <CardHeader className="space-x-1">
-        <CardTitle className="text-2xl">Se connecter</CardTitle>
-        <CardDescription>
-          Entrer votre email pour vous connecter
-        </CardDescription>
+        <CardTitle className="text-2xl">Sign in</CardTitle>
+        <CardDescription>Enter your email to log in</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4">
         <form onSubmit={handleSubmit} className="grid gap-2">
@@ -92,18 +93,22 @@ export default function SignUp() {
               autoComplete="email"
               autoCorrect="off"
               name="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               data-testid="login-email"
             />
-            <Label htmlFor="password">Mot de passe</Label>
+            <Label htmlFor="password">Password</Label>
             <Input
               id="password"
               type="password"
               name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               data-testid="login-password"
             />
           </div>
           <Button type="submit" className="w-full bg-primary">
-            Connexion
+            Log in
           </Button>
         </form>
       </CardContent>
