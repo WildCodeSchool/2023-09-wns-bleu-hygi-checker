@@ -66,7 +66,7 @@ export default class UrlResolver {
       return `Erreur: ${result.error}`;
     }
 
-    return `Statut: ${result.status}, Temps de réponse: ${result.responseTime} ms, Date de réponse: ${result.responseDate}`;
+    return result;
   }
 
   @Mutation(() => Url)
