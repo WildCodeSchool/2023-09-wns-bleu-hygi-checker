@@ -63,13 +63,13 @@ export default function SignUp() {
         });
       } else {
         toast({
-          title: "Veuillez saisir une adresse email valide !",
+          title: "Please enter a valid email address.",
           variant: "destructive",
         });
       }
     } else {
       toast({
-        title: "Champ incomplet !",
+        title: "Incomplete field.",
         variant: "destructive",
       });
     }
