@@ -1,17 +1,10 @@
 import Head from "next/head";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import { useState } from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import DropdownMenuTest from "../dashboard/DropdownMenuNav";
+import { Toaster } from "../ui/toaster";
 
 interface LayoutProps {
   children: ReactNode;
@@ -20,7 +13,19 @@ interface LayoutProps {
 
 export default function Layout({ children, title }: LayoutProps) {
   const router = useRouter();
-  const [isConnected] = useState<boolean>(false);
+  const [isConnected, setIsConnected] = useState<boolean>(false);
+
+  useEffect(() => {
+    const checkMail = () => {
+      const mail = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("email="));
+
+      setIsConnected(!!mail);
+    };
+
+    checkMail();
+  }, []);
 
   return (
     <>
@@ -55,42 +60,11 @@ export default function Layout({ children, title }: LayoutProps) {
         </div>
 
         <div className="mr-4 sm:fixed top-8 right-8">
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Avatar>
-                <AvatarImage
-                  src={
-                    isConnected
-                      ? "https://github.com/shadcn.png"
-                      : "https://i.stack.imgur.com/vaDPM.png?s=256&g=1"
-                  }
-                />
-                <AvatarFallback>CN</AvatarFallback>
-              </Avatar>
-            </DropdownMenuTrigger>
-            {isConnected ? (
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem>Profile</DropdownMenuItem>
-                <DropdownMenuItem>Billing</DropdownMenuItem>
-                <DropdownMenuItem>Team</DropdownMenuItem>
-                <DropdownMenuItem>Subscription</DropdownMenuItem>
-              </DropdownMenuContent>
-            ) : (
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel
-                  className="cursor-pointer"
-                  onClick={() => router.push("/auth/login")}
-                >
-                  Login
-                </DropdownMenuLabel>
-              </DropdownMenuContent>
-            )}
-          </DropdownMenu>
+          <DropdownMenuTest isConnected={isConnected} />
         </div>
       </header>
       <main className="main-content p-4 h-screen bg-primary">{children}</main>
+      <Toaster />
     </>
   );
 }

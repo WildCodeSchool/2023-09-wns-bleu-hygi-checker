@@ -1,0 +1,14 @@
+name: Test, compile and push client and server to production
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  notify-vps:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call VPS webhook to update production
+        uses: wei/curl@master
+        with:
+          args: https://ops.0923-bleu-2.wns.wilders.dev/hooks/update-production-hygi-checker"

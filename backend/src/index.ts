@@ -38,7 +38,11 @@ async function main() {
   app.use(
     "/",
     cors<cors.CorsRequest>({
-      origin: ["http://localhost:3000", "https://studio.apollographql.com"],
+      origin: [
+        "http://localhost:3000",
+        "https://studio.apollographql.com",
+        "https://0923-bleu-2.wns.wilders.dev/",
+      ],
       credentials: true,
     }),
     express.json(),
@@ -54,7 +58,7 @@ async function main() {
           try {
             const verify = await jwtVerify<Payload>(
               token,
-              new TextEncoder().encode(process.env.SECRET_KEY)
+              new TextEncoder().encode(process.env.JWT_PRIVATE_KEY)
             );
             user = await new UserService().findUserByEmail(
               verify.payload.email

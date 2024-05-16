@@ -1,6 +1,7 @@
 import Head from "next/head";
 import { ReactNode } from "react";
 import Nav from "./Header";
+import { Toaster } from "../ui/toaster";
 
 interface LayoutProps {
   children: ReactNode;
@@ -17,7 +18,14 @@ export default function Layout({ children, title }: LayoutProps) {
         <link rel="icon" href="favicon.ico" />
       </Head>
       <Nav />
-      <main className="main-content p-4 bg-primary">{children}</main>
+      <main
+        className="p-4 bg-primary overflow-y-auto"
+        // -80px car taille du header
+        style={{ maxHeight: "calc(100vh - 80px)" }}
+      >
+        {children}
+      </main>
+      <Toaster />
     </>
   );
 }

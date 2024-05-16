@@ -1,4 +1,4 @@
-import CampaignCard from "@/components/CampaignCard";
+import CampaignCard from "@/components/dashboard/CampaignCard";
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 

@@ -1,7 +1,8 @@
+import { Search } from "lucide-react";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { useRouter } from "next/router";
 
 interface FormCheckProps {
   checkText: string;
@@ -43,6 +44,7 @@ export default function FormCheck({
         />
         <div>
           <Button variant={variant} type="submit" disabled={isSubmitDisabled}>
+            <Search className="mr-2 h-4 w-4" />
             {checkText}
           </Button>
         </div>

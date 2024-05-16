@@ -31,7 +31,7 @@ export default function CampaignCard({ data }: { data: DataCardProps }) {
         <Button
           data-testid="watch-button"
           onClick={() => {
-            router.push("/dashboard/campaign/details");
+            router.push(`/dashboard/campaign/details/${data.id}`);
           }}
         >
           Voir
