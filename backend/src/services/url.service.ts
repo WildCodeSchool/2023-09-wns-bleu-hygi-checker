@@ -207,7 +207,7 @@ export default class UrlService {
       const endTime = Date.now();
 
       const responseTime = endTime - startTime;
-      const responseDate = response.headers.get("date") || "Non disponible";
+      const responseDate = response.headers.get("date") || "Not available";
 
       return {
         status: response.status,
