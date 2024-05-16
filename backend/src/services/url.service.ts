@@ -1,4 +1,5 @@
-import { Repository } from "typeorm";
+import { In, Repository } from "typeorm";
+import Campaign from "../entities/campaign.entity";
 import Url, { InputCreateUrl } from "../entities/url.entity";
 import datasource from "../lib/datasource";
 
@@ -8,23 +9,18 @@ export default class UrlService {
     this.db = datasource.getRepository(Url);
   }
 
-  async listUrls() {
-    return this.db.find();
+  async listUrls(): Promise<Url[]> {
+    return this.db.find({ relations: ["campaigns"] });
   }
 
-  // async listUrlsByCampaignId(userId: number): Promise<Url[]> {
-  //   return this.db.find({
-  //     where: { CampaingId },
-  //   });
-  // }
-
-  async findUrlById(id: number) {
-    return await this.db.findOneBy({ id });
+  async findUrlById(id: number): Promise<Url | null> {
+    return this.db.findOne({ where: { id }, relations: ["campaigns"] });
   }
 
-  async createUrl({ urlPath, type }: InputCreateUrl) {
-    const newUrl = this.db.create({ urlPath, type });
-    return await this.db.save(newUrl);
+  async createUrl(input: InputCreateUrl): Promise<Url> {
+    const campaigns = await Campaign.findBy({ id: In(input.campaignIds) });
+    const newUrl = this.db.create({ ...input, campaigns });
+    return this.db.save(newUrl);
   }
 
   async deleteUrl(id: number): Promise<Url> {
@@ -34,6 +30,25 @@ export default class UrlService {
     }
     await this.db.remove(url);
     return url;
+  }
+
+  async addUrlToCampaign(urlId: number, campaignId: number): Promise<Url> {
+    const url = await this.findUrlById(urlId);
+    const campaign = await Campaign.findOneBy({ id: campaignId });
+    if (!url || !campaign) {
+      throw new Error("URL or Campaign not found");
+    }
+    url.campaigns.push(campaign);
+    return this.db.save(url);
+  }
+
+  async removeUrlFromCampaign(urlId: number, campaignId: number): Promise<Url> {
+    const url = await this.findUrlById(urlId);
+    if (!url) {
+      throw new Error("URL not found");
+    }
+    url.campaigns = url.campaigns.filter((c) => c.id !== campaignId);
+    return this.db.save(url);
   }
 
   validateURL(url: string): boolean {

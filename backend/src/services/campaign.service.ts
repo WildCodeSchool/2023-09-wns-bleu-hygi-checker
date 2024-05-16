@@ -8,41 +8,31 @@ export default class CampaignService {
     this.db = datasource.getRepository(Campaign);
   }
 
-  async listCampaigns() {
-    return this.db.find();
+  async listCampaigns(): Promise<Campaign[]> {
+    return this.db.find({ relations: ["urls"] });
   }
 
   async listActiveCampaigns(): Promise<Campaign[]> {
     return this.db.find({
       where: { isWorking: true },
+      relations: ["urls"],
     });
   }
 
   async listCampaignsByUserId(userId: string): Promise<Campaign[]> {
     return this.db.find({
       where: { userId },
+      relations: ["urls"],
     });
   }
 
-  async findCampaignById(id: number) {
-    return await this.db.findOneBy({ id });
+  async findCampaignById(id: number): Promise<Campaign | null> {
+    return this.db.findOne({ where: { id }, relations: ["urls"] });
   }
 
-  async createCampaign({
-    name,
-    intervalTest,
-    isMailAlert,
-    isWorking,
-    userId,
-  }: InputCreateCampaign) {
-    const newCampaign = this.db.create({
-      name,
-      intervalTest,
-      isMailAlert,
-      isWorking,
-      userId,
-    });
-    return await this.db.save(newCampaign);
+  async createCampaign(input: InputCreateCampaign): Promise<Campaign> {
+    const newCampaign = this.db.create(input);
+    return this.db.save(newCampaign);
   }
 
   async deleteCampaign(id: number): Promise<Campaign> {
