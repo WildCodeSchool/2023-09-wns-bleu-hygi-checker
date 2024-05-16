@@ -29,6 +29,7 @@ export default class Response extends BaseEntity {
   @CreateDateColumn()
   creationDate: Date;
 
+  @Field()
   @Column({ name: "url_id" })
   urlId: number;
 
@@ -37,9 +38,6 @@ export default class Response extends BaseEntity {
   url: Url;
 }
 
-/**----------------------
- **      Input Types
- *------------------------**/
 @InputType()
 export class InputCreateResponse {
   @Field()

@@ -23,9 +23,6 @@ export default class Url extends BaseEntity {
   type: UrlType;
 }
 
-/**----------------------
- **      Input Types
- *------------------------**/
 @InputType()
 export class InputCreateUrl {
   @Field()

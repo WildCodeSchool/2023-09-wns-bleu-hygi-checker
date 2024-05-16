@@ -18,7 +18,7 @@ export default class CampaignService {
     });
   }
 
-  async listCampaignsByUserId(userId: number): Promise<Campaign[]> {
+  async listCampaignsByUserId(userId: string): Promise<Campaign[]> {
     return this.db.find({
       where: { userId },
     });
@@ -45,9 +45,13 @@ export default class CampaignService {
     return await this.db.save(newCampaign);
   }
 
-  async deleteCampagne(id: number) {
-    const campaign = (await this.findCampaignById(id)) as Campaign;
+  async deleteCampaign(id: number): Promise<Campaign> {
+    const campaign = await this.findCampaignById(id);
+    if (!campaign) {
+      throw new Error(`Campaign with id ${id} not found`);
+    }
     await this.db.remove(campaign);
-    return { ...campaign, id };
+    campaign.id = id;
+    return campaign;
   }
 }

@@ -4,29 +4,33 @@ import ResponseService from "../services/response.service";
 
 @Resolver()
 export default class ResponseResolver {
+  private responseService: ResponseService;
+
+  constructor() {
+    this.responseService = new ResponseService();
+  }
+
   @Query(() => [Response])
-  async urls(): Promise<Response[]> {
-    return await new ResponseService().listResponses();
+  async responses(): Promise<Response[]> {
+    return await this.responseService.listResponses();
   }
 
   @Query(() => Response, { nullable: true })
   async response(@Arg("id", () => Int) uuid: number): Promise<Response | null> {
-    return Response.findOneBy({ uuid });
+    return await this.responseService.findResponseById(uuid);
   }
 
   @Query(() => [Response])
   async responsesByUrlId(
     @Arg("urlId", () => Int) urlId: number
   ): Promise<Response[]> {
-    return Response.find({ where: { urlId } });
+    return await this.responseService.listResponsesByUrlId(urlId);
   }
 
   @Mutation(() => Response)
   async createResponse(
     @Arg("input") input: InputCreateResponse
   ): Promise<Response> {
-    const responseService = new ResponseService();
-    const response = await responseService.createResponse(input);
-    return response;
+    return await this.responseService.createResponse(input);
   }
 }
