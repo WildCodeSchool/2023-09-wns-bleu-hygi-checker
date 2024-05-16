@@ -4,9 +4,11 @@ import {
   Column,
   Entity,
   JoinColumn,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
+import Url from "./url.entity";
 import User from "./user.entity";
 
 @ObjectType()
@@ -36,9 +38,14 @@ export default class Campaign extends BaseEntity {
   @Column({ name: "user_id" })
   userId: string;
 
+  // @Field(() => User)
   @ManyToOne(() => User)
   @JoinColumn({ name: "user_id" })
   user: User;
+
+  @Field(() => [Url])
+  @ManyToMany(() => Url, (url) => url.campaigns)
+  urls: Url[];
 }
 
 @InputType()

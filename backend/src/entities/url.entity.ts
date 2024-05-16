@@ -1,5 +1,13 @@
 import { Field, InputType, ObjectType } from "type-graphql";
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm";
+import Campaign from "./campaign.entity";
 
 type UrlType = "API" | "PAGE";
 
@@ -21,6 +29,21 @@ export default class Url extends BaseEntity {
     default: "PAGE",
   })
   type: UrlType;
+
+  @Field(() => [Campaign], { nullable: true })
+  @ManyToMany(() => Campaign, (campaign) => campaign.urls)
+  @JoinTable({
+    name: "url_campaign",
+    joinColumn: {
+      name: "url",
+      referencedColumnName: "id",
+    },
+    inverseJoinColumn: {
+      name: "campaign",
+      referencedColumnName: "id",
+    },
+  })
+  campaigns: Campaign[];
 }
 
 @InputType()
@@ -30,4 +53,7 @@ export class InputCreateUrl {
 
   @Field(() => String)
   type: UrlType;
+
+  @Field(() => [Number])
+  campaignIds: number[];
 }
