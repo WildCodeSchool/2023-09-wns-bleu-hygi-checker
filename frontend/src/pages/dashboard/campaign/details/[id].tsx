@@ -22,6 +22,7 @@ import { Badge } from "@/components/ui/badge";
 
 import { useRouter } from "next/router";
 import { useToast } from "@/components/ui/use-toast";
+import Dropdown from "@/components/dashboard/Dropdown";
 
 export default function CampaignDetail() {
   const router = useRouter();
@@ -151,10 +152,10 @@ export default function CampaignDetail() {
                   </TableCell>
                   <TableCell>{response.status}</TableCell>
                   <TableCell className="text-right gap-4">
-                    {/* <div className="flex justify-end gap-4 md:hidden">
+                    <div className="flex justify-end gap-4 md:hidden">
                       <Dropdown />
-                    </div> */}
-                    <div className="flex justify-end gap-4">
+                    </div>
+                    <div className="hidden md:flex justify-end gap-4">
                       <ConfirmationModal
                         forDelete={true}
                         buttonText={"Delete"}
