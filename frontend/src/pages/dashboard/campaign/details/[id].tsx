@@ -18,11 +18,11 @@ import {
 import { ConfirmationModal } from "@/components/ConfirmationModal";
 import { CampaignForm } from "@/components/campaign/CampaignForm";
 import { UrlForm } from "@/components/campaign/UrlForm";
-import Dropdown from "@/components/dashboard/Dropdown";
 import { Badge } from "@/components/ui/badge";
 
 import { useRouter } from "next/router";
 import { useToast } from "@/components/ui/use-toast";
+import Dropdown from "@/components/dashboard/Dropdown";
 
 export default function CampaignDetail() {
   const router = useRouter();
@@ -63,6 +63,13 @@ export default function CampaignDetail() {
     });
   };
 
+  // données des card/carousel
+  const table = [
+    "Graphiques multiples 1",
+    "Graphiques multiples 2",
+    "Graphiques multiples 3",
+  ];
+
   return (
     <Layout title="Read">
       <div className="w-full">
@@ -70,17 +77,17 @@ export default function CampaignDetail() {
           <div className="flex flex-col text-white md:flex-row justify-center items-center">
             <p className="font-bold text-xl md:text-2xl">Campaign #1</p>
 
-            <Badge variant="secondary" className="mt-2 ml-0 md:ml-4 mt-1">
+            <Badge variant="secondary" className="mt-1 ml-0 md:ml-4">
               Active
             </Badge>
           </div>
           {/* **************  HEADER BUTTONS  *************** */}
-          <div>
+          <div className="flex justify-end">
             <UrlForm />
             <CampaignForm
               isNewCampaign={false}
               buttonText={"Edit campaign"}
-              buttonVariant={"outline"}
+              buttonVariant={"edit"}
               title={"Edit this campaign"}
             />
 
@@ -101,37 +108,24 @@ export default function CampaignDetail() {
         {/* --------------------  Desktop  -------------------- */}
         <section className="hidden md:block">
           <div className="flex justify-center mt-5 gap-4">
-            <Card className="flex justify-center p-10">
-              <CardContent>Graphiques multiples</CardContent>
-            </Card>
-            <Card className="flex justify-center p-10">
-              <CardContent>Graphiques multiples</CardContent>
-            </Card>
-            <Card className="flex justify-center p-10">
-              <CardContent>Graphiques multiples</CardContent>
-            </Card>
+            {table.map((t, index) => (
+              <Card key={index} className="flex justify-center p-10">
+                <CardContent className="p-0">{t}</CardContent>
+              </Card>
+            ))}
           </div>
         </section>
         {/* --------------------  Mobile  -------------------- */}
-
         <section className="my-4 px-12 md:hidden">
           <Carousel className="flex justify-center items-center">
-            <CarouselContent className="flex justify-center items-center">
-              <CarouselItem>
-                <div className="py-16 px-6 bg-gray-50 rounded-lg flex justify-center items-center text-2xl">
-                  Graphiques multiples
-                </div>
-              </CarouselItem>
-              <CarouselItem>
-                <div className="py-16 px-6 bg-gray-50 rounded-lg flex justify-center items-center text-2xl">
-                  Graphiques multiples
-                </div>
-              </CarouselItem>
-              <CarouselItem>
-                <div className="py-16 px-6 bg-gray-50 rounded-lg flex justify-center items-center text-2xl">
-                  Graphiques multiples
-                </div>
-              </CarouselItem>
+            <CarouselContent>
+              {table.map((t, index) => (
+                <CarouselItem key={index}>
+                  <Card className="flex justify-center p-10 rounded-lg text-2xl w-full">
+                    <CardContent>{t}</CardContent>
+                  </Card>
+                </CarouselItem>
+              ))}
             </CarouselContent>
             <CarouselPrevious />
             <CarouselNext />

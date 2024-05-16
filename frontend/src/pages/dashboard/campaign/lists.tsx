@@ -42,7 +42,7 @@ export default function Campaign() {
         <CampaignForm
           isNewCampaign={true}
           buttonText={"Create new campaign"}
-          buttonVariant={"outline"}
+          buttonVariant={"edit"}
           title={"Create new campaign"}
         />
       </div>
