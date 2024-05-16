@@ -28,6 +28,7 @@ export interface CampaignFormProps {
     | "secondary"
     | "white"
     | "ghost"
+    | "edit"
     | null
     | undefined;
   title: string;

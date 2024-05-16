@@ -54,8 +54,19 @@ export default function Nav() {
     };
   }, []);
 
-  const isActiveLink = (href: string) => {
-    return router.pathname === href ? "bg-secondary rounded text-black" : "";
+  const isActiveLink = (href: string, name: string) => {
+    if (router.pathname === href) {
+      return "bg-secondary rounded text-black";
+    }
+
+    if (
+      router.pathname.startsWith("/dashboard/campaign/details") &&
+      name == "Campaign"
+    ) {
+      return "bg-secondary rounded text-black";
+    }
+
+    return "";
   };
 
   const navLink = [
@@ -97,7 +108,7 @@ export default function Nav() {
           {navLink.map((a, index) => (
             <Link
               key={index}
-              className={`p-2 ${isActiveLink(a.link)}`}
+              className={`p-2 ${isActiveLink(a.link, a.name)}`}
               href={a.link}
             >
               {a.name}
@@ -134,7 +145,7 @@ export default function Nav() {
             {navLink.map((a, index) => (
               <Link
                 key={index}
-                className={`p-2 text-lg font-semibold ${isActiveLink(a.link)}`}
+                className={`p-2 text-lg font-semibold ${isActiveLink(a.link, a.name)}`}
                 href={a.link}
               >
                 {a.name.toUpperCase()}
