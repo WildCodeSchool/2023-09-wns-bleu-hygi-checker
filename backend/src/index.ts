@@ -8,9 +8,9 @@ import cors from "cors";
 import express from "express";
 import { jwtVerify } from "jose";
 
-import datasource from "./lib/datasource";
 import "reflect-metadata";
 import User from "./entities/user.entity";
+import datasource from "./lib/datasource";
 import schemaPromise from "./schema"; // schemaPromise is a alias of the buildSchema that is deported in backend/src/schema.ts
 import UserService from "./services/user.service";
 

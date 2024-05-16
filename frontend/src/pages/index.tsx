@@ -1,25 +1,16 @@
 import Layout from "@/components/check/Layout";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/router";
-import FormCheck from "@/components/FormCheck";
+import FormCheck from "../components/FormCheck";
+import Home from "../components/check/Home";
 
-export default function Home() {
+export default function Index() {
   const router = useRouter();
 
   return (
     <Layout title="Home">
       <div className="flex flex-col text-center gap-8 items-center text-white">
-        <h1 className="font-bold uppercase text-3xl tracking-wider">
-          The best Web App for
-          <span className="text-secondary"> Website Monitoring</span>
-        </h1>
-
-        <div className="md:w-1/2">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Totam magni
-          odit illo rem incidunt officia pariatur excepturi voluptatum et
-          minima, molestiae necessitatibus ad perferendis alias fugiat
-          repudiandae voluptatibus libero consectetur.
-        </div>
+        <Home />
 
         <div className="flex justify-center text-black">
           <FormCheck

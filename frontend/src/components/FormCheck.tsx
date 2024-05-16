@@ -1,8 +1,8 @@
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { Search } from "lucide-react";
 import { useRouter } from "next/router";
 import { useState } from "react";
-import { Search } from "lucide-react";
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
 
 interface FormCheckProps {
   checkText: string;
@@ -16,27 +16,39 @@ export default function FormCheck({
   variant,
 }: FormCheckProps) {
   const router = useRouter();
-  const [url, setUrl] = useState("");
+  const [urlPath, setUrlPath] = useState("");
 
-  const handleSubmit = (event: { preventDefault: () => void }) => {
-    event.preventDefault();
-    router.push(`/check/response?url=${encodeURIComponent(url)}`);
+  const handleSubmit = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+    try {
+      router.push(`/check/response?url=${encodeURIComponent(urlPath)}`);
+    } catch (error) {
+      console.error(
+        "Une erreur s'est produite lors de la vérification de l'URL:",
+        error
+      );
+    }
   };
+  // Détermine si le bouton doit être désactivé
+  const isSubmitDisabled = urlPath.trim() === "";
+
   return (
-    <form className={`flex gap-2 ${className}`} onSubmit={handleSubmit}>
-      <Input
-        id="url"
-        placeholder="enter URL"
-        className="w-[300px] text-black"
-        value={url}
-        onChange={(e) => setUrl(e.target.value)}
-      />
-      <div>
-        <Button variant={variant} type="submit">
-          <Search className="mr-2 h-4 w-4" />
-          {checkText}
-        </Button>
-      </div>
-    </form>
+    <div className="w-[300px] flex flex-col gap-2">
+      <form className={`flex gap-2 ${className}`} onSubmit={handleSubmit}>
+        <Input
+          id="url"
+          placeholder="enter URL"
+          className="text-black"
+          value={urlPath}
+          onChange={(e) => setUrlPath(e.target.value)}
+        />
+        <div>
+          <Button variant={variant} type="submit" disabled={isSubmitDisabled}>
+            <Search className="mr-2 h-4 w-4" />
+            {checkText}
+          </Button>
+        </div>
+      </form>
+    </div>
   );
 }
