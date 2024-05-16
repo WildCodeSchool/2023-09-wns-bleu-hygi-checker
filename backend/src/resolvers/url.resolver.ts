@@ -1,6 +1,7 @@
 import { Arg, Int, Mutation, Query, Resolver } from "type-graphql";
 import Url, { InputCreateUrl } from "../entities/url.entity";
 import UrlService from "../services/url.service";
+import CheckUrl from "../entities/checkUrl.entity";
 
 @Resolver()
 export default class UrlResolver {
@@ -20,7 +21,7 @@ export default class UrlResolver {
     return await this.urlService.findUrlById(id);
   }
 
-  @Query(() => String)
+  @Query(() => CheckUrl)
   async checkUrl(@Arg("urlPath") urlPath: string) {
     const result = await this.urlService.checkURL(urlPath);
 
@@ -28,7 +29,7 @@ export default class UrlResolver {
       return `Erreur: ${result.error}`;
     }
 
-    return `Statut: ${result.status}, Temps de réponse: ${result.responseTime} ms, Date de réponse: ${result.responseDate}`;
+    return result;
   }
 
   @Mutation(() => Url)

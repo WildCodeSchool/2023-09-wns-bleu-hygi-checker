@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { useRouter } from "next/router";
+import { useLazyQuery } from "@apollo/client";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Table,
@@ -8,45 +11,57 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
-import { useRouter } from "next/router";
+import { CHECK_URL } from "@/requests/queries/check-url.queries";
 
 export default function CardResponse() {
   const router = useRouter();
+  const urlPath = router.query.url;
 
-  const { url } = router.query;
+  const [checkURL, { data, loading, error }] = useLazyQuery(CHECK_URL);
 
-  const responses = [
-    {
-      type: "Url",
-      status: "200",
-      time: "1.2ms",
-      result: "Ok",
-    },
-  ];
+  useEffect(() => {
+    if (urlPath) {
+      checkURL({ variables: { urlPath } });
+    }
+  }, [checkURL, urlPath]);
+  // Fonction pour formater la date au bon format
+  const formatDate = (dateString: string | number | Date) => {
+    const date = new Date(dateString);
+    return date.toLocaleString();
+  };
   return (
     <Card className="flex flex-col justify-center">
       <CardContent className="grid gap-4">
-        <Input className="mt-4" placeholder="enter URL" value={url} disabled />
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-[100px]">Type</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead>Time</TableHead>
-              <TableHead className="text-right">Result</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {responses.map((response) => (
-              <TableRow key={response.type}>
-                <TableCell className="font-medium">{response.type}</TableCell>
-                <TableCell>{response.status}</TableCell>
-                <TableCell>{response.time}</TableCell>
-                <TableCell className="text-right">{response.result}</TableCell>
+        <Input
+          className="mt-4"
+          placeholder="enter URL"
+          value={urlPath}
+          disabled
+        />
+        {loading && <p>Vérification en cours...</p>}
+        {data && (
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead className="w-[100px]">Type</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Time</TableHead>
+                <TableHead className="text-right">Date</TableHead>
               </TableRow>
-            ))}
-          </TableBody>
-        </Table>
+            </TableHeader>
+            <TableBody>
+              <TableRow key={data.checkUrl.type}>
+                <TableCell className="font-medium">Url</TableCell>
+                <TableCell>{data.checkUrl.status}</TableCell>
+                <TableCell>{data.checkUrl.responseTime}ms</TableCell>
+                <TableCell className="text-right">
+                  {formatDate(data.checkUrl.responseDate)}{" "}
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        )}
+        {error && <p>Erreur lors de la vérification: {error.message}</p>}
       </CardContent>
     </Card>
   );
