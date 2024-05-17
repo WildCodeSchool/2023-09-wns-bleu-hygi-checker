@@ -23,7 +23,7 @@ export default class UserResolver {
   async login(@Arg("infos") infos: InputLogin, @Ctx() ctx: MyContext) {
     const user = await new UserService().findUserByEmail(infos.email);
     if (!user) {
-      throw new Error("Compte inconnu.");
+      throw new Error("Error, please try again");
     }
 
     const isPasswordValid = await argon2.verify(user.password, infos.password);
@@ -37,10 +37,10 @@ export default class UserResolver {
       const cookies = new Cookies(ctx.req, ctx.res);
       cookies.set("token", token, { httpOnly: true });
 
-      m.message = "Bienvenue!";
+      m.message = "Welcome!";
       m.success = true;
     } else {
-      m.message = "Vérifiez vos informations !";
+      m.message = "Check your informations !";
       m.success = false;
     }
     return m;
@@ -53,7 +53,7 @@ export default class UserResolver {
       cookies.set("token"); //sans valeur, le cookie token sera supprimé
     }
     const m = new Message();
-    m.message = "Vous avez été déconnecté.";
+    m.message = "You are logout.";
     m.success = true;
 
     return m;
@@ -63,7 +63,7 @@ export default class UserResolver {
   async register(@Arg("infos") infos: InputRegister) {
     const user = await new UserService().findUserByEmail(infos.email);
     if (user) {
-      throw new Error("Cet email est déjà pris!");
+      throw new Error("Error, please try again");
     }
     const newUser = await new UserService().createUser(infos);
     return newUser;
@@ -75,7 +75,7 @@ export default class UserResolver {
   async upgradeRole(@Arg("id") id: string) {
     const user = await new UserService().findUserById(id);
     if (!user) {
-      throw new Error("Cet utilisateur n'existe pas.");
+      throw new Error("Error, please try again");
     }
     const newRole = await new UserService().upgradeRoleToAdmin(user);
     return newRole;

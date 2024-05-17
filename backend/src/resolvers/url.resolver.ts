@@ -57,4 +57,5 @@ export default class UrlResolver {
   ): Promise<Url> {
     return await this.urlService.removeUrlFromCampaign(urlId, campaignId);
   }
+
 }
