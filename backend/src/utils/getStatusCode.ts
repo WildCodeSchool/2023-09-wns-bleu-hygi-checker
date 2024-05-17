@@ -1,6 +1,6 @@
 import httpStatusCodes from "./httpStatusCodes";
 
-function getStatusCodeDescription(code) {
+function getStatusCodeDescription(code: number) {
   const statusCode =
     httpStatusCodes.informativeResponses.find(
       (status) => status.code === code
