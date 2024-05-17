@@ -1,14 +1,14 @@
-// import CampaignCard from "@/components/campaign/CampaignCard";
+import CampaignCard from "@/components/campaign/CampaignCard";
 import Layout from "@/components/dashboard/Layout";
 import { CampaignForm } from "@/components/campaign/CampaignForm";
-// import { useCampaignsQuery } from "@/types/graphql";
+import { useCampaignsQuery } from "@/types/graphql";
 
 export default function Campaign() {
-  // const { data, loading } = useCampaignsQuery();
+  const { data, loading } = useCampaignsQuery();
 
-  // const campaigns = data?.campaigns;
+  const campaigns = data?.campaigns;
 
-  //if (loading) return <p>Chargement...</p>;
+  if (loading) return <p>Chargement...</p>;
 
   return (
     <Layout title="Campaign">
@@ -20,9 +20,9 @@ export default function Campaign() {
           title={"Create new campaign"}
         />
       </div>
-      {/* {campaigns !== undefined && campaigns!.length > 0 ? (
+      {campaigns !== undefined && campaigns!.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 justify-items-center xl:mx-24">
-          {campaigns!.map((data) => (
+          {campaigns.map((data) => (
             <CampaignCard key={data.id} data={data} />
           ))}
         </div>
@@ -30,7 +30,7 @@ export default function Campaign() {
         <p className="text-2xl text-center text-white mt-12 md:text-6xl">
           No campaign yet
         </p>
-      )} */}
+      )}
     </Layout>
   );
 }

@@ -8,7 +8,6 @@ import db from "./datasource";
 
 async function seedDB() {
   await db.initialize();
-  console.info("start seeding database...");
 
   // creation de resetTest dans la table Test
   const resetTest = Test.create({

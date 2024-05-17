@@ -10,11 +10,11 @@ import { CampaignCardProps } from "@/types/interfaces";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 
-export default function CampaignCard({ data }: { data: CampaignCardProps }) {
+export default function CampaignCard({ data }: CampaignCardProps) {
   const { toast } = useToast();
-  const [isWorkingCampaign, setIsWorkingCampaign] = useState(data.isWorking);
-
-  // const urlCount = data.urls ?? 0;
+  const [isWorkingCampaign, setIsWorkingCampaign] = useState<boolean>(
+    data.isWorking ?? false
+  );
 
   const handleIsWorking = () => {
     setIsWorkingCampaign(!isWorkingCampaign);
@@ -39,7 +39,7 @@ export default function CampaignCard({ data }: { data: CampaignCardProps }) {
         <Switch checked={isWorkingCampaign} onCheckedChange={handleIsWorking} />
       </CardContent>
       <CardFooter className="flex justify-between">
-        <Badge>0 URLs</Badge>
+        <Badge>{data.urls.length} urls</Badge>
         <Link href={`/dashboard/campaign/details/${data.id}`}>
           <Button data-testid="watch-button">Voir</Button>
         </Link>

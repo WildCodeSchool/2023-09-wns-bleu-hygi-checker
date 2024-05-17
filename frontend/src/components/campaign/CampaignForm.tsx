@@ -8,6 +8,8 @@ import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/router";
 import { CampaignFormProps } from "@/types/interfaces";
 import { useState } from "react";
+import { useCreateCampaignMutation } from "@/types/graphql";
+import { useCampaignsQuery } from "@/types/graphql";
 
 // ************ IMPORT UI COMPONENTS  *****************
 import { Button } from "@/components/ui/button";
@@ -32,11 +34,13 @@ import { Loader2, Plus, Wrench } from "lucide-react";
 
 // Define the form schema for validation
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
+  name: z.string().min(2, {
+    message: "Name must be at least 2 characters.",
+  }),
+  userId: z.string().min(2, {
+    message: "Id must be at least 2 characters.",
   }),
 });
-
 export function CampaignForm({
   isNewCampaign,
   buttonText,
@@ -46,14 +50,40 @@ export function CampaignForm({
   const { toast } = useToast();
   const router = useRouter();
 
-  const [loading, setLoading] = useState(false);
+  const [fakeLoading, setFakeLoading] = useState(false);
   const [openForm, setOpenForm] = useState(false);
+
+  const { refetch } = useCampaignsQuery();
+  const [createCampaign] = useCreateCampaignMutation({
+    onCompleted: (data) => {
+      const campaignId = data.createCampaign.id;
+      setTimeout(() => {
+        setFakeLoading(false);
+        setOpenForm(false);
+        if (isNewCampaign === true) {
+          router.push(`/dashboard/campaign/details/${campaignId}`);
+        }
+        toast({
+          title: `Campaign ${isNewCampaign ? "created" : "edited"} successfully`,
+          variant: "success",
+        });
+        refetch();
+      }, 1500);
+    },
+    onError: () => {
+      toast({
+        title: `Something went wrong. Please try again`,
+        variant: "destructive",
+      });
+    },
+  });
 
   // Define the form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
+      name: "",
+      userId: "c83135a6-3bd7-46b1-b6d8-6b4117cfabf7",
     },
   });
 
@@ -65,20 +95,22 @@ export function CampaignForm({
 
   // Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      toast({
-        title: `Campaign ${isNewCampaign ? "created" : "edited"} successfully`,
-        variant: "success",
+    setFakeLoading(true);
+    if (values.name) {
+      createCampaign({
+        variables: {
+          input: {
+            name: values.name,
+            userId: values.userId,
+          },
+        },
       });
-      setOpenForm(false);
-      if (isNewCampaign === true) {
-        router.push(`/dashboard/campaign/details/1`);
-      }
-    }, 1500);
-    // Do something with data below
-    console.warn(values);
+    } else {
+      toast({
+        title: "Champ incomplet !",
+        variant: "destructive",
+      });
+    }
   }
 
   // the following variable is used for avoiding a ternary in a ternary
@@ -104,7 +136,7 @@ export function CampaignForm({
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
               control={form.control}
-              name="username"
+              name="name"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Name of the campaign</FormLabel>
@@ -116,11 +148,11 @@ export function CampaignForm({
               )}
             />
 
-            <Button disabled={loading === true}>
-              {loading === true && (
+            <Button disabled={fakeLoading === true}>
+              {fakeLoading === true && (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               )}
-              {loading === true ? "Please wait" : EditOrCreate}
+              {fakeLoading === true ? "Please wait" : EditOrCreate}
             </Button>
           </form>
         </Form>

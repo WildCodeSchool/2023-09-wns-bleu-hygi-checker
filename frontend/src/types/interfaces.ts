@@ -1,3 +1,5 @@
+import { Campaign } from "./graphql";
+
 export interface ConfirmationModalProps {
   forDelete: boolean;
   buttonText: string;
@@ -35,16 +37,5 @@ export interface CampaignFormProps {
 }
 
 export interface CampaignCardProps {
-  id: number;
-  name: string;
-  image: string;
-  intervalTest: number | null | undefined;
-  isMailAlert: boolean;
-  isWorking: boolean;
-  userId: string;
-  urls: {
-    id: number;
-    urlPath: string;
-    type: string;
-  };
+  data: Campaign;
 }
