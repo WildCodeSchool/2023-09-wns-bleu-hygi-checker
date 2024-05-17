@@ -32,10 +32,13 @@ export default class CampaignService {
 
   async createCampaign(input: InputCreateCampaign): Promise<Campaign> {
     // const newPictureForProject = await fetch(
-    //   "https://source.unsplash.com/random?wallpapers&landscape"
+    //   "https://source.unsplash.com/random?wallpapers&landscape",
+    //   {
+    //     redirect: "follow",
+    //   }
     // )
     //   .then((res) => {
-    //     return res.request.responseURL;
+    //     console.log(res.url);
     //   })
     //   .catch(() => {
     //     throw new Error("Failed to get image");
