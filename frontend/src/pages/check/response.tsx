@@ -30,7 +30,7 @@ export default function Response() {
         <Button
           variant="outline"
           onClick={() => {
-            router.push("/auth/register");
+            router.push("/auth/login");
           }}
         >
           Create your free account
