@@ -61,9 +61,6 @@ export class InputCreateCampaign {
   @Field()
   name: string;
 
-  @Field()
-  image: string;
-
   @Field({ nullable: true })
   intervalTest?: number;
 
