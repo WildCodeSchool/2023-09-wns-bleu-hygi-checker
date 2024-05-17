@@ -18,6 +18,7 @@ export default function Campaign() {
           buttonText={"Create new campaign"}
           buttonVariant={"edit"}
           title={"Create new campaign"}
+          data-testid="create-new-campaign-link"
         />
       </div>
       {campaigns !== undefined && campaigns!.length > 0 ? (
