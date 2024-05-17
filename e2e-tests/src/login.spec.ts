@@ -8,7 +8,7 @@ test.beforeEach(clearDB);
 test.afterAll(disconnect);
 
 const email = "user@test.com";
-const password = "test";
+const password = "Test123456!!";
 
 async function createUser() {
   const userService = new UserService();
