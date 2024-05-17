@@ -29,6 +29,7 @@ export function Auth() {
   const [password, setPassword] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [selectedTab, setSelectedTab] = useState("Log in");
 
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -48,8 +49,9 @@ export function Auth() {
           title: "Account created successfully !",
           variant: "success",
         });
+        setSelectedTab("Log in");
       },
-      onError(error) {
+      onError: (error) => {
         if (error.message == "An error has occurred, please try again.") {
           router.push("/auth/login");
           setTimeout(() => {
@@ -122,7 +124,11 @@ export function Auth() {
   };
 
   return (
-    <Tabs defaultValue="Log in" className="w-[400px]">
+    <Tabs
+      value={selectedTab}
+      className="w-[400px]"
+      onValueChange={(newValue) => setSelectedTab(newValue)}
+    >
       <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger value="Log in">Log in</TabsTrigger>
         <TabsTrigger value="Sign up">Sign up</TabsTrigger>
