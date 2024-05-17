@@ -16,7 +16,7 @@ export default function Login() {
           className="absolute top-4 right-4"
           onClick={toggleSignUp}
         >
-          Connexion
+          Sign in
         </Button>
 
         <Register />

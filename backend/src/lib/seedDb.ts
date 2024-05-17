@@ -184,8 +184,10 @@ async function seedDB() {
     responses5_500,
   ]);
 
+
   await db.destroy();
   console.info("Database reseeded successfully !");
+
 }
 
 seedDB();
