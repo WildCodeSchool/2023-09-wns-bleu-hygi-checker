@@ -21,7 +21,7 @@ test("can connect with correct credentials", async ({ page }) => {
   await page.goto("http://localhost:3000/auth/login");
   await page.getByTestId("login-email").fill(email);
   await page.getByTestId("login-password").fill(password);
-  await page.getByRole("button", { name: "Connexion" }).click();
+  await page.getByRole("button", { name: "Log in" }).click();
   await expect(
     page.getByRole("link", { name: "Create new campaign" })
   ).toBeVisible(); // await page.pause();
