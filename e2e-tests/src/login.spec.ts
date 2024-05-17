@@ -22,8 +22,6 @@ test("can connect with correct credentials", async ({ page }) => {
   await page.getByTestId("login-email").fill(email);
   await page.getByTestId("login-password").fill(password);
   await page.getByRole("button", { name: "Log in" }).click();
-  await expect(page.getByTestId("create-new-campaign-link")).toBeVisible({
-    timeout: 10000,
-  });
+  await page.waitForURL("http://localhost:3000/dashboard");
   // await page.pause();
 });
