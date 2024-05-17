@@ -18,12 +18,12 @@ export default class Campaign extends BaseEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Field({ nullable: true })
-  @Column({ nullable: true })
-  name: string;
-
   @Field()
   @Column()
+  name: string;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   image: string;
 
   @Field({ nullable: true })
