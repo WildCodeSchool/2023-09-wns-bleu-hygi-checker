@@ -12,6 +12,7 @@
     "eslint:fix": "eslint --fix src/**/*.ts",
     "start:prod": "node build/index.js",
     "resetDB": "ts-node-dev src/lib/resetDb.ts",
+    "seedDB": "ts-node-dev src/lib/seedDb.ts",
     "test": "jest",
     "testDB:wait": "docker compose -f docker-compose.integration-test.yml up testDB --wait"
   },
