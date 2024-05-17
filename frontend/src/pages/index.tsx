@@ -3,9 +3,24 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/router";
 import FormCheck from "../components/FormCheck";
 import Home from "../components/check/Home";
+import { useEffect, useState } from "react";
 
 export default function Index() {
   const router = useRouter();
+
+  const [isConnected, setIsConnected] = useState<boolean>(false);
+
+  useEffect(() => {
+    const checkMail = () => {
+      const mail = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("email="));
+
+      setIsConnected(!!mail);
+    };
+
+    checkMail();
+  }, []);
 
   return (
     <Layout title="Home">
@@ -19,15 +34,17 @@ export default function Index() {
             variant="white"
           />
         </div>
-        <Button
-          variant="outline"
-          className="text-black"
-          onClick={() => {
-            router.push("auth/register");
-          }}
-        >
-          Create your free acount
-        </Button>
+        {!isConnected && (
+          <Button
+            variant="outline"
+            className="text-black"
+            onClick={() => {
+              router.push("auth/register");
+            }}
+          >
+            Create your free acount
+          </Button>
+        )}
       </div>
     </Layout>
   );

@@ -45,6 +45,10 @@ async function checkToken(token: string | undefined, request: NextRequest) {
     if (payload.email) {
       response = NextResponse.next();
 
+      if (request.nextUrl.pathname.startsWith("/auth")) {
+        response = NextResponse.redirect(new URL("/", request.url));
+      }
+
       if (request.nextUrl.pathname.startsWith("/admin")) {
         if (payload.role !== "ADMIN") {
           response = NextResponse.redirect(new URL("/400", request.url));
