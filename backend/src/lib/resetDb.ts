@@ -17,6 +17,7 @@ async function main() {
   await db.initialize();
   await clearDB();
   await db.destroy();
+  console.info("Database reseted successfully !");
 }
 
 main();

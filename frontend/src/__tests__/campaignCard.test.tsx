@@ -7,23 +7,25 @@ describe("CampaignCard component", () => {
     const view = render(
       <CampaignCard
         data={{
-          name: "campaign test",
+          id: 1,
+          name: "Campaign1_User1",
           image:
-            "https://images.unsplash.com/photo-1419064642531-e575728395f2?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8d2FsbHBhcGVycyxsYW5kc2NhcGV8fHx8fHwxNzE1OTA0NTE0&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080",
-          id: 2,
-          isWorking: true,
-          isMailAlert: true,
+            "https://images.unsplash.com/photo-1564406836777-5964b5c6c3a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8d2FsbHBhcGVyc3x8fHx8fDE3MTU4NzgwNDQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080",
           intervalTest: 60,
-          userId: "d5d31072-f28a-4ea7-b971-3f457cfdfa5d",
-          urls: {
-            urlPath: "https://www.github.com/",
-            type: "PAGE",
-            id: 1,
-          },
+          isMailAlert: false,
+          isWorking: true,
+          userId: "c83135a6-3bd7-46b1-b6d8-6b4117cfabf7",
+          urls: [
+            {
+              id: 1,
+              urlPath: "https://nextjs.org/",
+              type: "PAGE",
+            },
+          ],
         }}
       />
     );
-    expect(screen.getByText(/campaign test/)).toBeInTheDocument();
+    expect(screen.getByText(/Campaign1_User1/)).toBeInTheDocument();
     expect(screen.getByText(/Voir/)).toBeInTheDocument();
     expect(view.baseElement).toMatchSnapshot();
   });
