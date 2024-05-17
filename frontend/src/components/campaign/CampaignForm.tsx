@@ -119,7 +119,11 @@ export function CampaignForm({
   return (
     <Dialog open={openForm} onOpenChange={handleCloseForm}>
       <DialogTrigger asChild>
-        <Button className="bg-blue-500 text-white mx-4" variant={buttonVariant}>
+        <Button
+          className="bg-blue-500 text-white mx-4"
+          variant={buttonVariant}
+          data-testid="create-new-campaign-link"
+        >
           {isNewCampaign === true ? (
             <Plus className="md:mr-2 h-4 w-4" />
           ) : (
