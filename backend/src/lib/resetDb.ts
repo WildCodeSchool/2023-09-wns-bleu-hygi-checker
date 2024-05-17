@@ -1,4 +1,3 @@
-import Test from "../entities/test.entity";
 import db from "./datasource";
 
 async function clearDB() {
@@ -17,14 +16,7 @@ async function clearDB() {
 async function main() {
   await db.initialize();
   await clearDB();
-
-  // creation de resetTest dans la table Test
-  const resetTest = Test.create({
-    text: "Ceci est le premier test après le resetDB",
-  });
-
-  // sauvegarde
-  await resetTest.save();
+  await db.destroy();
 }
 
 main();
