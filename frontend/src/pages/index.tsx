@@ -39,7 +39,7 @@ export default function Index() {
             variant="outline"
             className="text-black"
             onClick={() => {
-              router.push("auth/register");
+              router.push("auth/login");
             }}
           >
             Create your free acount
