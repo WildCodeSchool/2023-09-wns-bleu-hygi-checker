@@ -22,6 +22,6 @@ test("can connect with correct credentials", async ({ page }) => {
   await page.getByTestId("login-email").fill(email);
   await page.getByTestId("login-password").fill(password);
   await page.getByRole("button", { name: "Log in" }).click();
-  await page.waitForURL(/\/dashboard\/campaign\/lists/);
+  await page.waitForURL("**/dashboard/campaign/lists");
   // await page.pause();
 });
