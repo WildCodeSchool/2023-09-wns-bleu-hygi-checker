@@ -42,57 +42,57 @@ async function seedDB() {
 
   await User.save([user1, user2, user3]);
 
-  // Création des campagnes
-  const campaign1 = Campaign.create({
-    name: "Campaign1_User1",
-    image:
-      "https://images.unsplash.com/photo-1564406836777-5964b5c6c3a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8d2FsbHBhcGVyc3x8fHx8fDE3MTU4NzgwNDQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080",
-    intervalTest: 60,
-    isMailAlert: false,
-    isWorking: true,
-    userId: user1.id,
-  });
-  const campaign2 = Campaign.create({
-    name: "Campaign1_User2",
-    image:
-      "https://images.unsplash.com/photo-1676495906154-96415c612630?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8d2FsbHBhcGVycyxsYW5kc2NhcGV8fHx8fHwxNzE1ODgwMTIw&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080",
-    intervalTest: 60,
-    isMailAlert: false,
-    isWorking: true,
-    userId: user2.id,
-  });
+  //   // Création des campagnes
+  //   const campaign1 = Campaign.create({
+  //     name: "Campaign1_User1",
+  //     image:
+  //       "https://images.unsplash.com/photo-1564406836777-5964b5c6c3a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8d2FsbHBhcGVyc3x8fHx8fDE3MTU4NzgwNDQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080",
+  //     intervalTest: 60,
+  //     isMailAlert: false,
+  //     isWorking: true,
+  //     userId: user1.id,
+  //   });
+  //   const campaign2 = Campaign.create({
+  //     name: "Campaign1_User2",
+  //     image:
+  //       "https://images.unsplash.com/photo-1676495906154-96415c612630?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8d2FsbHBhcGVycyxsYW5kc2NhcGV8fHx8fHwxNzE1ODgwMTIw&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080",
+  //     intervalTest: 60,
+  //     isMailAlert: false,
+  //     isWorking: true,
+  //     userId: user2.id,
+  //   });
 
-  const campaign3 = Campaign.create({
-    name: "Campaign2_User1",
-    image:
-      "https://images.unsplash.com/photo-1502088513349-3ff6482aa816?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8d2FsbHBhcGVycyxsYW5kc2NhcGV8fHx8fHwxNzE1ODgwMTQ2&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080",
-    intervalTest: 120,
-    isMailAlert: true,
-    isWorking: true,
-    userId: user1.id,
-  });
+  //   const campaign3 = Campaign.create({
+  //     name: "Campaign2_User1",
+  //     image:
+  //       "https://images.unsplash.com/photo-1502088513349-3ff6482aa816?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8d2FsbHBhcGVycyxsYW5kc2NhcGV8fHx8fHwxNzE1ODgwMTQ2&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080",
+  //     intervalTest: 120,
+  //     isMailAlert: true,
+  //     isWorking: true,
+  //     userId: user1.id,
+  //   });
 
-  const campaign4 = Campaign.create({
-    name: "Campaign2_User2",
-    image:
-      "https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8d2FsbHBhcGVycyxsYW5kc2NhcGV8fHx8fHwxNzE1ODgwMTc3&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080",
-    intervalTest: 120,
-    isMailAlert: true,
-    isWorking: true,
-    userId: user2.id,
-  });
+  //   const campaign4 = Campaign.create({
+  //     name: "Campaign2_User2",
+  //     image:
+  //       "https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8d2FsbHBhcGVycyxsYW5kc2NhcGV8fHx8fHwxNzE1ODgwMTc3&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080",
+  //     intervalTest: 120,
+  //     isMailAlert: true,
+  //     isWorking: true,
+  //     userId: user2.id,
+  //   });
 
-  const campaign5 = Campaign.create({
-    name: "Campaign1_User3",
-    image:
-      "https://images.unsplash.com/photo-1448375240586-882707db888b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8d2FsbHBhcGVycyxsYW5kc2NhcGV8fHx8fHwxNzE1ODgwMTk1&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080",
-    intervalTest: 60,
-    isMailAlert: false,
-    isWorking: true,
-    userId: user3.id,
-  });
+  //   const campaign5 = Campaign.create({
+  //     name: "Campaign1_User3",
+  //     image:
+  //       "https://images.unsplash.com/photo-1448375240586-882707db888b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8d2FsbHBhcGVycyxsYW5kc2NhcGV8fHx8fHwxNzE1ODgwMTk1&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080",
+  //     intervalTest: 60,
+  //     isMailAlert: false,
+  //     isWorking: true,
+  //     userId: user3.id,
+  //   });
 
-  await Campaign.save([campaign1, campaign2, campaign3, campaign4, campaign5]);
+  //   await Campaign.save([campaign1, campaign2, campaign3, campaign4, campaign5]);
 
   //Création des URLs partagées entre campagnes
   const url1 = Url.create({
@@ -185,8 +185,8 @@ async function seedDB() {
     responses5_500,
   ]);
 
-  await db.destroy();
-  console.info("Database reseeded successfully !");
+  //   await db.destroy();
+  //   console.info("Database reseeded successfully !");
 }
 
 seedDB();
