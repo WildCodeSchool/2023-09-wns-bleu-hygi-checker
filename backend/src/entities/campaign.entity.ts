@@ -27,18 +27,7 @@ export default class Campaign extends BaseEntity {
   image: string;
 
   @Field({ nullable: true })
-  @Column({ nullable: true })
-  image: string;
 
-  @Field({ nullable: true })
-  @Column({ nullable: true })
-  image: string;
-
-  @Field()
-  @Column()
-  image: string;
-
-  @Field({ nullable: true })
   @Column({ nullable: true, default: 60 })
   intervalTest?: number = 60; // Interval in minutes, default 60
 
