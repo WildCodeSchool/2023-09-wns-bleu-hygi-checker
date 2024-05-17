@@ -34,7 +34,7 @@ export type Scalars = {
 export type Campaign = {
   __typename?: "Campaign";
   id: Scalars["Float"]["output"];
-  image?: Maybe<Scalars["String"]["output"]>;
+  image: Scalars["String"]["output"];
   intervalTest?: Maybe<Scalars["Float"]["output"]>;
   isMailAlert?: Maybe<Scalars["Boolean"]["output"]>;
   isWorking?: Maybe<Scalars["Boolean"]["output"]>;
@@ -52,7 +52,7 @@ export type CheckUrl = {
 };
 
 export type InputCreateCampaign = {
-  image?: InputMaybe<Scalars["String"]["input"]>;
+  image: Scalars["String"]["input"];
   intervalTest?: InputMaybe<Scalars["Float"]["input"]>;
   isMailAlert?: InputMaybe<Scalars["Boolean"]["input"]>;
   isWorking?: InputMaybe<Scalars["Boolean"]["input"]>;
@@ -254,7 +254,7 @@ export type CreateCampaignMutation = {
     __typename?: "Campaign";
     id: number;
     name: string;
-    image?: string | null;
+    image: string;
     intervalTest?: number | null;
     isMailAlert?: boolean | null;
     isWorking?: boolean | null;
@@ -310,7 +310,7 @@ export type CampaignsQuery = {
     __typename?: "Campaign";
     id: number;
     name: string;
-    image?: string | null;
+    image: string;
     intervalTest?: number | null;
     isMailAlert?: boolean | null;
     isWorking?: boolean | null;

@@ -38,7 +38,7 @@ export interface CampaignCardProps {
   id: number;
   name: string;
   image: string;
-  intervalTest: number;
+  intervalTest: number | null | undefined;
   isMailAlert: boolean;
   isWorking: boolean;
   userId: string;
