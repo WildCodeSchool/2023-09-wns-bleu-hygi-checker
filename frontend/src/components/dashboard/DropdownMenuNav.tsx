@@ -11,13 +11,13 @@ import { useRouter } from "next/router";
 import { useLazyQuery } from "@apollo/client";
 import { LogoutQuery, LogoutQueryVariables } from "@/types/graphql";
 import { LOGOUT } from "@/requests/queries/auth.queries";
-import { useToast } from "./ui/use-toast";
+import { useToast } from "../ui/use-toast";
 
 interface DropdownMenuProps {
   isConnected: boolean;
 }
 
-export default function DropdownMenuTest({ isConnected }: DropdownMenuProps) {
+export default function DropdownMenuNav({ isConnected }: DropdownMenuProps) {
   const router = useRouter();
 
   const { toast } = useToast();
@@ -62,10 +62,17 @@ export default function DropdownMenuTest({ isConnected }: DropdownMenuProps) {
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => router.push("/dashboard/campaign/lists")}
+          >
+            Campaigns
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
             className="cursor-pointer text-destructive focus:text-destructive"
             onClick={handleLogout}
           >
-            Déconnexion
+            Logout
           </DropdownMenuItem>
         </DropdownMenuContent>
       ) : (

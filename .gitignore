@@ -4,5 +4,8 @@ secret.env
 
 node_modules
 
+tasks.md
+
 .env.prod
 .env.staging
+

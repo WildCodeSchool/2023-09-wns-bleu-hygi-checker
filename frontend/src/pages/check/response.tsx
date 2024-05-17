@@ -14,8 +14,8 @@ export default function Response() {
       </div>
       <div className="flex justify-center mt-5 text-white">
         <p className="text-center">
-          Sed viverra tellus in hac habitasse platea dictumst vestibulum rhoncus
-          est pellentesque elit ullamcorper dignissim
+          You have just checked your url, you can check again or sign up for the
+          app for free to get more features:
         </p>
       </div>
       <div className="flex justify-center gap-4 mt-5">
@@ -30,7 +30,7 @@ export default function Response() {
         <Button
           variant="outline"
           onClick={() => {
-            router.push("/auth/register");
+            router.push("/auth/login");
           }}
         >
           Create your free account
