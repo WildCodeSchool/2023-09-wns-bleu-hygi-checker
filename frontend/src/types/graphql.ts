@@ -28,6 +28,48 @@ export type Scalars = {
   Boolean: { input: boolean; output: boolean };
   Int: { input: number; output: number };
   Float: { input: number; output: number };
+  DateTimeISO: { input: Date; output: string };
+};
+
+export type Campaign = {
+  __typename?: "Campaign";
+  id: Scalars["Float"]["output"];
+  image: Scalars["String"]["output"];
+  intervalTest?: Maybe<Scalars["Float"]["output"]>;
+  isMailAlert?: Maybe<Scalars["Boolean"]["output"]>;
+  isWorking?: Maybe<Scalars["Boolean"]["output"]>;
+  name?: Maybe<Scalars["String"]["output"]>;
+  urls: Array<Url>;
+  userId: Scalars["String"]["output"];
+};
+
+export type CheckUrl = {
+  __typename?: "CheckUrl";
+  responseDate: Scalars["String"]["output"];
+  responseTime: Scalars["Float"]["output"];
+  status: Scalars["Float"]["output"];
+  statusText: Scalars["String"]["output"];
+};
+
+export type InputCreateCampaign = {
+  intervalTest?: InputMaybe<Scalars["Float"]["input"]>;
+  isMailAlert?: InputMaybe<Scalars["Boolean"]["input"]>;
+  isWorking?: InputMaybe<Scalars["Boolean"]["input"]>;
+  name: Scalars["String"]["input"];
+  userId: Scalars["String"]["input"];
+};
+
+export type InputCreateResponse = {
+  creationDate: Scalars["DateTimeISO"]["input"];
+  responseTime: Scalars["Float"]["input"];
+  statusCode: Scalars["String"]["input"];
+  urlId: Scalars["Float"]["input"];
+};
+
+export type InputCreateUrl = {
+  campaignIds: Array<Scalars["Float"]["input"]>;
+  type: Scalars["String"]["input"];
+  urlPath: Scalars["String"]["input"];
 };
 
 export type InputLogin = {
@@ -49,8 +91,15 @@ export type Message = {
 export type Mutation = {
   __typename?: "Mutation";
   addTest: Test;
+  addUrlToCampaign: Url;
+  createCampaign: Campaign;
+  createResponse: Response;
+  createUrl: Url;
+  deleteCampaign: Campaign;
   deleteTest: Test;
+  deleteUrl: Url;
   register: UserWithoutPassword;
+  removeUrlFromCampaign: Url;
   upgradeRole: Array<User>;
 };
 
@@ -58,12 +107,42 @@ export type MutationAddTestArgs = {
   text: Scalars["String"]["input"];
 };
 
+export type MutationAddUrlToCampaignArgs = {
+  campaignId: Scalars["Int"]["input"];
+  urlId: Scalars["Int"]["input"];
+};
+
+export type MutationCreateCampaignArgs = {
+  input: InputCreateCampaign;
+};
+
+export type MutationCreateResponseArgs = {
+  input: InputCreateResponse;
+};
+
+export type MutationCreateUrlArgs = {
+  input: InputCreateUrl;
+};
+
+export type MutationDeleteCampaignArgs = {
+  id: Scalars["Int"]["input"];
+};
+
 export type MutationDeleteTestArgs = {
   id: Scalars["String"]["input"];
 };
 
+export type MutationDeleteUrlArgs = {
+  id: Scalars["Int"]["input"];
+};
+
 export type MutationRegisterArgs = {
   infos: InputRegister;
+};
+
+export type MutationRemoveUrlFromCampaignArgs = {
+  campaignId: Scalars["Int"]["input"];
+  urlId: Scalars["Int"]["input"];
 };
 
 export type MutationUpgradeRoleArgs = {
@@ -72,21 +151,72 @@ export type MutationUpgradeRoleArgs = {
 
 export type Query = {
   __typename?: "Query";
+  activeCampaigns: Array<Campaign>;
+  campaign?: Maybe<Campaign>;
+  campaigns: Array<Campaign>;
+  campaignsByUserId: Array<Campaign>;
+  checkUrl: CheckUrl;
   login: Message;
   logout: Message;
   profile: User;
+  response?: Maybe<Response>;
+  responses: Array<Response>;
+  responsesByUrlId: Array<Response>;
   tests: Array<Test>;
+  url?: Maybe<Url>;
+  urls: Array<Url>;
   users: Array<User>;
+};
+
+export type QueryCampaignArgs = {
+  id: Scalars["Int"]["input"];
+};
+
+export type QueryCampaignsByUserIdArgs = {
+  userId: Scalars["String"]["input"];
+};
+
+export type QueryCheckUrlArgs = {
+  urlPath: Scalars["String"]["input"];
 };
 
 export type QueryLoginArgs = {
   infos: InputLogin;
 };
 
+export type QueryResponseArgs = {
+  id: Scalars["Int"]["input"];
+};
+
+export type QueryResponsesByUrlIdArgs = {
+  urlId: Scalars["Int"]["input"];
+};
+
+export type QueryUrlArgs = {
+  id: Scalars["Int"]["input"];
+};
+
+export type Response = {
+  __typename?: "Response";
+  creationDate: Scalars["DateTimeISO"]["output"];
+  responseTime: Scalars["Float"]["output"];
+  statusCode: Scalars["String"]["output"];
+  urlId: Scalars["Float"]["output"];
+  uuid: Scalars["Float"]["output"];
+};
+
 export type Test = {
   __typename?: "Test";
   id: Scalars["String"]["output"];
   text: Scalars["String"]["output"];
+};
+
+export type Url = {
+  __typename?: "Url";
+  campaigns?: Maybe<Array<Campaign>>;
+  id: Scalars["Float"]["output"];
+  type: Scalars["String"]["output"];
+  urlPath: Scalars["String"]["output"];
 };
 
 export type User = {
@@ -113,6 +243,24 @@ export type RegisterMutation = {
   register: { __typename?: "UserWithoutPassword"; id: string; email: string };
 };
 
+export type CreateCampaignMutationVariables = Exact<{
+  input: InputCreateCampaign;
+}>;
+
+export type CreateCampaignMutation = {
+  __typename?: "Mutation";
+  createCampaign: {
+    __typename?: "Campaign";
+    id: number;
+    name?: string | null;
+    image: string;
+    intervalTest?: number | null;
+    isMailAlert?: boolean | null;
+    isWorking?: boolean | null;
+    userId: string;
+  };
+};
+
 export type AddTestMutationVariables = Exact<{
   text: Scalars["String"]["input"];
 }>;
@@ -136,6 +284,43 @@ export type LogoutQueryVariables = Exact<{ [key: string]: never }>;
 export type LogoutQuery = {
   __typename?: "Query";
   logout: { __typename?: "Message"; success: boolean; message: string };
+};
+
+export type CheckUrlQueryVariables = Exact<{
+  urlPath: Scalars["String"]["input"];
+}>;
+
+export type CheckUrlQuery = {
+  __typename?: "Query";
+  checkUrl: {
+    __typename?: "CheckUrl";
+    status: number;
+    statusText: string;
+    responseTime: number;
+    responseDate: string;
+  };
+};
+
+export type CampaignsQueryVariables = Exact<{ [key: string]: never }>;
+
+export type CampaignsQuery = {
+  __typename?: "Query";
+  campaigns: Array<{
+    __typename?: "Campaign";
+    id: number;
+    name?: string | null;
+    image: string;
+    intervalTest?: number | null;
+    isMailAlert?: boolean | null;
+    isWorking?: boolean | null;
+    userId: string;
+    urls: Array<{
+      __typename?: "Url";
+      id: number;
+      urlPath: string;
+      type: string;
+    }>;
+  }>;
 };
 
 export type ProfileQueryVariables = Exact<{ [key: string]: never }>;
@@ -199,6 +384,62 @@ export type RegisterMutationResult = Apollo.MutationResult<RegisterMutation>;
 export type RegisterMutationOptions = Apollo.BaseMutationOptions<
   RegisterMutation,
   RegisterMutationVariables
+>;
+export const CreateCampaignDocument = gql`
+  mutation CreateCampaign($input: InputCreateCampaign!) {
+    createCampaign(input: $input) {
+      id
+      name
+      image
+      intervalTest
+      isMailAlert
+      isWorking
+      userId
+    }
+  }
+`;
+export type CreateCampaignMutationFn = Apollo.MutationFunction<
+  CreateCampaignMutation,
+  CreateCampaignMutationVariables
+>;
+
+/**
+ * __useCreateCampaignMutation__
+ *
+ * To run a mutation, you first call `useCreateCampaignMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateCampaignMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createCampaignMutation, { data, loading, error }] = useCreateCampaignMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateCampaignMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateCampaignMutation,
+    CreateCampaignMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateCampaignMutation,
+    CreateCampaignMutationVariables
+  >(CreateCampaignDocument, options);
+}
+export type CreateCampaignMutationHookResult = ReturnType<
+  typeof useCreateCampaignMutation
+>;
+export type CreateCampaignMutationResult =
+  Apollo.MutationResult<CreateCampaignMutation>;
+export type CreateCampaignMutationOptions = Apollo.BaseMutationOptions<
+  CreateCampaignMutation,
+  CreateCampaignMutationVariables
 >;
 export const AddTestDocument = gql`
   mutation AddTest($text: String!) {
@@ -371,6 +612,155 @@ export type LogoutSuspenseQueryHookResult = ReturnType<
 export type LogoutQueryResult = Apollo.QueryResult<
   LogoutQuery,
   LogoutQueryVariables
+>;
+export const CheckUrlDocument = gql`
+  query CheckUrl($urlPath: String!) {
+    checkUrl(urlPath: $urlPath) {
+      status
+      statusText
+      responseTime
+      responseDate
+    }
+  }
+`;
+
+/**
+ * __useCheckUrlQuery__
+ *
+ * To run a query within a React component, call `useCheckUrlQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCheckUrlQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCheckUrlQuery({
+ *   variables: {
+ *      urlPath: // value for 'urlPath'
+ *   },
+ * });
+ */
+export function useCheckUrlQuery(
+  baseOptions: Apollo.QueryHookOptions<CheckUrlQuery, CheckUrlQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<CheckUrlQuery, CheckUrlQueryVariables>(
+    CheckUrlDocument,
+    options
+  );
+}
+export function useCheckUrlLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    CheckUrlQuery,
+    CheckUrlQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<CheckUrlQuery, CheckUrlQueryVariables>(
+    CheckUrlDocument,
+    options
+  );
+}
+export function useCheckUrlSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    CheckUrlQuery,
+    CheckUrlQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<CheckUrlQuery, CheckUrlQueryVariables>(
+    CheckUrlDocument,
+    options
+  );
+}
+export type CheckUrlQueryHookResult = ReturnType<typeof useCheckUrlQuery>;
+export type CheckUrlLazyQueryHookResult = ReturnType<
+  typeof useCheckUrlLazyQuery
+>;
+export type CheckUrlSuspenseQueryHookResult = ReturnType<
+  typeof useCheckUrlSuspenseQuery
+>;
+export type CheckUrlQueryResult = Apollo.QueryResult<
+  CheckUrlQuery,
+  CheckUrlQueryVariables
+>;
+export const CampaignsDocument = gql`
+  query Campaigns {
+    campaigns {
+      id
+      name
+      image
+      intervalTest
+      isMailAlert
+      isWorking
+      userId
+      urls {
+        id
+        urlPath
+        type
+      }
+    }
+  }
+`;
+
+/**
+ * __useCampaignsQuery__
+ *
+ * To run a query within a React component, call `useCampaignsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCampaignsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCampaignsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useCampaignsQuery(
+  baseOptions?: Apollo.QueryHookOptions<CampaignsQuery, CampaignsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<CampaignsQuery, CampaignsQueryVariables>(
+    CampaignsDocument,
+    options
+  );
+}
+export function useCampaignsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    CampaignsQuery,
+    CampaignsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<CampaignsQuery, CampaignsQueryVariables>(
+    CampaignsDocument,
+    options
+  );
+}
+export function useCampaignsSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    CampaignsQuery,
+    CampaignsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<CampaignsQuery, CampaignsQueryVariables>(
+    CampaignsDocument,
+    options
+  );
+}
+export type CampaignsQueryHookResult = ReturnType<typeof useCampaignsQuery>;
+export type CampaignsLazyQueryHookResult = ReturnType<
+  typeof useCampaignsLazyQuery
+>;
+export type CampaignsSuspenseQueryHookResult = ReturnType<
+  typeof useCampaignsSuspenseQuery
+>;
+export type CampaignsQueryResult = Apollo.QueryResult<
+  CampaignsQuery,
+  CampaignsQueryVariables
 >;
 export const ProfileDocument = gql`
   query Profile {
