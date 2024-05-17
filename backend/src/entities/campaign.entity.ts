@@ -22,8 +22,8 @@ export default class Campaign extends BaseEntity {
   @Column()
   name: string;
 
-  @Field()
-  @Column()
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   image: string;
 
   @Field({ nullable: true })
@@ -57,6 +57,9 @@ export default class Campaign extends BaseEntity {
 export class InputCreateCampaign {
   @Field()
   name: string;
+
+  @Field({ nullable: true })
+  image: string;
 
   @Field({ nullable: true })
   intervalTest?: number;

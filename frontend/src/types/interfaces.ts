@@ -33,3 +33,18 @@ export interface CampaignFormProps {
     | undefined;
   title: string;
 }
+
+export interface CampaignCardProps {
+  id: number;
+  name: string;
+  image: string;
+  intervalTest: number;
+  isMailAlert: boolean;
+  isWorking: boolean;
+  userId: string;
+  urls: {
+    id: number;
+    urlPath: string;
+    type: string;
+  };
+}
