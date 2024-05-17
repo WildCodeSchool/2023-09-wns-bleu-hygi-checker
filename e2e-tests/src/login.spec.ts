@@ -23,7 +23,6 @@ test("can connect with correct credentials", async ({ page }) => {
   await page.getByTestId("login-password").fill(password);
   await page.getByRole("button", { name: "Connexion" }).click();
   await expect(
-    page.getByRole("button", { name: "Connexion" })
-  ).toBeVisible();
-  // await page.pause();
+    page.getByRole("link", { name: "Create new campaign" })
+  ).toBeVisible(); // await page.pause();
 });
