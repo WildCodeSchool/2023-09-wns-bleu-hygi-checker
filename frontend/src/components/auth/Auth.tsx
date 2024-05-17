@@ -171,6 +171,13 @@ export function Auth() {
                   <p className="text-red-500">{passwordError}</p>
                 )}
               </div>
+              <p
+                onClick={() => setSelectedTab("Sign up")}
+                className="cursor-pointer text-sm"
+              >
+                You don&apos;t have an account yet, create one&nbsp;
+                <span className="font-bold underline">here</span>
+              </p>
               <Button type="submit" className="w-full bg-primary">
                 Log in
               </Button>
