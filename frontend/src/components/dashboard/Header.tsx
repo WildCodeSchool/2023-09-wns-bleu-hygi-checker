@@ -117,7 +117,12 @@ export default function Nav() {
         </div>
 
         <div className="hidden lg:block">
-          <FormCheck checkText="Check" className="flex-row" variant="outline" />
+          <FormCheck
+            checkText="Check"
+            inputId="nav_check"
+            className="flex-row"
+            variant="outline"
+          />
         </div>
 
         <div className="md:flex hidden w-[150px] lg:w-auto justify-end">
@@ -155,6 +160,7 @@ export default function Nav() {
           <div className="flex justify-center">
             <FormCheck
               checkText="Check"
+              inputId="mobile_check"
               className="flex-row"
               variant="outline"
             />

@@ -1,6 +1,7 @@
 import { Campaign } from "./graphql";
 
 export interface ConfirmationModalProps {
+  isLargeButton: boolean;
   forDelete: boolean;
   buttonText: string;
   buttonVariant:

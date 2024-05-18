@@ -1,4 +1,3 @@
-
 import { Search } from "lucide-react";
 import { useRouter } from "next/router";
 import { useState } from "react";
@@ -6,12 +5,14 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
 interface FormCheckProps {
+  inputId: string;
   checkText: string;
   className: string;
   variant: "outline" | "white";
 }
 
 export default function FormCheck({
+  inputId,
   checkText,
   className,
   variant,
@@ -37,7 +38,7 @@ export default function FormCheck({
     <div className="w-[300px] flex flex-col gap-2">
       <form className={`flex gap-2 ${className}`} onSubmit={handleSubmit}>
         <Input
-          id="url"
+          id={inputId}
           placeholder="enter URL"
           className="text-black"
           value={urlPath}

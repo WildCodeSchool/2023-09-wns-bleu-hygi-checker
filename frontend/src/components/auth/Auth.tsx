@@ -127,7 +127,7 @@ export function Auth() {
     <Tabs
       value={selectedTab}
       className="w-[400px]"
-      onValueChange={(newValue) => setSelectedTab(newValue)}
+      onValueChange={(newValue: string) => setSelectedTab(newValue)}
     >
       <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger value="Log in">Log in</TabsTrigger>

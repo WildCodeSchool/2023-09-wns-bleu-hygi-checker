@@ -21,21 +21,21 @@ async function seedDB() {
   const user1 = User.create({
     id: "c83135a6-3bd7-46b1-b6d8-6b4117cfabf7",
     email: "jane.doe@example.com",
-    password: await argon2.hash("toto"),
+    password: await argon2.hash("Hygichecker69!"),
     role: "USER",
   });
 
   const user2 = User.create({
     id: "5e4841aa-024e-4743-a1c6-a138b81bc1ab",
     email: "john.doe@example.com",
-    password: await argon2.hash("toto"),
+    password: await argon2.hash("Hygichecker69!"),
     role: "USER",
   });
 
   const user3 = User.create({
     id: "b3a1c9a6-f1c7-4d7b-8b85-123456789012",
     email: "admin@example.com",
-    password: await argon2.hash("admin"),
+    password: await argon2.hash("Adminchecker69!"),
     role: "ADMIN",
   });
 

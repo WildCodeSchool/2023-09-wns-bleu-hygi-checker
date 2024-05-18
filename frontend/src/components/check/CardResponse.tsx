@@ -32,12 +32,7 @@ export default function CardResponse() {
   return (
     <Card className="flex flex-col justify-center">
       <CardContent className="grid gap-4">
-        <Input
-          className="mt-4"
-          placeholder="enter URL"
-          value={urlPath}
-          disabled
-        />
+        <Input id="check_response" className="mt-4" value={urlPath} disabled />
         {loading && <p>Vérification en cours...</p>}
         {data && (
           <Table>

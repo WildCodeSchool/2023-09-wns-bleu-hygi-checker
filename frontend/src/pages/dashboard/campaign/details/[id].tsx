@@ -92,6 +92,7 @@ export default function CampaignDetail() {
             />
 
             <ConfirmationModal
+              isLargeButton={false}
               forDelete={true}
               buttonText={"Delete campaign"}
               buttonVariant={"destructive"}
@@ -157,6 +158,7 @@ export default function CampaignDetail() {
                     </div>
                     <div className="hidden md:flex justify-end gap-4">
                       <ConfirmationModal
+                        isLargeButton={false}
                         forDelete={true}
                         buttonText={"Delete"}
                         buttonVariant={"destructive"}

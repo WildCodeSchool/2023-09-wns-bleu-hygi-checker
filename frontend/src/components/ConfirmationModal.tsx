@@ -15,6 +15,7 @@ import { Trash, Loader2 } from "lucide-react";
 // ****************************************************
 
 export function ConfirmationModal({
+  isLargeButton,
   forDelete,
   buttonText,
   buttonVariant,
@@ -39,9 +40,20 @@ export function ConfirmationModal({
   return (
     <Dialog open={openForm} onOpenChange={setOpenForm}>
       <DialogTrigger asChild>
-        <Button variant={buttonVariant} className="mx-4">
-          {forDelete === true ? <Trash className="md:mr-2 h-4 w-4" /> : null}
-          <span className="hidden md:block">{buttonText}</span>
+        <Button
+          variant={buttonVariant}
+          className={` ${isLargeButton === true ? "w-full" : "mx-4"}`}
+        >
+          {forDelete === true ? (
+            <Trash
+              className={`${isLargeButton === true ? "mr-2 h-4 w-4" : ""}md:mr-2 h-4 w-4`}
+            />
+          ) : null}
+          <span
+            className={`${isLargeButton === true ? "block" : "hidden"} md:block`}
+          >
+            {buttonText}
+          </span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
