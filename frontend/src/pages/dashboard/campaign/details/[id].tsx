@@ -201,7 +201,7 @@ export default function CampaignDetail() {
       ) : (
         <div className="flex justify-center items-center mt-4 flex-col gap-2 text-white">
           <p className="text-center text-2xl font-bold">
-            Campaign {id} indisponible.
+            Campaign {id} unavailable.
           </p>
           <Button
             variant={"secondary"}

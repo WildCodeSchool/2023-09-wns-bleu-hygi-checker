@@ -35,7 +35,7 @@ export function Auth() {
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
-  const [selectedTab, setSelectedTab] = useState("Log in");
+  const [selectedTab, setSelectedTab] = useState("Sign up");
 
   const validateUsername = (username: string) => {
     const re = /^[a-zA-Z0-9]{4,24}$/;
@@ -97,7 +97,7 @@ export function Auth() {
           router.push("/dashboard/campaign/lists");
           setTimeout(() => {
             toast({
-              title: `Bienvenue ${username} !`,
+              title: `${data.login.message} ${username} !`,
               variant: "success",
             });
           }, 500);
