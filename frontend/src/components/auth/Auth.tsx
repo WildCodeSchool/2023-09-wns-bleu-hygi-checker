@@ -35,7 +35,7 @@ export function Auth() {
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
-  const [selectedTab, setSelectedTab] = useState("Log in");
+  const [selectedTab, setSelectedTab] = useState("Sign up");
 
   const validateUsername = (username: string) => {
     const re = /^[a-zA-Z0-9]{4,24}$/;
