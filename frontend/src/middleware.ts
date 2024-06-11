@@ -55,6 +55,10 @@ async function checkToken(token: string | undefined, request: NextRequest) {
         }
       }
 
+      // if (request.nextUrl.pathname.startsWith("/dashboard/campaign/details")) {
+      //   response = NextResponse.redirect(new URL("/400", request.url));
+      // }
+
       response.cookies.set("email", payload.email);
       response.cookies.set("role", payload.role);
       return response;

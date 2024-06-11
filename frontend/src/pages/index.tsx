@@ -3,24 +3,16 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/router";
 import FormCheck from "../components/FormCheck";
 import Home from "../components/check/Home";
-import { useEffect, useState } from "react";
+import { useGetUserProfileQuery } from "@/types/graphql";
 
 export default function Index() {
   const router = useRouter();
 
-  const [isConnected, setIsConnected] = useState<boolean>(false);
+  const { data: currentUser } = useGetUserProfileQuery({
+    errorPolicy: "ignore",
+  });
 
-  useEffect(() => {
-    const checkMail = () => {
-      const mail = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("email="));
-
-      setIsConnected(!!mail);
-    };
-
-    checkMail();
-  }, []);
+  const isConnected = !!currentUser?.getUserProfile;
 
   return (
     <Layout title="Home">
