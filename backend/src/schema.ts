@@ -15,6 +15,6 @@ export default buildSchema({
     ResponseResolver,
     CampaignResolver,
   ],
-  validate: false,
+  validate: true,
   authChecker: customAuthChecker,
 });

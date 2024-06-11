@@ -5,6 +5,7 @@ import Url from "../entities/url.entity";
 import Response from "../entities/response.entity";
 import argon2 from "argon2";
 import db from "./datasource";
+import { GENDER } from "../entities/user.entity";
 
 async function seedDB() {
   await db.initialize();
@@ -20,22 +21,40 @@ async function seedDB() {
   // Création des utilisateurs
   const user1 = User.create({
     id: "c83135a6-3bd7-46b1-b6d8-6b4117cfabf7",
+    username: "Jane Doe",
     email: "jane.doe@example.com",
-    password: await argon2.hash("toto"),
+    password: await argon2.hash("Hygichecker69!"),
+    accepted_terms: true,
+    gender: GENDER.female,
+    birth_date: "1998-07-25",
+    country: "FR",
+    avatar: "avatar01",
     role: "USER",
   });
 
   const user2 = User.create({
     id: "5e4841aa-024e-4743-a1c6-a138b81bc1ab",
+    username: "John Doe",
     email: "john.doe@example.com",
-    password: await argon2.hash("toto"),
+    password: await argon2.hash("Hygichecker69!"),
+    accepted_terms: true,
+    gender: GENDER.male,
+    birth_date: "1998-07-25",
+    country: "FR",
+    avatar: "avatar01",
     role: "USER",
   });
 
   const user3 = User.create({
     id: "b3a1c9a6-f1c7-4d7b-8b85-123456789012",
+    username: "Marco",
     email: "admin@example.com",
-    password: await argon2.hash("admin"),
+    password: await argon2.hash("Adminchecker69!"),
+    accepted_terms: true,
+    gender: GENDER.male,
+    birth_date: "1998-07-25",
+    country: "FR",
+    avatar: "avatar01",
     role: "ADMIN",
   });
 
@@ -45,7 +64,7 @@ async function seedDB() {
   const campaign1 = Campaign.create({
     name: "Campaign1_User1",
     image:
-      "https://images.unsplash.com/photo-1564406836777-5964b5c6c3a5?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8d2FsbHBhcGVyc3x8fHx8fDE3MTU4NzgwNDQ&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080",
+      "https://fastly.picsum.photos/id/826/1920/1080.jpg?hmac=CSZ6ZNnqhNlFOUi55Unatj6afDU9RgJUK2RB6IPwkwg",
     intervalTest: 60,
     isMailAlert: false,
     isWorking: true,
@@ -54,7 +73,7 @@ async function seedDB() {
   const campaign2 = Campaign.create({
     name: "Campaign1_User2",
     image:
-      "https://images.unsplash.com/photo-1676495906154-96415c612630?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8d2FsbHBhcGVycyxsYW5kc2NhcGV8fHx8fHwxNzE1ODgwMTIw&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080",
+      "https://fastly.picsum.photos/id/1063/1920/1080.jpg?hmac=bZWbcXgGOnrgZE0_VD2mUoLolkPdd3vBtNUXa-UxtY0",
     intervalTest: 60,
     isMailAlert: false,
     isWorking: true,
@@ -64,7 +83,7 @@ async function seedDB() {
   const campaign3 = Campaign.create({
     name: "Campaign2_User1",
     image:
-      "https://images.unsplash.com/photo-1502088513349-3ff6482aa816?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8d2FsbHBhcGVycyxsYW5kc2NhcGV8fHx8fHwxNzE1ODgwMTQ2&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080",
+      "https://fastly.picsum.photos/id/1019/1920/1080.jpg?hmac=XGm3xPMZTa3H-YXR0qxs91ClJOdn43Ei0xRbGTpq6wA",
     intervalTest: 120,
     isMailAlert: true,
     isWorking: true,
@@ -74,7 +93,7 @@ async function seedDB() {
   const campaign4 = Campaign.create({
     name: "Campaign2_User2",
     image:
-      "https://images.unsplash.com/photo-1473580044384-7ba9967e16a0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8d2FsbHBhcGVycyxsYW5kc2NhcGV8fHx8fHwxNzE1ODgwMTc3&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080",
+      "https://fastly.picsum.photos/id/482/1920/1080.jpg?hmac=WOOpg36fuOhzwR8Jl4Dcc_l6krSTlHl70b8BhoaXQqU",
     intervalTest: 120,
     isMailAlert: true,
     isWorking: true,
@@ -84,7 +103,7 @@ async function seedDB() {
   const campaign5 = Campaign.create({
     name: "Campaign1_User3",
     image:
-      "https://images.unsplash.com/photo-1448375240586-882707db888b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxfDB8MXxyYW5kb218MHx8d2FsbHBhcGVycyxsYW5kc2NhcGV8fHx8fHwxNzE1ODgwMTk1&ixlib=rb-4.0.3&q=80&utm_campaign=api-credit&utm_medium=referral&utm_source=unsplash_source&w=1080",
+      "https://fastly.picsum.photos/id/993/1920/1080.jpg?hmac=dPlPg5Ajy9w_la62n3jwZAj0xuIkFA9jvQjg3bbJiVg",
     intervalTest: 60,
     isMailAlert: false,
     isWorking: true,

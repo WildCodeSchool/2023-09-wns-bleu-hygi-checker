@@ -29,12 +29,13 @@ export default function Index() {
 
         <div className="flex justify-center text-black">
           <FormCheck
+            inputId="home_check"
             checkText="Start checking URL"
             className="flex-col"
             variant="white"
           />
         </div>
-        {!isConnected && (
+        {isConnected === false && (
           <Button
             variant="outline"
             className="text-black"

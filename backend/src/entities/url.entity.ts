@@ -31,7 +31,9 @@ export default class Url extends BaseEntity {
   type: UrlType;
 
   @Field(() => [Campaign], { nullable: true })
-  @ManyToMany(() => Campaign, (campaign) => campaign.urls)
+  @ManyToMany(() => Campaign, (campaign) => campaign.urls, {
+    onDelete: "CASCADE",
+  })
   @JoinTable({
     name: "url_campaign",
     joinColumn: {

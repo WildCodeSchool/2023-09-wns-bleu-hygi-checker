@@ -89,7 +89,11 @@ export function UrlForm() {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder="http://example.com" {...field} />
+                    <Input
+                      placeholder="http://example.com"
+                      id="URL"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

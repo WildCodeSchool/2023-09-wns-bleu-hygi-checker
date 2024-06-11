@@ -37,9 +37,6 @@ const formSchema = z.object({
   name: z.string().min(2, {
     message: "Name must be at least 2 characters.",
   }),
-  userId: z.string().min(2, {
-    message: "Id must be at least 2 characters.",
-  }),
 });
 export function CampaignForm({
   isNewCampaign,
@@ -83,7 +80,6 @@ export function CampaignForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      userId: "c83135a6-3bd7-46b1-b6d8-6b4117cfabf7",
     },
   });
 
@@ -101,7 +97,6 @@ export function CampaignForm({
         variables: {
           input: {
             name: values.name,
-            userId: values.userId,
           },
         },
       });

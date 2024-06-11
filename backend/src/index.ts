@@ -42,6 +42,7 @@ async function main() {
         "http://localhost:3000",
         "https://studio.apollographql.com",
         "https://0923-bleu-2.wns.wilders.dev/",
+        "https://staging.0923-bleu-2.wns.wilders.dev/",
       ],
       credentials: true,
     }),
@@ -54,17 +55,22 @@ async function main() {
 
         const cookies = new Cookies(req, res);
         const token = cookies.get("token");
+
         if (token) {
           try {
             const verify = await jwtVerify<Payload>(
               token,
               new TextEncoder().encode(process.env.JWT_PRIVATE_KEY)
             );
+
             user = await new UserService().findUserByEmail(
               verify.payload.email
             );
           } catch (err) {
+            console.error("il s'est produit une erreur dans l'index");
             console.error(err);
+            const cookies = new Cookies(req, res);
+            cookies.set("token");
             //potentiellement gérer l'erreur, est ce que l'erreur est liée au fait que le token soit expiré? est ce qu'on le renouvelle? ou est ce autre chose? etc...
           }
         }
