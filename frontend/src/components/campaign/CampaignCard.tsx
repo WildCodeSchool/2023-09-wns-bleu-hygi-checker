@@ -27,7 +27,7 @@ export default function CampaignCard({ data }: CampaignCardProps) {
   return (
     <Card className="flex flex-col w-[350px]">
       <Image
-        src={data.image}
+        src={data?.image ?? "../../../public/logo_large.svg"}
         alt="image"
         className="w-full rounded-t-lg"
         width={350}

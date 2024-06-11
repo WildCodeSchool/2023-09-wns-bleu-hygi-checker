@@ -9,7 +9,6 @@ export const CREATE_CAMPAIGN = gql`
       intervalTest
       isMailAlert
       isWorking
-      userId
     }
   }
 `;

@@ -1,6 +1,3 @@
-// import { Input } from "@/components/ui/input";
-// import { Label } from "@/components/ui/label";
-// import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -8,23 +5,65 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Loader2 } from "lucide-react";
 import { Button } from "../ui/button";
 import { Avatar, AvatarImage, AvatarFallback } from "../ui/avatar";
 import { useState } from "react";
+import { useToast } from "../ui/use-toast";
 import { avatars } from "../../utils/avatars";
+import { SettingsProps } from "@/types/interfaces";
+import {
+  useChangeAvatarMutation,
+  useGetAvatarQuery,
+  useGetUserProfileQuery,
+} from "@/types/graphql";
 
 interface Avatar {
   id: number;
   fileName: string;
 }
 
-export default function Appearance() {
-  const [selectedAvatar, setSelectedAvatar] = useState("avatar01");
+export default function Appearance({ data }: SettingsProps) {
+  const [fakeLoading, setFakeLoading] = useState(false);
+  const { toast } = useToast();
+  const { refetch: refreshAvatar } = useGetAvatarQuery();
+  const { refetch: refreshProfile } = useGetUserProfileQuery();
+  const [changeAvatarMutation] = useChangeAvatarMutation({
+    onCompleted: (data) => {
+      setTimeout(() => {
+        setFakeLoading(false);
+        setActualAvatar(data.changeAvatar.avatar);
+        toast({
+          title: "Avatar changed successfully",
+          variant: "success",
+        });
+        refreshAvatar();
+        refreshProfile();
+      }, 1000);
+    },
+    onError: () => {
+      setFakeLoading(false);
+      toast({
+        title: `Something went wrong. Please try again`,
+        variant: "destructive",
+      });
+    },
+  });
 
-  const actualAvatar = "avatar01";
+  const [selectedAvatar, setSelectedAvatar] = useState(data?.avatar as string);
+  const [actualAvatar, setActualAvatar] = useState(data?.avatar as string);
 
   const handleSetAvatar = (avatar: Avatar) => {
     setSelectedAvatar(avatar.fileName);
+  };
+
+  const handleSubmit = () => {
+    setFakeLoading(true);
+    changeAvatarMutation({
+      variables: {
+        newAvatar: selectedAvatar,
+      },
+    });
   };
 
   return (
@@ -45,7 +84,12 @@ export default function Appearance() {
           </button>
         ))}
         {actualAvatar !== selectedAvatar && (
-          <Button className="mt-6">Change avatar</Button>
+          <Button onClick={handleSubmit} className="mt-6">
+            {fakeLoading === true && (
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            {fakeLoading === true ? "Please wait" : "Change avatar"}
+          </Button>
         )}
       </CardContent>
     </Card>

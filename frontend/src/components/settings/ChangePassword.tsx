@@ -7,6 +7,7 @@ import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
+import { useChangePasswordMutation } from "@/types/graphql";
 
 // ************ IMPORT UI COMPONENTS  *****************
 import { Button } from "@/components/ui/button";
@@ -28,23 +29,55 @@ import {
 import { Loader2, KeyRound } from "lucide-react";
 // ****************************************************
 
+const passwordRegex =
+  /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{10,}$/;
+
 // Define the form schema for validation
-const formSchema = z.object({
-  previousPassword: z.string(),
-  newPassword: z.string().min(4, {
-    message:
-      "Password must contain at least 10 characters, including one uppercase letter, one digit, and one special character.", // TODO : Regex the URL Format
-  }),
-  confirmPassword: z.string().min(4, {
-    message: "New passwords doesn't match", // TODO : Regex the URL Format
-  }),
-});
+const formSchema = z
+  .object({
+    previousPassword: z.string().min(10, {
+      message: "Your current password should noy be under 10 characters long",
+    }),
+    newPassword: z.string().regex(passwordRegex, {
+      message:
+        "Password must contain at least 10 characters, including one uppercase letter, one digit, and one special character.", // TODO : Regex the URL Format
+    }),
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.newPassword === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ["confirmPassword"], // path of error
+  });
 
 export function ChangePassword() {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false); // to show the loader in the button
   const [openForm, setOpenForm] = useState(false); // to close the form after submit
-
+  const [changePasswordMutation] = useChangePasswordMutation({
+    onCompleted: (data) => {
+      setTimeout(() => {
+        setLoading(false);
+        if (data.changePassword.success === false) {
+          toast({
+            title: data.changePassword.message,
+            variant: "destructive",
+          });
+        } else {
+          toast({
+            title: data.changePassword.message,
+            variant: "success",
+          });
+          handleCloseForm();
+        }
+      }, 1000);
+    },
+    onError: () => {
+      toast({
+        title: `Something went wrong. Please try again`,
+        variant: "destructive",
+      });
+    },
+  });
   // Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -65,15 +98,14 @@ export function ChangePassword() {
   function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
     setTimeout(() => {
-      setLoading(false);
-      toast({
-        title: "Password changed successfully",
-        variant: "success",
+      changePasswordMutation({
+        variables: {
+          passwordData: values,
+        },
       });
-      handleCloseForm();
     }, 1500);
-    // Do something with data below
-    console.warn(values);
+
+    console.warn(values); // To remove !!!! ----------------------------------------------------------------
   }
 
   return (

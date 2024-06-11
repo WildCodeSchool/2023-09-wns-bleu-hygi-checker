@@ -1,4 +1,4 @@
-import { Campaign } from "./graphql";
+import { Campaign, UserProfile } from "./graphql";
 
 export interface ConfirmationModalProps {
   isLargeButton: boolean;
@@ -39,4 +39,8 @@ export interface CampaignFormProps {
 
 export interface CampaignCardProps {
   data: Campaign;
+}
+
+export interface SettingsProps {
+  data: UserProfile;
 }

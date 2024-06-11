@@ -1,11 +1,13 @@
+import { FormEvent } from "react";
 import { ChangePassword } from "./ChangePassword";
 import { ConfirmationModal } from "../ConfirmationModal";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/router";
-
+import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "../ui/button";
+import { Loader2 } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -13,8 +15,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { SettingsProps } from "@/types/interfaces";
+import { useUpdateNameMutation, useGetUserProfileQuery } from "@/types/graphql";
 
-export default function Account() {
+export default function Account({ data }: SettingsProps) {
+  const [fakeLoading, setFakeLoading] = useState(false);
+  const [username, setUsername] = useState(data?.username as string);
+  const initialUsername = data?.username;
   const { toast } = useToast();
   const router = useRouter();
 
@@ -27,14 +35,58 @@ export default function Account() {
     router.push("/");
   };
 
+  const { refetch } = useGetUserProfileQuery();
+  const [updateNameMutation] = useUpdateNameMutation({
+    onCompleted: () => {
+      setTimeout(() => {
+        setFakeLoading(false);
+        toast({
+          title: "Username changed successfully",
+          variant: "success",
+        });
+        refetch();
+      }, 1000);
+    },
+    onError: () => {
+      toast({
+        title: `Something went wrong. Please try again`,
+        variant: "destructive",
+      });
+    },
+  });
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setFakeLoading(true);
+    updateNameMutation({
+      variables: {
+        updateName: { username },
+      },
+    });
+  };
+
   return (
     <Card className="md:w-[750px]">
       <CardHeader>
         <CardTitle>Account</CardTitle>
         <CardDescription>Modify yout account informations</CardDescription>
       </CardHeader>
-      <CardContent className="">
-        <form className="grid gap-2">
+      <CardContent>
+        <div className="space-y-1">
+          <Label htmlFor="email">Email</Label>
+          <Input
+            id="email"
+            placeholder="name@example.com"
+            type="email"
+            autoCapitalize="none"
+            autoComplete="email"
+            autoCorrect="off"
+            value={data?.email}
+            disabled
+          />
+        </div>
+        <Separator decorative={true} className="my-8" />
+        <form onSubmit={handleSubmit} className="grid gap-2">
           <div className="space-y-1">
             <Label htmlFor="email">Username</Label>
             <Input
@@ -43,20 +95,23 @@ export default function Account() {
               autoCapitalize="none"
               autoComplete="email"
               autoCorrect="off"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
           </div>
-          <div className="space-y-1">
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              placeholder="name@example.com"
-              type="email"
-              autoCapitalize="none"
-              autoComplete="email"
-              autoCorrect="off"
-            />
-          </div>
-          <Button className="mt-6">Valid changes</Button>
+          {username !== initialUsername && (
+            <Button
+              disabled={
+                username.trim().length <= 3 || username.trim().length >= 20
+              }
+              className="mt-6"
+            >
+              {fakeLoading === true && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              {fakeLoading === true ? "Please wait" : "Change username"}
+            </Button>
+          )}
         </form>
         <p className="mt-12 font-bold mb-2">Password</p>
         <ChangePassword />

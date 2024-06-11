@@ -3,8 +3,20 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Account from "@/components/settings/Account";
 import Profile from "@/components/settings/Profile";
 import Appearance from "@/components/settings/Appearance";
+import { useGetUserProfileQuery } from "@/types/graphql";
 
 export default function Settings() {
+  const { data, loading } = useGetUserProfileQuery();
+  const user = data?.getUserProfile;
+
+  if (loading) {
+    return <p>loading ...</p>; // TODO : add some style to loading page
+  }
+
+  if (!user) {
+    return <p>User profile not found</p>; // TODO : add some style to error page
+  }
+
   return (
     <Layout title="Settings">
       <div className="flex flex-col text-center gap-8 items-center text-white">
@@ -21,13 +33,13 @@ export default function Settings() {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="account">
-            <Account />
+            <Account data={user} />
           </TabsContent>
           <TabsContent value="profile">
-            <Profile />
+            <Profile data={user} />
           </TabsContent>
           <TabsContent value="appearance">
-            <Appearance />
+            <Appearance data={user} />
           </TabsContent>
         </Tabs>
       </div>

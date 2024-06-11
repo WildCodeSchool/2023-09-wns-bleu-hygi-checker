@@ -9,7 +9,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useRouter } from "next/router";
 
-import { useLogoutLazyQuery } from "@/types/graphql";
+import { useLogoutLazyQuery, useGetAvatarQuery } from "@/types/graphql";
 
 import { useToast } from "../ui/use-toast";
 
@@ -23,6 +23,7 @@ export default function DropdownMenuNav({ isConnected }: DropdownMenuProps) {
   const { toast } = useToast();
 
   const [logout] = useLogoutLazyQuery();
+  const { data } = useGetAvatarQuery();
 
   const handleLogout = () => {
     logout({
@@ -54,11 +55,11 @@ export default function DropdownMenuNav({ isConnected }: DropdownMenuProps) {
           <AvatarImage
             src={
               isConnected
-                ? "https://github.com/shadcn.png"
+                ? `../../../avatars/${data?.getAvatar.avatar}.jpg`
                 : "https://i.stack.imgur.com/vaDPM.png?s=256&g=1"
             }
           />
-          <AvatarFallback>CN</AvatarFallback>
+          <AvatarFallback>HC</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       {isConnected ? (

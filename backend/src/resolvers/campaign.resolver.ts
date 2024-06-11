@@ -1,6 +1,8 @@
-import { Arg, Int, Mutation, Query, Resolver } from "type-graphql";
+import { Arg, Int, Mutation, Ctx, Query, Resolver } from "type-graphql";
 import Campaign, { InputCreateCampaign } from "../entities/campaign.entity";
 import CampaignService from "../services/campaign.service";
+import { MyContext } from "..";
+import UserService from "../services/user.service";
 
 @Resolver()
 export default class CampaignResolver {
@@ -34,9 +36,16 @@ export default class CampaignResolver {
 
   @Mutation(() => Campaign)
   async createCampaign(
+    @Ctx() ctx: MyContext,
     @Arg("input") input: InputCreateCampaign
-  ): Promise<Campaign> {
-    return await this.campaignService.createCampaign(input);
+  ): Promise<Campaign | null | undefined> {
+    if (ctx.user) {
+      const user = await new UserService().findUserByEmail(ctx.user.email);
+      if (!user) {
+        throw new Error("Error, please try again");
+      }
+      return await this.campaignService.createCampaign(input, user);
+    }
   }
 
   @Mutation(() => Campaign)

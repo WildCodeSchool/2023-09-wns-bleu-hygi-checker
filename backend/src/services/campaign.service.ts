@@ -1,5 +1,6 @@
 import { Repository } from "typeorm";
 import Campaign, { InputCreateCampaign } from "../entities/campaign.entity";
+import User from "../entities/user.entity";
 import datasource from "../lib/datasource";
 
 export default class CampaignService {
@@ -30,9 +31,12 @@ export default class CampaignService {
     return this.db.findOne({ where: { id }, relations: ["urls"] });
   }
 
-  async createCampaign(input: InputCreateCampaign): Promise<Campaign> {
+  async createCampaign(
+    input: InputCreateCampaign,
+    user: User
+  ): Promise<Campaign> {
     const newPictureForProject = await fetch(
-      "https://source.unsplash.com/random?wallpapers&landscape",
+      "https://picsum.photos/1920/1080",
       {
         redirect: "follow",
       }
@@ -46,6 +50,7 @@ export default class CampaignService {
 
     const newCampaign = this.db.create(input);
     newCampaign.image = newPictureForProject;
+    newCampaign.userId = user.id;
     return this.db.save(newCampaign);
   }
 

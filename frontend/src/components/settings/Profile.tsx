@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { cn } from "@/lib/utils";
+import { useState, useEffect, useMemo } from "react";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -36,42 +37,109 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Loader2 } from "lucide-react";
 import { Input } from "../ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { countries } from "@/utils/countries";
 import { toast } from "@/components/ui/use-toast";
+import { SettingsProps } from "@/types/interfaces";
+import {
+  useUpdateProfileMutation,
+  useGetUserProfileQuery,
+} from "@/types/graphql";
+
+type GENDER = "male" | "female" | "other" | "unspecified";
 
 const FormSchema = z.object({
-  gender: z.enum(["male", "female", "other"], {
+  gender: z.enum(["male", "female", "other", "unspecified"], {
     required_error: "You need to select a notification type.",
   }),
-  dob: z.string({
-    required_error: "A date of birth is required.",
-  }),
-  country: z.string({
-    required_error: "Please select yout country.",
-  }),
+  birth_date: z
+    .string({
+      required_error: "A date of birth is required.",
+    })
+    .min(10, {
+      message: "Birth date must be 2 caracters length.", // TODO : Regex the URL Format
+    })
+    .max(10, {
+      message: "Birth date must be 2 caracters length.", // TODO : Regex the URL Format
+    }),
+  country: z
+    .string({
+      required_error: "Please select yout country.",
+    })
+    .min(2, {
+      message: "Country code must be 2 caracters length.", // TODO : Regex the URL Format
+    })
+    .max(2, {
+      message: "Country code must be 2 caracters length.", // TODO : Regex the URL Format
+    }),
 });
 
-export default function Profile() {
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
+export default function Profile({ data }: SettingsProps) {
+  const [fakeLoading, setFakeLoading] = useState(false);
+  const [isChanged, setIsChanged] = useState(false);
+  const { refetch } = useGetUserProfileQuery();
+  const [updateProfileMutation] = useUpdateProfileMutation({
+    onCompleted: () => {
+      toast({
+        title: "Profile updated successfully",
+        variant: "success",
+      });
+      setIsChanged(false);
+      refetch();
+    },
+    onError: () => {
+      toast({
+        title: `Something went wrong. Please try again`,
+        variant: "destructive",
+      });
+    },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
-    console.warn(data);
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      gender: (data?.gender as GENDER) ?? "",
+      birth_date: (data?.birth_date as string) ?? "",
+      country: (data?.country as string) ?? "",
+    },
+  });
+
+  function onSubmit(formData: z.infer<typeof FormSchema>) {
+    setFakeLoading(true);
+    setTimeout(() => {
+      setFakeLoading(false);
+      updateProfileMutation({
+        variables: {
+          updateData: formData,
+        },
+      });
+    }, 1000);
   }
 
   const date = new Date();
   const todayDate = date.toISOString().split("T")[0];
+
+  const initialValues = useMemo(
+    () => ({
+      gender: data?.gender,
+      birth_date: data?.birth_date,
+      country: data?.country,
+    }),
+    [data]
+  );
+
+  useEffect(() => {
+    const subscription = form.watch((value) => {
+      setIsChanged(
+        initialValues.gender !== value.gender ||
+          initialValues.birth_date !== value.birth_date ||
+          initialValues.country !== value.country
+      );
+    });
+    return () => subscription.unsubscribe();
+  }, [form, initialValues]);
 
   return (
     <Card className="md:w-[750px]">
@@ -92,7 +160,7 @@ export default function Profile() {
                     <RadioGroup
                       onValueChange={field.onChange}
                       defaultValue={field.value}
-                      className="flex flex-row justify-center gap-12"
+                      className="flex flex-col justify-center items-center md:flex-row gap-12"
                     >
                       <FormItem className="flex items-center space-x-3 space-y-0">
                         <FormControl>
@@ -108,9 +176,17 @@ export default function Profile() {
                       </FormItem>
                       <FormItem className="flex items-center space-x-3 space-y-0">
                         <FormControl>
-                          <RadioGroupItem value="none" />
+                          <RadioGroupItem value="other" />
                         </FormControl>
                         <FormLabel className="font-normal">Other</FormLabel>
+                      </FormItem>
+                      <FormItem className="flex items-center space-x-3 space-y-0">
+                        <FormControl>
+                          <RadioGroupItem value="unspecified" />
+                        </FormControl>
+                        <FormLabel className="font-normal">
+                          Unspecified
+                        </FormLabel>
                       </FormItem>
                     </RadioGroup>
                   </FormControl>
@@ -120,7 +196,7 @@ export default function Profile() {
             />
             <FormField
               control={form.control}
-              name="dob"
+              name="birth_date"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Date of birth</FormLabel>
@@ -198,10 +274,19 @@ export default function Profile() {
               )}
             />
             {/* ******************************* */}
-
-            <Button type="submit" variant="outline" className="w-full mt-4">
-              Update Profile
-            </Button>
+            {isChanged && (
+              <Button
+                disabled={!isChanged}
+                type="submit"
+                variant="outline"
+                className="w-full mt-4"
+              >
+                {fakeLoading === true && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                {fakeLoading === true ? "Please wait" : "Update Profile"}
+              </Button>
+            )}
             {/* ***************************** */}
           </form>
         </Form>

@@ -42,13 +42,14 @@ export default class Campaign extends BaseEntity {
   @Column({ name: "user_id" })
   userId: string;
 
-  // @Field(() => User)
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, (user) => user.campaigns, { onDelete: "CASCADE" }) // Here is the onDelete option
   @JoinColumn({ name: "user_id" })
   user: User;
 
   @Field(() => [Url])
-  @ManyToMany(() => Url, (url) => url.campaigns)
+  @ManyToMany(() => Url, (url) => url.campaigns, {
+    cascade: true,
+  })
   urls: Url[];
 }
 
@@ -65,7 +66,4 @@ export class InputCreateCampaign {
 
   @Field({ nullable: true })
   isWorking?: boolean;
-
-  @Field()
-  userId: string;
 }
