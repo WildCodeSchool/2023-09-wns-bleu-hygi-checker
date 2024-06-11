@@ -8,8 +8,10 @@ import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/router";
 import { CampaignFormProps } from "@/types/interfaces";
 import { useState } from "react";
-import { useCreateCampaignMutation } from "@/types/graphql";
-import { useCampaignsQuery } from "@/types/graphql";
+import {
+  useCampaignsByUserIdQuery,
+  useCreateCampaignMutation,
+} from "@/types/graphql";
 
 // ************ IMPORT UI COMPONENTS  *****************
 import { Button } from "@/components/ui/button";
@@ -50,7 +52,8 @@ export function CampaignForm({
   const [fakeLoading, setFakeLoading] = useState(false);
   const [openForm, setOpenForm] = useState(false);
 
-  const { refetch } = useCampaignsQuery();
+  const { refetch } = useCampaignsByUserIdQuery();
+
   const [createCampaign] = useCreateCampaignMutation({
     onCompleted: (data) => {
       const campaignId = data.createCampaign.id;
@@ -65,7 +68,7 @@ export function CampaignForm({
           variant: "success",
         });
         refetch();
-      }, 1500);
+      }, 1000);
     },
     onError: () => {
       toast({
