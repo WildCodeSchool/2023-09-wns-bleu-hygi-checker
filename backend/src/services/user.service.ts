@@ -27,8 +27,18 @@ export default class UserService {
     return await this.db.findOneBy({ id });
   }
 
-  async createUser({ email, password }: InputRegister) {
-    const newUser = this.db.create({ email, password });
+  async createUser({
+    email,
+    password,
+    username,
+    accepted_terms,
+  }: InputRegister) {
+    const newUser = this.db.create({
+      email,
+      password,
+      username,
+      accepted_terms,
+    });
     return await this.db.save(newUser);
   }
 

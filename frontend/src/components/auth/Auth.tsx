@@ -151,7 +151,9 @@ export function Auth() {
       return;
     }
     register({
-      variables: { infos: { email, password } },
+      variables: {
+        infos: { email, password, username, accepted_terms: acceptedTerms },
+      },
     });
   };
 
