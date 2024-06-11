@@ -101,6 +101,9 @@ export class UserWithoutPassword {
   id: string;
 
   @Field()
+  username: string;
+
+  @Field()
   email: string;
 
   @Field(() => String)
@@ -156,6 +159,7 @@ export class InputRegister {
   email: string;
 
   @Field()
+  @Matches(passwordRegex)
   password: string;
 
   @Field()
