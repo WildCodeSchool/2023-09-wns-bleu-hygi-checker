@@ -7,6 +7,7 @@ export default async function () {
     role: "ADMIN",
     email: "admin@app.com",
     password: "adminadmin",
+    accepted_terms: true,
   }).save();
 
   const JWT = await new SignJWT({ userId: admin.id })
