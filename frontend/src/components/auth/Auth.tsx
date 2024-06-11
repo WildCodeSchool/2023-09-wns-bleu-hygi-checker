@@ -97,7 +97,7 @@ export function Auth() {
           router.push("/dashboard/campaign/lists");
           setTimeout(() => {
             toast({
-              title: data.login.message,
+              title: `${data.login.message} ${username} !`,
               variant: "success",
             });
           }, 500);

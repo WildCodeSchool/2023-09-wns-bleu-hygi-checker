@@ -8,10 +8,8 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useRouter } from "next/router";
-
-import { useLogoutLazyQuery, useGetAvatarQuery } from "@/types/graphql";
-
-import { useToast } from "../ui/use-toast";
+import { useGetAvatarQuery } from "@/types/graphql";
+import { useLogout } from "../auth/Logout";
 
 interface DropdownMenuProps {
   isConnected: boolean;
@@ -20,33 +18,9 @@ interface DropdownMenuProps {
 export default function DropdownMenuNav({ isConnected }: DropdownMenuProps) {
   const router = useRouter();
 
-  const { toast } = useToast();
-
-  const [logout] = useLogoutLazyQuery();
   const { data } = useGetAvatarQuery();
 
-  const handleLogout = () => {
-    logout({
-      onCompleted: (data) => {
-        if (data.logout.success) {
-          if (router.pathname == "/") {
-            router.reload();
-          } else {
-            router.push("/");
-            setTimeout(() => {
-              router.reload();
-            }, 200);
-          }
-
-          setTimeout(() => {
-            toast({
-              title: data.logout.message,
-            });
-          }, 500);
-        }
-      },
-    });
-  };
+  const handleLogout = useLogout();
 
   return (
     <DropdownMenu>

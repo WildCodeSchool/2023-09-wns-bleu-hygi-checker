@@ -187,7 +187,7 @@ export type NewUserAvatar = {
 export type Query = {
   __typename?: "Query";
   activeCampaigns: Array<Campaign>;
-  campaign?: Maybe<Campaign>;
+  campaignById?: Maybe<Campaign>;
   campaigns: Array<Campaign>;
   campaignsByUserId: Array<Campaign>;
   checkUrl: CheckUrl;
@@ -204,12 +204,8 @@ export type Query = {
   users: Array<User>;
 };
 
-export type QueryCampaignArgs = {
+export type QueryCampaignByIdArgs = {
   id: Scalars["Int"]["input"];
-};
-
-export type QueryCampaignsByUserIdArgs = {
-  userId: Scalars["String"]["input"];
 };
 
 export type QueryCheckUrlArgs = {
@@ -284,6 +280,7 @@ export type UserWithoutPassword = {
   email: Scalars["String"]["output"];
   id: Scalars["String"]["output"];
   role: Scalars["String"]["output"];
+  username: Scalars["String"]["output"];
 };
 
 export type InputUpdateName = {
@@ -416,11 +413,35 @@ export type GetAvatarQuery = {
   getAvatar: { __typename?: "User"; avatar: string };
 };
 
-export type CampaignsQueryVariables = Exact<{ [key: string]: never }>;
+export type CampaignByIdQueryVariables = Exact<{
+  campaignByIdId: Scalars["Int"]["input"];
+}>;
 
-export type CampaignsQuery = {
+export type CampaignByIdQuery = {
   __typename?: "Query";
-  campaigns: Array<{
+  campaignById?: {
+    __typename?: "Campaign";
+    id: number;
+    name: string;
+    image?: string | null;
+    intervalTest?: number | null;
+    isMailAlert?: boolean | null;
+    isWorking?: boolean | null;
+    userId: string;
+    urls: Array<{
+      __typename?: "Url";
+      id: number;
+      urlPath: string;
+      type: string;
+    }>;
+  } | null;
+};
+
+export type CampaignsByUserIdQueryVariables = Exact<{ [key: string]: never }>;
+
+export type CampaignsByUserIdQuery = {
+  __typename?: "Query";
+  campaignsByUserId: Array<{
     __typename?: "Campaign";
     id: number;
     name: string;
@@ -1076,9 +1097,9 @@ export type GetAvatarQueryResult = Apollo.QueryResult<
   GetAvatarQuery,
   GetAvatarQueryVariables
 >;
-export const CampaignsDocument = gql`
-  query Campaigns {
-    campaigns {
+export const CampaignByIdDocument = gql`
+  query CampaignById($campaignByIdId: Int!) {
+    campaignById(id: $campaignByIdId) {
       id
       name
       image
@@ -1096,63 +1117,152 @@ export const CampaignsDocument = gql`
 `;
 
 /**
- * __useCampaignsQuery__
+ * __useCampaignByIdQuery__
  *
- * To run a query within a React component, call `useCampaignsQuery` and pass it any options that fit your needs.
- * When your component renders, `useCampaignsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useCampaignByIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCampaignByIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useCampaignsQuery({
+ * const { data, loading, error } = useCampaignByIdQuery({
+ *   variables: {
+ *      campaignByIdId: // value for 'campaignByIdId'
+ *   },
+ * });
+ */
+export function useCampaignByIdQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    CampaignByIdQuery,
+    CampaignByIdQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<CampaignByIdQuery, CampaignByIdQueryVariables>(
+    CampaignByIdDocument,
+    options
+  );
+}
+export function useCampaignByIdLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    CampaignByIdQuery,
+    CampaignByIdQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<CampaignByIdQuery, CampaignByIdQueryVariables>(
+    CampaignByIdDocument,
+    options
+  );
+}
+export function useCampaignByIdSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    CampaignByIdQuery,
+    CampaignByIdQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<CampaignByIdQuery, CampaignByIdQueryVariables>(
+    CampaignByIdDocument,
+    options
+  );
+}
+export type CampaignByIdQueryHookResult = ReturnType<
+  typeof useCampaignByIdQuery
+>;
+export type CampaignByIdLazyQueryHookResult = ReturnType<
+  typeof useCampaignByIdLazyQuery
+>;
+export type CampaignByIdSuspenseQueryHookResult = ReturnType<
+  typeof useCampaignByIdSuspenseQuery
+>;
+export type CampaignByIdQueryResult = Apollo.QueryResult<
+  CampaignByIdQuery,
+  CampaignByIdQueryVariables
+>;
+export const CampaignsByUserIdDocument = gql`
+  query CampaignsByUserId {
+    campaignsByUserId {
+      id
+      name
+      image
+      intervalTest
+      isMailAlert
+      isWorking
+      userId
+      urls {
+        id
+        urlPath
+        type
+      }
+    }
+  }
+`;
+
+/**
+ * __useCampaignsByUserIdQuery__
+ *
+ * To run a query within a React component, call `useCampaignsByUserIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCampaignsByUserIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCampaignsByUserIdQuery({
  *   variables: {
  *   },
  * });
  */
-export function useCampaignsQuery(
-  baseOptions?: Apollo.QueryHookOptions<CampaignsQuery, CampaignsQueryVariables>
+export function useCampaignsByUserIdQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    CampaignsByUserIdQuery,
+    CampaignsByUserIdQueryVariables
+  >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<CampaignsQuery, CampaignsQueryVariables>(
-    CampaignsDocument,
-    options
-  );
+  return Apollo.useQuery<
+    CampaignsByUserIdQuery,
+    CampaignsByUserIdQueryVariables
+  >(CampaignsByUserIdDocument, options);
 }
-export function useCampaignsLazyQuery(
+export function useCampaignsByUserIdLazyQuery(
   baseOptions?: Apollo.LazyQueryHookOptions<
-    CampaignsQuery,
-    CampaignsQueryVariables
+    CampaignsByUserIdQuery,
+    CampaignsByUserIdQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<CampaignsQuery, CampaignsQueryVariables>(
-    CampaignsDocument,
-    options
-  );
+  return Apollo.useLazyQuery<
+    CampaignsByUserIdQuery,
+    CampaignsByUserIdQueryVariables
+  >(CampaignsByUserIdDocument, options);
 }
-export function useCampaignsSuspenseQuery(
+export function useCampaignsByUserIdSuspenseQuery(
   baseOptions?: Apollo.SuspenseQueryHookOptions<
-    CampaignsQuery,
-    CampaignsQueryVariables
+    CampaignsByUserIdQuery,
+    CampaignsByUserIdQueryVariables
   >
 ) {
   const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<CampaignsQuery, CampaignsQueryVariables>(
-    CampaignsDocument,
-    options
-  );
+  return Apollo.useSuspenseQuery<
+    CampaignsByUserIdQuery,
+    CampaignsByUserIdQueryVariables
+  >(CampaignsByUserIdDocument, options);
 }
-export type CampaignsQueryHookResult = ReturnType<typeof useCampaignsQuery>;
-export type CampaignsLazyQueryHookResult = ReturnType<
-  typeof useCampaignsLazyQuery
+export type CampaignsByUserIdQueryHookResult = ReturnType<
+  typeof useCampaignsByUserIdQuery
 >;
-export type CampaignsSuspenseQueryHookResult = ReturnType<
-  typeof useCampaignsSuspenseQuery
+export type CampaignsByUserIdLazyQueryHookResult = ReturnType<
+  typeof useCampaignsByUserIdLazyQuery
 >;
-export type CampaignsQueryResult = Apollo.QueryResult<
-  CampaignsQuery,
-  CampaignsQueryVariables
+export type CampaignsByUserIdSuspenseQueryHookResult = ReturnType<
+  typeof useCampaignsByUserIdSuspenseQuery
+>;
+export type CampaignsByUserIdQueryResult = Apollo.QueryResult<
+  CampaignsByUserIdQuery,
+  CampaignsByUserIdQueryVariables
 >;
 export const GetUserProfileDocument = gql`
   query GetUserProfile {

@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
-export const GET_CAMPAIGNS = gql`
-  query CampaignsByUserId {
-    campaignsByUserId {
+export const GET_CAMPAIGN_BY_ID = gql`
+  query CampaignById($campaignByIdId: Int!) {
+    campaignById(id: $campaignByIdId) {
       id
       name
       image
