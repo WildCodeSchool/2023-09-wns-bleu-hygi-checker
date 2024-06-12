@@ -3,7 +3,7 @@ import db from "./datasource";
 async function clearDB() {
   const runner = db.createQueryRunner();
 
-  // supprime toutes les tables
+  // delete all tables
   await Promise.all(
     db.entityMetadatas.map(async (entity) =>
       runner.query(`DROP TABLE IF EXISTS "${entity.tableName}" CASCADE`)

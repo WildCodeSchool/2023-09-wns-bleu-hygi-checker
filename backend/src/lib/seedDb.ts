@@ -3,6 +3,7 @@ import User from "../entities/user.entity";
 import Campaign from "../entities/campaign.entity";
 import Url from "../entities/url.entity";
 import Response from "../entities/response.entity";
+import CampaignUrl from "../entities/campaignUrl.entity";
 import argon2 from "argon2";
 import db from "./datasource";
 import { GENDER } from "../entities/user.entity";
@@ -28,7 +29,7 @@ async function seedDB() {
     gender: GENDER.female,
     birth_date: "1998-07-25",
     country: "FR",
-    avatar: "avatar01",
+    avatar: "avatar04",
     role: "USER",
   });
 
@@ -62,7 +63,7 @@ async function seedDB() {
 
   // Création des campagnes
   const campaign1 = Campaign.create({
-    name: "Campaign1_User1",
+    name: "Campaign #1",
     image:
       "https://fastly.picsum.photos/id/826/1920/1080.jpg?hmac=CSZ6ZNnqhNlFOUi55Unatj6afDU9RgJUK2RB6IPwkwg",
     intervalTest: 60,
@@ -71,17 +72,17 @@ async function seedDB() {
     userId: user1.id,
   });
   const campaign2 = Campaign.create({
-    name: "Campaign1_User2",
+    name: "Campaign #2",
     image:
       "https://fastly.picsum.photos/id/1063/1920/1080.jpg?hmac=bZWbcXgGOnrgZE0_VD2mUoLolkPdd3vBtNUXa-UxtY0",
     intervalTest: 60,
     isMailAlert: false,
     isWorking: true,
-    userId: user2.id,
+    userId: user1.id,
   });
 
   const campaign3 = Campaign.create({
-    name: "Campaign2_User1",
+    name: "Campaign #3",
     image:
       "https://fastly.picsum.photos/id/1019/1920/1080.jpg?hmac=XGm3xPMZTa3H-YXR0qxs91ClJOdn43Ei0xRbGTpq6wA",
     intervalTest: 120,
@@ -91,23 +92,23 @@ async function seedDB() {
   });
 
   const campaign4 = Campaign.create({
-    name: "Campaign2_User2",
+    name: "Campaign #4",
     image:
       "https://fastly.picsum.photos/id/482/1920/1080.jpg?hmac=WOOpg36fuOhzwR8Jl4Dcc_l6krSTlHl70b8BhoaXQqU",
     intervalTest: 120,
     isMailAlert: true,
     isWorking: true,
-    userId: user2.id,
+    userId: user1.id,
   });
 
   const campaign5 = Campaign.create({
-    name: "Campaign1_User3",
+    name: "Campaign #5",
     image:
       "https://fastly.picsum.photos/id/993/1920/1080.jpg?hmac=dPlPg5Ajy9w_la62n3jwZAj0xuIkFA9jvQjg3bbJiVg",
     intervalTest: 60,
     isMailAlert: false,
     isWorking: true,
-    userId: user3.id,
+    userId: user1.id,
   });
 
   await Campaign.save([campaign1, campaign2, campaign3, campaign4, campaign5]);
@@ -148,52 +149,79 @@ async function seedDB() {
     type: "PAGE",
   });
 
-  url1.campaigns = [campaign1, campaign2, campaign3, campaign4, campaign5];
-  url2.campaigns = [campaign1, campaign2, campaign3, campaign4, campaign5];
-  url3.campaigns = [campaign1, campaign2, campaign3, campaign4, campaign5];
-  url4.campaigns = [campaign1, campaign2, campaign3, campaign4, campaign5];
-  url5.campaigns = [campaign1, campaign2, campaign3, campaign4, campaign5];
-  url6.campaigns = [campaign1, campaign2, campaign3, campaign4, campaign5];
-  url7.campaigns = [campaign1, campaign2, campaign3, campaign4, campaign5];
-
   await Url.save([url1, url2, url3, url4, url5, url6, url7]);
+
+  // Création des url dans les campagnes
+  const campaignUrl1 = CampaignUrl.create({
+    campaign: { id: campaign1.id },
+    url: { id: url1.id },
+  });
+  const campaignUrl2 = CampaignUrl.create({
+    campaign: { id: campaign1.id },
+    url: { id: url2.id },
+  });
+  const campaignUrl3 = CampaignUrl.create({
+    campaign: { id: campaign1.id },
+    url: { id: url3.id },
+  });
+  const campaignUrl4 = CampaignUrl.create({
+    campaign: { id: campaign1.id },
+    url: { id: url4.id },
+  });
+  const campaignUrl5 = CampaignUrl.create({
+    campaign: { id: campaign1.id },
+    url: { id: url5.id },
+  });
+  const campaignUrl6 = CampaignUrl.create({
+    campaign: { id: campaign1.id },
+    url: { id: url6.id },
+  });
+  const campaignUrl7 = CampaignUrl.create({
+    campaign: { id: campaign1.id },
+    url: { id: url7.id },
+  });
+
+  await CampaignUrl.save([
+    campaignUrl1,
+    campaignUrl2,
+    campaignUrl3,
+    campaignUrl4,
+    campaignUrl5,
+    campaignUrl6,
+    campaignUrl7,
+  ]);
 
   // Création des réponses pour chaque URL
   const responses1_200 = Response.create({
     responseTime: 300,
     statusCode: "200 OK",
-    creationDate: new Date("2023-05-15T00:00:00Z"),
   });
 
   const responses2_200 = Response.create({
     responseTime: 100,
     statusCode: "200 OK",
-    creationDate: new Date("2023-05-15T00:00:00Z"),
   });
 
   const responses3_200 = Response.create({
     responseTime: 150,
     statusCode: "200 OK",
-    creationDate: new Date("2023-05-15T00:00:00Z"),
   });
 
   const responses4_404 = Response.create({
     responseTime: 300,
     statusCode: "404 Not Found",
-    creationDate: new Date("2023-05-15T00:00:00Z"),
   });
 
   const responses5_500 = Response.create({
     responseTime: 250,
     statusCode: "500 Internal Server Error",
-    creationDate: new Date("2023-05-15T00:00:00Z"),
   });
 
-  responses1_200.urlId = url1.id;
-  responses2_200.urlId = url1.id;
-  responses3_200.urlId = url1.id;
-  responses4_404.urlId = url1.id;
-  responses5_500.urlId = url1.id;
+  responses1_200.campaignUrlId = campaignUrl1.id;
+  responses2_200.campaignUrlId = campaignUrl1.id;
+  responses3_200.campaignUrlId = campaignUrl1.id;
+  responses4_404.campaignUrlId = campaignUrl1.id;
+  responses5_500.campaignUrlId = campaignUrl1.id;
 
   await Response.save([
     responses1_200,

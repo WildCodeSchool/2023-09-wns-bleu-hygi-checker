@@ -31,20 +31,27 @@ export default class UserResolver {
       const connectedUser = await new UserService().findUserByEmail(
         ctx.user.email
       );
+      if (!connectedUser) {
+        throw new Error("user not found");
+      }
       return connectedUser;
+    } else {
+      throw new Error("You must be authenticated to perform this action");
     }
-    throw new Error("user not found");
   }
 
   @Query(() => User)
   async getAvatar(@Ctx() ctx: MyContext) {
+    // TODO : remove this query as the getUserProfile is enough to get the avatar => make a query on front with getUserProfile but just select avatar
     if (ctx.user) {
       const avatar = await new UserService().findUserByEmail(ctx.user.email);
-      if (avatar) {
-        return avatar;
+      if (!avatar) {
+        throw new Error("avatar not found");
       }
+      return avatar;
+    } else {
+      throw new Error("You must be authenticated to perform this action");
     }
-    throw new Error("avatar not found");
   }
 
   @Mutation(() => NewUserAvatar)
@@ -62,6 +69,8 @@ export default class UserResolver {
         newAvatar
       );
       return editedAvatar;
+    } else {
+      throw new Error("You must be authenticated to perform this action");
     }
   }
 
@@ -80,6 +89,8 @@ export default class UserResolver {
         updateData
       );
       return updatedProfile;
+    } else {
+      throw new Error("You must be authenticated to perform this action");
     }
   }
 
@@ -98,6 +109,8 @@ export default class UserResolver {
         updateName
       );
       return updatedName;
+    } else {
+      throw new Error("You must be authenticated to perform this action");
     }
   }
 
@@ -136,6 +149,8 @@ export default class UserResolver {
         m.success = false;
       }
       return m;
+    } else {
+      throw new Error("You must be authenticated to perform this action");
     }
   }
   @Authorized(["USER", "ADMIN"])
@@ -187,7 +202,7 @@ export default class UserResolver {
   async logout(@Ctx() ctx: MyContext) {
     if (ctx.user) {
       const cookies = await new Cookies(ctx.req, ctx.res);
-      cookies.set("token"); //sans valeur, le cookie token sera supprimé
+      cookies.set("token"); // without value, cookie will be deleted
     }
     const m = new Message();
     m.message = "You are logout.";
@@ -206,7 +221,7 @@ export default class UserResolver {
     return newUser;
   }
 
-  @Authorized(["USER"])
+  @Authorized(["USER"]) // TODO : remove this function for final production (except if we work on admin rights)
   @Mutation(() => [User])
   async upgradeRole(@Arg("id") id: string) {
     const user = await new UserService().findUserById(id);

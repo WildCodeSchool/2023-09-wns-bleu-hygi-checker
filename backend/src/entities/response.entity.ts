@@ -8,7 +8,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import Url from "./url.entity";
+import CampaignUrl from "./campaignUrl.entity";
 
 @ObjectType()
 @Entity()
@@ -26,16 +26,16 @@ export default class Response extends BaseEntity {
   statusCode: string;
 
   @Field()
-  @CreateDateColumn()
-  creationDate: Date;
+  @CreateDateColumn({ type: "timestamp" })
+  createdAt: Date;
 
   @Field()
-  @Column({ name: "url_id" })
-  urlId: number;
+  @Column({ name: "campaign_url_id" })
+  campaignUrlId: number;
 
-  @ManyToOne(() => Url)
-  @JoinColumn({ name: "url_id" })
-  url: Url;
+  @ManyToOne(() => CampaignUrl, { onDelete: "CASCADE" })
+  @JoinColumn({ name: "campaign_url_id" })
+  campaignUrl: CampaignUrl;
 }
 
 @InputType()
@@ -47,8 +47,8 @@ export class InputCreateResponse {
   statusCode: string;
 
   @Field()
-  creationDate: Date;
+  createdAt: Date;
 
   @Field()
-  urlId: number;
+  campaignUrlId: number;
 }

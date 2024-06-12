@@ -1,6 +1,5 @@
-import { In, Repository } from "typeorm";
-import Campaign from "../entities/campaign.entity";
-import Url, { InputCreateUrl } from "../entities/url.entity";
+import { Repository } from "typeorm";
+import Url from "../entities/url.entity";
 import datasource from "../lib/datasource";
 
 export default class UrlService {
@@ -10,16 +9,19 @@ export default class UrlService {
   }
 
   async listUrls(): Promise<Url[]> {
-    return this.db.find({ relations: ["campaigns"] });
+    return this.db.find();
   }
 
   async findUrlById(id: number): Promise<Url | null> {
     return this.db.findOne({ where: { id }, relations: ["campaigns"] });
   }
 
-  async createUrl(input: InputCreateUrl): Promise<Url> {
-    const campaigns = await Campaign.findBy({ id: In(input.campaignIds) });
-    const newUrl = this.db.create({ ...input, campaigns });
+  async findIdByUrl(url: string): Promise<Url | null> {
+    return this.db.findOne({ where: { urlPath: url } });
+  }
+
+  async createUrl(url: string): Promise<Url> {
+    const newUrl = this.db.create({ urlPath: url });
     return this.db.save(newUrl);
   }
 
@@ -30,25 +32,6 @@ export default class UrlService {
     }
     await this.db.remove(url);
     return url;
-  }
-
-  async addUrlToCampaign(urlId: number, campaignId: number): Promise<Url> {
-    const url = await this.findUrlById(urlId);
-    const campaign = await Campaign.findOneBy({ id: campaignId });
-    if (!url || !campaign) {
-      throw new Error("URL or Campaign not found");
-    }
-    url.campaigns.push(campaign);
-    return this.db.save(url);
-  }
-
-  async removeUrlFromCampaign(urlId: number, campaignId: number): Promise<Url> {
-    const url = await this.findUrlById(urlId);
-    if (!url) {
-      throw new Error("URL not found");
-    }
-    url.campaigns = url.campaigns.filter((c) => c.id !== campaignId);
-    return this.db.save(url);
   }
 
   validateURL(url: string): boolean {

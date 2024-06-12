@@ -12,9 +12,9 @@ export default class ResponseService {
     return this.db.find();
   }
 
-  async listResponsesByUrlId(urlId: number): Promise<Response[]> {
+  async listResponsesByUrlId(campaignUrlId: number): Promise<Response[]> {
     return this.db.find({
-      where: { urlId },
+      where: { campaignUrlId },
     });
   }
 
@@ -25,14 +25,14 @@ export default class ResponseService {
   async createResponse({
     responseTime,
     statusCode,
-    creationDate,
-    urlId,
+    createdAt,
+    campaignUrlId,
   }: InputCreateResponse) {
     const newUrl = this.db.create({
       responseTime,
       statusCode,
-      creationDate,
-      urlId,
+      createdAt,
+      campaignUrlId,
     });
     return await this.db.save(newUrl);
   }
