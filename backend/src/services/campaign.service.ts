@@ -27,8 +27,18 @@ export default class CampaignService {
     });
   }
 
-  async findCampaignById(id: number): Promise<Campaign | null> {
-    return this.db.findOne({ where: { id }, relations: ["urls"] });
+  async findCampaignById(
+    id: number,
+    userId?: string
+  ): Promise<Campaign | null> {
+    const campaign = await this.db.findOne({
+      where: { id },
+      relations: ["urls"],
+    });
+    if (campaign && userId && campaign.userId !== userId) {
+      throw new Error("Acces denied.");
+    }
+    return campaign;
   }
 
   async createCampaign(
