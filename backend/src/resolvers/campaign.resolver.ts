@@ -55,15 +55,6 @@ export default class CampaignResolver {
     } else {
       throw new Error("You must be authenticated to perform this action");
     }
-    @Ctx() ctx: MyContext
-  ): Promise<Campaign[] | undefined> {
-    if (ctx.user) {
-      const user = await new UserService().findUserByEmail(ctx.user.email);
-      if (!user) {
-        throw new Error("Error, please try again");
-      }
-      return await this.campaignService.listCampaignsByUserId(user.id);
-    }
   }
 
   @Query(() => Campaign, { nullable: true })
