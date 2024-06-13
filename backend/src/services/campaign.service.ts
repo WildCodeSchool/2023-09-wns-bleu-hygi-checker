@@ -30,13 +30,22 @@ export default class CampaignService {
     const campaigns = await this.db.find({
       where: { userId },
     });
-
     // return IDs of campaign only
     return campaigns.map((campaign: Campaign) => ({ id: campaign.id }));
   }
 
-  async findCampaignById(id: number): Promise<Campaign | null> {
-    return this.db.findOne({ where: { id }, relations: ["urls"] });
+  async findCampaignById(
+    campaignId: number,
+    userId?: string
+  ): Promise<Campaign | null> {
+    const campaign = await this.db.findOne({
+      where: { id: campaignId },
+      relations: ["urls"],
+    });
+    if (campaign && userId && campaign.userId !== userId) {
+      throw new Error("Acces denied.");
+    }
+    return campaign;
   }
 
   async createCampaign(

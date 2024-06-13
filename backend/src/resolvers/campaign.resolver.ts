@@ -26,17 +26,16 @@ export default class CampaignResolver {
   }
 
   @Query(() => Campaign, { nullable: true })
-  async campaign(
+  async campaignById(
     @Ctx() ctx: MyContext,
-    @Arg("id", () => Int) id: number
-  ): Promise<Campaign | null> {
+    @Arg("campaignId", () => Int) campaignId: number
+  ): Promise<Campaign | undefined | null> {
     if (ctx.user) {
       const user = await new UserService().findUserByEmail(ctx.user.email);
       if (!user) {
         throw new Error("Error, please try again");
       }
-      // TODO : verify if the campaign we want to get belong to the currently logged in user
-      return await this.campaignService.findCampaignById(id);
+      return await this.campaignService.findCampaignById(campaignId, user.id);
     } else {
       throw new Error("You must be authenticated to perform this action");
     }
