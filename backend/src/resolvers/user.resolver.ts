@@ -174,7 +174,7 @@ export default class UserResolver {
       const cookies = new Cookies(ctx.req, ctx.res);
       cookies.set("token", token, { httpOnly: true });
 
-      m.message = "Welcome!";
+      m.message = "Welcome";
       m.success = true;
     } else {
       m.message = "Check your informations !";

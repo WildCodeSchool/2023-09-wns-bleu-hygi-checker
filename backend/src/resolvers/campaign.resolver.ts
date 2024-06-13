@@ -24,14 +24,31 @@ export default class CampaignResolver {
 
   @Query(() => [Campaign])
   async campaignsByUserId(
-    @Arg("userId", () => String) userId: string
-  ): Promise<Campaign[]> {
-    return await this.campaignService.listCampaignsByUserId(userId);
+    @Ctx() ctx: MyContext
+  ): Promise<Campaign[] | undefined> {
+    if (ctx.user) {
+      const user = await new UserService().findUserByEmail(ctx.user.email);
+      if (!user) {
+        throw new Error("Error, please try again");
+      }
+      return await this.campaignService.listCampaignsByUserId(user.id);
+    }
   }
 
   @Query(() => Campaign, { nullable: true })
-  async campaign(@Arg("id", () => Int) id: number): Promise<Campaign | null> {
-    return await this.campaignService.findCampaignById(id);
+  async campaignById(
+    @Ctx() ctx: MyContext,
+    @Arg("id", () => Int) id: number
+  ): Promise<Campaign | undefined | null> {
+    if (ctx.user) {
+      const user = await new UserService().findUserByEmail(ctx.user.email);
+      if (!user) {
+        throw new Error("Error, please try again");
+      }
+      return await this.campaignService.findCampaignById(id, user.id);
+    } else {
+      throw new Error("Unknown user");
+    }
   }
 
   @Mutation(() => Campaign)
