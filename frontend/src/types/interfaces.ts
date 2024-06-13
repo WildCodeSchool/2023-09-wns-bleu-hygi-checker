@@ -1,4 +1,5 @@
 import { Campaign, UserProfile } from "./graphql";
+import { Dispatch, SetStateAction } from "react";
 
 export interface ConfirmationModalProps {
   isLargeButton: boolean;
@@ -43,4 +44,11 @@ export interface CampaignCardProps {
 
 export interface SettingsProps {
   data: UserProfile;
+}
+
+export interface AddUrlToCampaignProps {
+  showAddUrlModal: boolean;
+  setShowAddUrlModal: Dispatch<SetStateAction<boolean>>;
+  urlToAdd: string | undefined;
+  setUrlPath: Dispatch<SetStateAction<string>> | null;
 }

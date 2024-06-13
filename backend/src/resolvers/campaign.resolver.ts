@@ -4,6 +4,7 @@ import CampaignService from "../services/campaign.service";
 import { MyContext } from "..";
 import UserService from "../services/user.service";
 import { Message } from "../entities/user.entity";
+import { CampaignIds } from "../entities/campaign.entity";
 
 @Resolver()
 export default class CampaignResolver {
@@ -30,7 +31,6 @@ export default class CampaignResolver {
     @Ctx() ctx: MyContext,
     @Arg("campaignId", () => Int) campaignId: number
   ): Promise<Campaign | undefined | null> {
-
     if (ctx.user) {
       const user = await new UserService().findUserByEmail(ctx.user.email);
       if (!user) {
@@ -42,12 +42,10 @@ export default class CampaignResolver {
     }
   }
 
-
   @Query(() => [Campaign])
   async campaignsByUserId(
     @Ctx() ctx: MyContext
   ): Promise<Campaign[] | undefined> {
-
     if (ctx.user) {
       const user = await new UserService().findUserByEmail(ctx.user.email);
       if (!user) {
@@ -76,11 +74,37 @@ export default class CampaignResolver {
   }
 
   @Mutation(() => Message)
-  async deleteCampaign(@Arg("campaignId") campaignId: number) {
-    await this.campaignService.deleteCampaign(campaignId);
-    const m = new Message();
-    m.message = "Campaign deleted successfully";
-    m.success = true;
-    return m;
+  async deleteCampaign(
+    @Ctx() ctx: MyContext,
+    @Arg("campaignId") campaignId: number
+  ) {
+    if (ctx.user) {
+      const user = await new UserService().findUserByEmail(ctx.user.email);
+      if (!user) {
+        throw new Error("Error, please try again");
+      }
+      const allUserCampaignsId =
+        await this.campaignService.listCampaignsIdByUserId(user.id);
+
+      if (allUserCampaignsId.length === 0) {
+        throw new Error(
+          "You don't have any campaign to delete. Please start by creating a new campagin"
+        );
+      }
+
+      const isUserOwnThisCampaign = allUserCampaignsId.some(
+        (element: CampaignIds) => element.id === campaignId
+      );
+      if (!isUserOwnThisCampaign) {
+        throw new Error("You can't perform this action");
+      }
+      await this.campaignService.deleteCampaign(campaignId);
+      const m = new Message();
+      m.message = "Campaign deleted successfully";
+      m.success = true;
+      return m;
+    } else {
+      throw new Error("You must be authenticated to perform this action");
+    }
   }
 }

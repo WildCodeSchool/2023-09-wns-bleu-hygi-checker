@@ -1,14 +1,22 @@
 import Layout from "@/components/check/Layout";
 import CardResponse from "@/components/check/CardResponse";
+import { AddUrlToCampaign } from "@/components/check/AddUrlToCampaign";
 import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function Response() {
   const router = useRouter();
+  const urlPath = router.query.url;
 
   const [isConnected, setIsConnected] = useState<boolean>(false);
+  const [showAddUrlModal, setShowAddUrlModal] = useState<boolean>(false);
+
+  const handleOpenForm = () => {
+    setShowAddUrlModal(true);
+  };
 
   useEffect(() => {
     const checkMail = () => {
@@ -62,14 +70,18 @@ export default function Response() {
           </Button>
         )}
         {isConnected === true && (
-          <Button
-            variant="outline"
-            onClick={() => {
-              router.push("/dashboard/campaign/lists");
-            }}
-          >
-            Add url to a campaign
+          <Button variant="outline" onClick={handleOpenForm}>
+            <Plus className="md:mr-2 h-4 w-4" />
+            <span className="hidden md:block">Add URL to campaign</span>
           </Button>
+        )}
+        {showAddUrlModal === true && (
+          <AddUrlToCampaign
+            showAddUrlModal={showAddUrlModal}
+            setShowAddUrlModal={setShowAddUrlModal}
+            urlToAdd={urlPath as string | undefined}
+            setUrlPath={null}
+          />
         )}
       </div>
     </Layout>

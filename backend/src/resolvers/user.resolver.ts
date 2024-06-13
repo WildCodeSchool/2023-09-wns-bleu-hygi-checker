@@ -164,10 +164,15 @@ export default class UserResolver {
       const m = new Message();
 
       await new UserService().deleteThisAccount(user);
+
+      const cookies = await new Cookies(ctx.req, ctx.res);
+      cookies.set("token"); // without value, cookie will be deleted
+
       m.message = "Account deleted";
       m.success = true;
-
       return m;
+    } else {
+      throw new Error("You must be authenticated to perform this action");
     }
   }
 
