@@ -3,12 +3,16 @@ import { useRouter } from "next/router";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
+import { toast } from "./ui/use-toast";
+import { useLazyQuery } from "@apollo/client";
+import { CHECK_URL } from "@/requests/queries/check-url.queries";
 
 interface FormCheckProps {
   inputId: string;
   checkText: string;
   className: string;
   variant: "outline" | "white";
+  source: "navbar" | "homepage";
 }
 
 export default function FormCheck({
@@ -16,14 +20,51 @@ export default function FormCheck({
   checkText,
   className,
   variant,
+  source,
 }: FormCheckProps) {
   const router = useRouter();
   const [urlPath, setUrlPath] = useState("");
 
+  const [checkURL] = useLazyQuery(CHECK_URL, {
+    onCompleted: (data) => {
+      if (source === "navbar") {
+        const { status, responseTime, responseDate } = data.checkUrl;
+        toast({
+          title: `URL vérifiée:`,
+          description: (
+            <pre className="flex-col gap-4 mt-5">
+              <div>URL: {urlPath}</div>
+              <div>Status: {status}</div>
+              <div>Time: {responseTime}ms</div>
+              <div>Date: {new Date(responseDate).toLocaleString()}</div>
+              <Button variant="outline" className="mt-5">
+                Add URL to campaign
+              </Button>
+            </pre>
+          ),
+          variant: "default",
+        });
+      }
+    },
+    onError: (error) => {
+      if (source === "navbar") {
+        toast({
+          title: `Erreur lors de la vérification: ${error.message}`,
+          variant: "destructive",
+        });
+      }
+    },
+  });
+
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
     try {
-      router.push(`/check/response?url=${encodeURIComponent(urlPath)}`);
+      if (source === "homepage") {
+        router.push(`/check/response?url=${encodeURIComponent(urlPath)}`);
+      }
+      if (source === "navbar") {
+        checkURL({ variables: { urlPath } });
+      }
     } catch (error) {
       console.error(
         "Une erreur s'est produite lors de la vérification de l'URL:",
