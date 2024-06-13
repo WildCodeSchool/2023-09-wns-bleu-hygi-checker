@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Badge } from "../ui/badge";
+// import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Card, CardTitle, CardContent, CardFooter } from "../ui/card";
 import { Switch } from "../ui/switch";
@@ -19,8 +19,8 @@ export default function CampaignCard({ data }: CampaignCardProps) {
   const handleIsWorking = () => {
     setIsWorkingCampaign(!isWorkingCampaign);
     toast({
-      title: `Campaign ${isWorkingCampaign === true ? "stopped" : "started"} successfully`,
-      variant: "success",
+      title: `Campaign ${isWorkingCampaign === true ? "stopped" : "started"} successfully ${isWorkingCampaign === true ? "⏸️" : "▶️"}`,
+      variant: `${isWorkingCampaign === true ? "default" : "success"}`,
     });
   };
 
@@ -39,7 +39,7 @@ export default function CampaignCard({ data }: CampaignCardProps) {
         <Switch checked={isWorkingCampaign} onCheckedChange={handleIsWorking} />
       </CardContent>
       <CardFooter className="flex justify-between">
-        <Badge>{data.urls.length} urls</Badge>
+        {/* <Badge>{5} urls</Badge>  TODO : request the url table to get the number of url in a campaign*/}
         <Link href={`/dashboard/campaign/details/${data.id}`}>
           <Button data-testid="watch-button">Voir</Button>
         </Link>

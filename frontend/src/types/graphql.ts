@@ -39,8 +39,15 @@ export type Campaign = {
   isMailAlert?: Maybe<Scalars["Boolean"]["output"]>;
   isWorking?: Maybe<Scalars["Boolean"]["output"]>;
   name: Scalars["String"]["output"];
-  urls: Array<Url>;
   userId: Scalars["String"]["output"];
+};
+
+export type CampaignUrl = {
+  __typename?: "CampaignUrl";
+  campaign: Campaign;
+  createdAt: Scalars["DateTimeISO"]["output"];
+  id: Scalars["Float"]["output"];
+  url: Url;
 };
 
 export type CheckUrl = {
@@ -59,6 +66,11 @@ export enum Gender {
   Unspecified = "unspecified",
 }
 
+export type InputAddUrlToCampaign = {
+  campaignId: Scalars["String"]["input"];
+  url: Scalars["String"]["input"];
+};
+
 export type InputCreateCampaign = {
   intervalTest?: InputMaybe<Scalars["Float"]["input"]>;
   isMailAlert?: InputMaybe<Scalars["Boolean"]["input"]>;
@@ -67,16 +79,15 @@ export type InputCreateCampaign = {
 };
 
 export type InputCreateResponse = {
-  creationDate: Scalars["DateTimeISO"]["input"];
+  campaignUrlId: Scalars["Float"]["input"];
+  createdAt: Scalars["DateTimeISO"]["input"];
   responseTime: Scalars["Float"]["input"];
   statusCode: Scalars["String"]["input"];
-  urlId: Scalars["Float"]["input"];
 };
 
-export type InputCreateUrl = {
-  campaignIds: Array<Scalars["Float"]["input"]>;
-  type: Scalars["String"]["input"];
-  urlPath: Scalars["String"]["input"];
+export type InputDeleteUrlToCampaign = {
+  campaignId: Scalars["String"]["input"];
+  urlId: Scalars["String"]["input"];
 };
 
 export type InputLogin = {
@@ -100,18 +111,16 @@ export type Message = {
 export type Mutation = {
   __typename?: "Mutation";
   addTest: Test;
-  addUrlToCampaign: Url;
+  addUrlToCampaign: Message;
   changeAvatar: NewUserAvatar;
   changePassword: Message;
   createCampaign: Campaign;
   createResponse: Response;
-  createUrl: Url;
   deleteAccount: Message;
-  deleteCampaign: Campaign;
+  deleteCampaign: Message;
   deleteTest: Test;
-  deleteUrl: Url;
+  deleteUrlFromCampaign: Message;
   register: UserWithoutPassword;
-  removeUrlFromCampaign: Url;
   updateName: UserProfile;
   updateProfile: UserProfile;
   upgradeRole: Array<User>;
@@ -122,8 +131,7 @@ export type MutationAddTestArgs = {
 };
 
 export type MutationAddUrlToCampaignArgs = {
-  campaignId: Scalars["Int"]["input"];
-  urlId: Scalars["Int"]["input"];
+  infos: InputAddUrlToCampaign;
 };
 
 export type MutationChangeAvatarArgs = {
@@ -142,29 +150,20 @@ export type MutationCreateResponseArgs = {
   input: InputCreateResponse;
 };
 
-export type MutationCreateUrlArgs = {
-  input: InputCreateUrl;
-};
-
 export type MutationDeleteCampaignArgs = {
-  id: Scalars["Int"]["input"];
+  campaignId: Scalars["Float"]["input"];
 };
 
 export type MutationDeleteTestArgs = {
   id: Scalars["String"]["input"];
 };
 
-export type MutationDeleteUrlArgs = {
-  id: Scalars["Int"]["input"];
+export type MutationDeleteUrlFromCampaignArgs = {
+  infos: InputDeleteUrlToCampaign;
 };
 
 export type MutationRegisterArgs = {
   infos: InputRegister;
-};
-
-export type MutationRemoveUrlFromCampaignArgs = {
-  campaignId: Scalars["Int"]["input"];
-  urlId: Scalars["Int"]["input"];
 };
 
 export type MutationUpdateNameArgs = {
@@ -192,6 +191,7 @@ export type Query = {
   campaignsByUserId: Array<Campaign>;
   checkUrl: CheckUrl;
   getAvatar: User;
+  getUrlFromCampaign: Array<CampaignUrl>;
   getUserProfile: UserProfile;
   login: Message;
   logout: Message;
@@ -205,11 +205,15 @@ export type Query = {
 };
 
 export type QueryCampaignByIdArgs = {
-  id: Scalars["Int"]["input"];
+  campaignId: Scalars["Int"]["input"];
 };
 
 export type QueryCheckUrlArgs = {
   urlPath: Scalars["String"]["input"];
+};
+
+export type QueryGetUrlFromCampaignArgs = {
+  campaignId: Scalars["Float"]["input"];
 };
 
 export type QueryLoginArgs = {
@@ -230,10 +234,10 @@ export type QueryUrlArgs = {
 
 export type Response = {
   __typename?: "Response";
-  creationDate: Scalars["DateTimeISO"]["output"];
+  campaignUrlId: Scalars["Float"]["output"];
+  createdAt: Scalars["DateTimeISO"]["output"];
   responseTime: Scalars["Float"]["output"];
   statusCode: Scalars["String"]["output"];
-  urlId: Scalars["Float"]["output"];
   uuid: Scalars["Float"]["output"];
 };
 
@@ -245,7 +249,6 @@ export type Test = {
 
 export type Url = {
   __typename?: "Url";
-  campaigns?: Maybe<Array<Campaign>>;
   id: Scalars["Float"]["output"];
   type: Scalars["String"]["output"];
   urlPath: Scalars["String"]["output"];
@@ -299,6 +302,19 @@ export type InputUpdateProfile = {
   gender: Scalars["String"]["input"];
 };
 
+export type AddUrlToCampaignMutationVariables = Exact<{
+  infos: InputAddUrlToCampaign;
+}>;
+
+export type AddUrlToCampaignMutation = {
+  __typename?: "Mutation";
+  addUrlToCampaign: {
+    __typename?: "Message";
+    success: boolean;
+    message: string;
+  };
+};
+
 export type RegisterMutationVariables = Exact<{
   infos: InputRegister;
 }>;
@@ -341,6 +357,13 @@ export type CreateCampaignMutation = {
     isMailAlert?: boolean | null;
     isWorking?: boolean | null;
   };
+};
+
+export type DeleteAccountMutationVariables = Exact<{ [key: string]: never }>;
+
+export type DeleteAccountMutation = {
+  __typename?: "Mutation";
+  deleteAccount: { __typename?: "Message"; message: string; success: boolean };
 };
 
 export type AddTestMutationVariables = Exact<{
@@ -414,7 +437,7 @@ export type GetAvatarQuery = {
 };
 
 export type CampaignByIdQueryVariables = Exact<{
-  campaignByIdId: Scalars["Int"]["input"];
+  campaignId: Scalars["Int"]["input"];
 }>;
 
 export type CampaignByIdQuery = {
@@ -428,12 +451,6 @@ export type CampaignByIdQuery = {
     isMailAlert?: boolean | null;
     isWorking?: boolean | null;
     userId: string;
-    urls: Array<{
-      __typename?: "Url";
-      id: number;
-      urlPath: string;
-      type: string;
-    }>;
   } | null;
 };
 
@@ -450,12 +467,6 @@ export type CampaignsByUserIdQuery = {
     isMailAlert?: boolean | null;
     isWorking?: boolean | null;
     userId: string;
-    urls: Array<{
-      __typename?: "Url";
-      id: number;
-      urlPath: string;
-      type: string;
-    }>;
   }>;
 };
 
@@ -481,6 +492,57 @@ export type TestsQuery = {
   tests: Array<{ __typename?: "Test"; text: string; id: string }>;
 };
 
+export const AddUrlToCampaignDocument = gql`
+  mutation AddUrlToCampaign($infos: InputAddUrlToCampaign!) {
+    addUrlToCampaign(infos: $infos) {
+      success
+      message
+    }
+  }
+`;
+export type AddUrlToCampaignMutationFn = Apollo.MutationFunction<
+  AddUrlToCampaignMutation,
+  AddUrlToCampaignMutationVariables
+>;
+
+/**
+ * __useAddUrlToCampaignMutation__
+ *
+ * To run a mutation, you first call `useAddUrlToCampaignMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddUrlToCampaignMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addUrlToCampaignMutation, { data, loading, error }] = useAddUrlToCampaignMutation({
+ *   variables: {
+ *      infos: // value for 'infos'
+ *   },
+ * });
+ */
+export function useAddUrlToCampaignMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AddUrlToCampaignMutation,
+    AddUrlToCampaignMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    AddUrlToCampaignMutation,
+    AddUrlToCampaignMutationVariables
+  >(AddUrlToCampaignDocument, options);
+}
+export type AddUrlToCampaignMutationHookResult = ReturnType<
+  typeof useAddUrlToCampaignMutation
+>;
+export type AddUrlToCampaignMutationResult =
+  Apollo.MutationResult<AddUrlToCampaignMutation>;
+export type AddUrlToCampaignMutationOptions = Apollo.BaseMutationOptions<
+  AddUrlToCampaignMutation,
+  AddUrlToCampaignMutationVariables
+>;
 export const RegisterDocument = gql`
   mutation Register($infos: InputRegister!) {
     register(infos: $infos) {
@@ -684,6 +746,56 @@ export type CreateCampaignMutationResult =
 export type CreateCampaignMutationOptions = Apollo.BaseMutationOptions<
   CreateCampaignMutation,
   CreateCampaignMutationVariables
+>;
+export const DeleteAccountDocument = gql`
+  mutation DeleteAccount {
+    deleteAccount {
+      message
+      success
+    }
+  }
+`;
+export type DeleteAccountMutationFn = Apollo.MutationFunction<
+  DeleteAccountMutation,
+  DeleteAccountMutationVariables
+>;
+
+/**
+ * __useDeleteAccountMutation__
+ *
+ * To run a mutation, you first call `useDeleteAccountMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteAccountMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteAccountMutation, { data, loading, error }] = useDeleteAccountMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useDeleteAccountMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteAccountMutation,
+    DeleteAccountMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteAccountMutation,
+    DeleteAccountMutationVariables
+  >(DeleteAccountDocument, options);
+}
+export type DeleteAccountMutationHookResult = ReturnType<
+  typeof useDeleteAccountMutation
+>;
+export type DeleteAccountMutationResult =
+  Apollo.MutationResult<DeleteAccountMutation>;
+export type DeleteAccountMutationOptions = Apollo.BaseMutationOptions<
+  DeleteAccountMutation,
+  DeleteAccountMutationVariables
 >;
 export const AddTestDocument = gql`
   mutation AddTest($text: String!) {
@@ -1098,8 +1210,8 @@ export type GetAvatarQueryResult = Apollo.QueryResult<
   GetAvatarQueryVariables
 >;
 export const CampaignByIdDocument = gql`
-  query CampaignById($campaignByIdId: Int!) {
-    campaignById(id: $campaignByIdId) {
+  query CampaignById($campaignId: Int!) {
+    campaignById(campaignId: $campaignId) {
       id
       name
       image
@@ -1107,11 +1219,6 @@ export const CampaignByIdDocument = gql`
       isMailAlert
       isWorking
       userId
-      urls {
-        id
-        urlPath
-        type
-      }
     }
   }
 `;
@@ -1128,7 +1235,7 @@ export const CampaignByIdDocument = gql`
  * @example
  * const { data, loading, error } = useCampaignByIdQuery({
  *   variables: {
- *      campaignByIdId: // value for 'campaignByIdId'
+ *      campaignId: // value for 'campaignId'
  *   },
  * });
  */
@@ -1191,11 +1298,6 @@ export const CampaignsByUserIdDocument = gql`
       isMailAlert
       isWorking
       userId
-      urls {
-        id
-        urlPath
-        type
-      }
     }
   }
 `;
