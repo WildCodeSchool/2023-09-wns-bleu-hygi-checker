@@ -36,11 +36,11 @@ export default class CampaignService {
   }
 
   async findCampaignById(
-    id: number,
+    campaignId: number,
     userId?: string
   ): Promise<Campaign | null> {
     const campaign = await this.db.findOne({
-      where: { id },
+      where: { id: campaignId },
       relations: ["urls"],
     });
     if (campaign && userId && campaign.userId !== userId) {
