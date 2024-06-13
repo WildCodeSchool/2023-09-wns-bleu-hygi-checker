@@ -3,9 +3,25 @@ import CardResponse from "@/components/check/CardResponse";
 import { Button } from "@/components/ui/button";
 
 import { useRouter } from "next/router";
+import { useEffect, useState } from "react";
 
 export default function Response() {
   const router = useRouter();
+
+  const [isConnected, setIsConnected] = useState<boolean>(false);
+
+  useEffect(() => {
+    const checkMail = () => {
+      const mail = document.cookie
+        .split("; ")
+        .find((row) => row.startsWith("email="));
+
+      setIsConnected(!!mail);
+    };
+
+    checkMail();
+  }, []);
+
   return (
     <Layout title="Read">
       <div className="text-white"></div>
@@ -13,10 +29,18 @@ export default function Response() {
         <CardResponse />
       </div>
       <div className="flex justify-center mt-5 text-white">
-        <p className="text-center">
-          You have just checked your url, you can check again or sign up for the
-          app for free to get more features:
-        </p>
+        {isConnected === false && (
+          <p className="text-center">
+            You have just checked your url, you can check again or sign up for
+            the app for free to get more features:
+          </p>
+        )}
+        {isConnected === true && (
+          <p className="text-center">
+            You have just checked your url, you can check again or add this url
+            to a campaign:
+          </p>
+        )}
       </div>
       <div className="flex justify-center gap-4 mt-5">
         <Button
@@ -27,14 +51,26 @@ export default function Response() {
         >
           Make a new check
         </Button>
-        <Button
-          variant="outline"
-          onClick={() => {
-            router.push("/auth/login");
-          }}
-        >
-          Create your free account
-        </Button>
+        {isConnected === false && (
+          <Button
+            variant="outline"
+            onClick={() => {
+              router.push("/auth/login");
+            }}
+          >
+            Create your free account
+          </Button>
+        )}
+        {isConnected === true && (
+          <Button
+            variant="outline"
+            onClick={() => {
+              router.push("/dashboard/campaign/lists");
+            }}
+          >
+            Add url to a campaign
+          </Button>
+        )}
       </div>
     </Layout>
   );

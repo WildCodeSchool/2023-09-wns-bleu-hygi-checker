@@ -16,7 +16,7 @@ export default function Index() {
 
   return (
     <Layout title="Home">
-      <div className="flex flex-col text-center gap-8 items-center text-white">
+      <div className="flex flex-col justify-center items-center text-center gap-8 text-white w-full h-full">
         <Home />
 
         <div className="flex justify-center text-black">
@@ -25,6 +25,7 @@ export default function Index() {
             checkText="Start checking URL"
             className="flex-col"
             variant="white"
+            source="homepage"
           />
         </div>
         {isConnected === false && (

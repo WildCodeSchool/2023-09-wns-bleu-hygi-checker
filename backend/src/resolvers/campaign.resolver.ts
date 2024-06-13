@@ -30,6 +30,7 @@ export default class CampaignResolver {
     @Ctx() ctx: MyContext,
     @Arg("campaignId", () => Int) campaignId: number
   ): Promise<Campaign | undefined | null> {
+
     if (ctx.user) {
       const user = await new UserService().findUserByEmail(ctx.user.email);
       if (!user) {
@@ -41,10 +42,12 @@ export default class CampaignResolver {
     }
   }
 
+
   @Query(() => [Campaign])
   async campaignsByUserId(
     @Ctx() ctx: MyContext
   ): Promise<Campaign[] | undefined> {
+
     if (ctx.user) {
       const user = await new UserService().findUserByEmail(ctx.user.email);
       if (!user) {

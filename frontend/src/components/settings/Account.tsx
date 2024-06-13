@@ -66,10 +66,10 @@ export default function Account({ data }: SettingsProps) {
   };
 
   return (
-    <Card className="md:w-[750px]">
+    <Card className="md:w-full">
       <CardHeader>
         <CardTitle>Account</CardTitle>
-        <CardDescription>Modify yout account informations</CardDescription>
+        <CardDescription>Modify your account information</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-1">

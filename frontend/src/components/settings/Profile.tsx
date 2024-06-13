@@ -142,12 +142,12 @@ export default function Profile({ data }: SettingsProps) {
   }, [form, initialValues]);
 
   return (
-    <Card className="md:w-[750px]">
+    <Card className="md:w-full">
       <CardHeader>
         <CardTitle>Profile</CardTitle>
-        <CardDescription>Modify your profile informations</CardDescription>
+        <CardDescription>Modify your profile information</CardDescription>
       </CardHeader>
-      <CardContent className="space-y-2">
+      <CardContent className="flex flex-col justify-center items-center space-y-2">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
@@ -160,27 +160,27 @@ export default function Profile({ data }: SettingsProps) {
                     <RadioGroup
                       onValueChange={field.onChange}
                       defaultValue={field.value}
-                      className="flex flex-col justify-center items-center md:flex-row gap-12"
+                      className="flex flex-col justify-center items-center md:flex-row gap-6"
                     >
-                      <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormItem className="flex items-center space-x-1 space-y-0">
                         <FormControl>
                           <RadioGroupItem value="male" />
                         </FormControl>
                         <FormLabel className="font-normal">Male</FormLabel>
                       </FormItem>
-                      <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormItem className="flex items-center space-x-1 space-y-0">
                         <FormControl>
                           <RadioGroupItem value="female" />
                         </FormControl>
                         <FormLabel className="font-normal">Female</FormLabel>
                       </FormItem>
-                      <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormItem className="flex items-center space-x-1 space-y-0">
                         <FormControl>
                           <RadioGroupItem value="other" />
                         </FormControl>
                         <FormLabel className="font-normal">Other</FormLabel>
                       </FormItem>
-                      <FormItem className="flex items-center space-x-3 space-y-0">
+                      <FormItem className="flex items-center space-x-1 space-y-0">
                         <FormControl>
                           <RadioGroupItem value="unspecified" />
                         </FormControl>
@@ -198,14 +198,14 @@ export default function Profile({ data }: SettingsProps) {
               control={form.control}
               name="birth_date"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex flex-col items-center justify-center text-center">
                   <FormLabel>Date of birth</FormLabel>
                   <FormControl>
                     <Input
                       type="date"
                       min="1900-01-01"
                       max={todayDate}
-                      className="flex flex-row items-center justify-center"
+                      className="w-1/2 flex items-center justify-center text-center"
                       {...field}
                     />
                   </FormControl>
@@ -217,7 +217,7 @@ export default function Profile({ data }: SettingsProps) {
               control={form.control}
               name="country"
               render={({ field }) => (
-                <FormItem className="flex flex-col">
+                <FormItem className="flex flex-col items-center justify-center text-center">
                   <FormLabel>Country</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
@@ -226,7 +226,7 @@ export default function Profile({ data }: SettingsProps) {
                           variant="default"
                           role="combobox"
                           className={cn(
-                            "w-full justify-between",
+                            "w-1/2",
                             !field.value && "text-neutral-400"
                           )}
                         >
@@ -239,7 +239,7 @@ export default function Profile({ data }: SettingsProps) {
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
-                    <PopoverContent className="w-full p-0">
+                    <PopoverContent className="w-1/2 p-0">
                       <Command>
                         <CommandInput placeholder="Search country..." />
                         <CommandEmpty>No country found.</CommandEmpty>
@@ -279,7 +279,7 @@ export default function Profile({ data }: SettingsProps) {
                 disabled={!isChanged}
                 type="submit"
                 variant="outline"
-                className="w-full mt-4"
+                className="w-1/2 mt-4"
               >
                 {fakeLoading === true && (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />

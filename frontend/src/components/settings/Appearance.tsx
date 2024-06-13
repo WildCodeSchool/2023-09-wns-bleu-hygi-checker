@@ -67,22 +67,24 @@ export default function Appearance({ data }: SettingsProps) {
   };
 
   return (
-    <Card className="md:w-[750px]">
+    <Card className="md:w-2/5 m-auto">
       <CardHeader>
         <CardTitle>Appearance</CardTitle>
-        <CardDescription>Modify yout appearance informations</CardDescription>
+        <CardDescription>Modify your appearance information</CardDescription>
       </CardHeader>
-      <CardContent className=" flex flex-row flex-wrap justify-center align-center">
-        {avatars.map((avatar) => (
-          <button key={avatar.id} onClick={() => handleSetAvatar(avatar)}>
-            <Avatar
-              className={`m-4 w-[80px] h-[80px] cursor-pointer ${selectedAvatar === avatar.fileName ? "border-4 border-zinc-900" : ""}`}
-            >
-              <AvatarImage src={`../../../avatars/${avatar.fileName}.jpg`} />
-              <AvatarFallback>HC</AvatarFallback>
-            </Avatar>
-          </button>
-        ))}
+      <CardContent className="flex flex-col items-center">
+        <div className="flex flex-wrap justify-center w-full">
+          {avatars.map((avatar) => (
+            <button key={avatar.id} onClick={() => handleSetAvatar(avatar)}>
+              <Avatar
+                className={`m-4 w-[80px] h-[80px] cursor-pointer ${selectedAvatar === avatar.fileName ? "border-4 border-zinc-900" : ""}`}
+              >
+                <AvatarImage src={`../../../avatars/${avatar.fileName}.jpg`} />
+                <AvatarFallback>HC</AvatarFallback>
+              </Avatar>
+            </button>
+          ))}
+        </div>
         {actualAvatar !== selectedAvatar && (
           <Button onClick={handleSubmit} className="mt-6">
             {fakeLoading === true && (

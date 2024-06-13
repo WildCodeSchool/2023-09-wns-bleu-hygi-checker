@@ -17,15 +17,17 @@ export default function Layout({ children, title }: LayoutProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="favicon.ico" />
       </Head>
-      <Nav />
-      <main
-        className="p-4 bg-primary overflow-y-auto"
-        // -80px car taille du header
-        style={{ maxHeight: "calc(100vh - 80px)" }}
-      >
-        {children}
-      </main>
-      <Toaster />
+      <div className="flex flex-col min-h-screen">
+        <Nav />
+        <main
+          className="flex flex-col justify-center items-center p-4 bg-primary overflow-y-auto"
+          // -80px car taille du header
+          style={{ height: "calc(100vh - 80px)" }}
+        >
+          {children}
+        </main>
+        <Toaster />
+      </div>
     </>
   );
 }

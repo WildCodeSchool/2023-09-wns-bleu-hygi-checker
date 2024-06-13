@@ -91,6 +91,7 @@ export default function Nav() {
             inputId="nav_check"
             className="flex-row"
             variant="outline"
+            source="navbar"
           />
         </div>
 
@@ -132,6 +133,7 @@ export default function Nav() {
               inputId="mobile_check"
               className="flex-row"
               variant="outline"
+              source="navbar"
             />
           </div>
           <div className="flex-grow"></div>

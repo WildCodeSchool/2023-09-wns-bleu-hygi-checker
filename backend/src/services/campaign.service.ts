@@ -30,6 +30,7 @@ export default class CampaignService {
     const campaigns = await this.db.find({
       where: { userId },
     });
+
     // return IDs of campaign only
     return campaigns.map((campaign: Campaign) => ({ id: campaign.id }));
   }

@@ -42,7 +42,7 @@ export function ConfirmationModal({
       <DialogTrigger asChild>
         <Button
           variant={buttonVariant}
-          className={` ${isLargeButton === true ? "w-full" : "mx-4"}`}
+          className={` ${isLargeButton === true ? "w-1/2" : "mx-4"}`}
         >
           {forDelete === true ? (
             <Trash
