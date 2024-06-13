@@ -4,12 +4,12 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import Url from "./url.entity";
 import User from "./user.entity";
+import CampaignUrl from "./campaignUrl.entity";
 
 @ObjectType()
 @Entity()
@@ -46,11 +46,10 @@ export default class Campaign extends BaseEntity {
   @JoinColumn({ name: "user_id" })
   user: User;
 
-  @Field(() => [Url])
-  @ManyToMany(() => Url, (url) => url.campaigns, {
-    cascade: true,
+  @OneToMany(() => CampaignUrl, (campaignUrl) => campaignUrl.campaign, {
+    onDelete: "CASCADE",
   })
-  urls: Url[];
+  campaignUrl: CampaignUrl[];
 }
 
 @InputType()
@@ -66,4 +65,10 @@ export class InputCreateCampaign {
 
   @Field({ nullable: true })
   isWorking?: boolean;
+}
+
+@ObjectType()
+export class CampaignIds {
+  @Field()
+  id: number;
 }

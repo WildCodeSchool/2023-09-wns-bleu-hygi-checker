@@ -3,11 +3,10 @@ import {
   BaseEntity,
   Column,
   Entity,
-  JoinTable,
-  ManyToMany,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import Campaign from "./campaign.entity";
+import CampaignUrl from "./campaignUrl.entity";
 
 type UrlType = "API" | "PAGE";
 
@@ -30,22 +29,10 @@ export default class Url extends BaseEntity {
   })
   type: UrlType;
 
-  @Field(() => [Campaign], { nullable: true })
-  @ManyToMany(() => Campaign, (campaign) => campaign.urls, {
+  @OneToMany(() => CampaignUrl, (campaignUrl) => campaignUrl.url, {
     onDelete: "CASCADE",
-  })
-  @JoinTable({
-    name: "url_campaign",
-    joinColumn: {
-      name: "url",
-      referencedColumnName: "id",
-    },
-    inverseJoinColumn: {
-      name: "campaign",
-      referencedColumnName: "id",
-    },
-  })
-  campaigns: Campaign[];
+  }) // Here is the onDelete option
+  campaignUrl: CampaignUrl[];
 }
 
 @InputType()

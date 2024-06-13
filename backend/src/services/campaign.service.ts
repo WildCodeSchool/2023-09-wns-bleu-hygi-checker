@@ -10,7 +10,7 @@ export default class CampaignService {
   }
 
   async listCampaigns(): Promise<Campaign[]> {
-    return this.db.find({ relations: ["urls"] });
+    return this.db.find();
   }
 
   async listActiveCampaigns(): Promise<Campaign[]> {
@@ -23,16 +23,23 @@ export default class CampaignService {
   async listCampaignsByUserId(userId: string): Promise<Campaign[]> {
     return this.db.find({
       where: { userId },
-      relations: ["urls"],
     });
+  }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async listCampaignsIdByUserId(userId: string): Promise<any> {
+    const campaigns = await this.db.find({
+      where: { userId },
+    });
+    // return IDs of campaign only
+    return campaigns.map((campaign: Campaign) => ({ id: campaign.id }));
   }
 
   async findCampaignById(
-    id: number,
+    campaignId: number,
     userId?: string
   ): Promise<Campaign | null> {
     const campaign = await this.db.findOne({
-      where: { id },
+      where: { id: campaignId },
       relations: ["urls"],
     });
     if (campaign && userId && campaign.userId !== userId) {
@@ -64,13 +71,23 @@ export default class CampaignService {
     return this.db.save(newCampaign);
   }
 
-  async deleteCampaign(id: number): Promise<Campaign> {
-    const campaign = await this.findCampaignById(id);
+  async deleteCampaign(id: number) {
+    const campaign = await this.db.findOneOrFail({
+      where: {
+        id: id,
+      },
+    });
     if (!campaign) {
-      throw new Error(`Campaign with id ${id} not found`);
+      throw new Error(`Campaign not found`);
     }
-    await this.db.remove(campaign);
-    campaign.id = id;
-    return campaign;
+    return this.db.remove(campaign);
   }
+
+  // async deleteCampaign(id: number): Promise<void> {
+  //   const campaign = await this.findCampaignById(id);
+  //   if (!campaign) {
+  //     throw new Error(`Campaign with id ${id} not found`);
+  //   }
+  //   await this.db.remove(campaign);
+  // }
 }
