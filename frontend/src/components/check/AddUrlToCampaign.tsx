@@ -36,7 +36,7 @@ import {
   useCampaignsByUserIdQuery,
   useAddUrlToCampaignMutation,
 } from "@/types/graphql";
-import { AddUrlToCampaignProps } from "@/types/interfaces";
+import { AddUrlToCampaignToastProps } from "@/types/interfaces";
 // ****************************************************
 
 const urlPattern =
@@ -57,7 +57,7 @@ export function AddUrlToCampaign({
   setShowAddUrlModal,
   urlToAdd,
   setUrlPath,
-}: AddUrlToCampaignProps) {
+}: AddUrlToCampaignToastProps) {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false); // to show the loader in the button
 

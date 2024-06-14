@@ -366,6 +366,15 @@ export type DeleteAccountMutation = {
   deleteAccount: { __typename?: "Message"; message: string; success: boolean };
 };
 
+export type DeleteCampaignMutationVariables = Exact<{
+  campaignId: Scalars["Float"]["input"];
+}>;
+
+export type DeleteCampaignMutation = {
+  __typename?: "Mutation";
+  deleteCampaign: { __typename?: "Message"; message: string; success: boolean };
+};
+
 export type AddTestMutationVariables = Exact<{
   text: Scalars["String"]["input"];
 }>;
@@ -796,6 +805,57 @@ export type DeleteAccountMutationResult =
 export type DeleteAccountMutationOptions = Apollo.BaseMutationOptions<
   DeleteAccountMutation,
   DeleteAccountMutationVariables
+>;
+export const DeleteCampaignDocument = gql`
+  mutation DeleteCampaign($campaignId: Float!) {
+    deleteCampaign(campaignId: $campaignId) {
+      message
+      success
+    }
+  }
+`;
+export type DeleteCampaignMutationFn = Apollo.MutationFunction<
+  DeleteCampaignMutation,
+  DeleteCampaignMutationVariables
+>;
+
+/**
+ * __useDeleteCampaignMutation__
+ *
+ * To run a mutation, you first call `useDeleteCampaignMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteCampaignMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteCampaignMutation, { data, loading, error }] = useDeleteCampaignMutation({
+ *   variables: {
+ *      campaignId: // value for 'campaignId'
+ *   },
+ * });
+ */
+export function useDeleteCampaignMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteCampaignMutation,
+    DeleteCampaignMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteCampaignMutation,
+    DeleteCampaignMutationVariables
+  >(DeleteCampaignDocument, options);
+}
+export type DeleteCampaignMutationHookResult = ReturnType<
+  typeof useDeleteCampaignMutation
+>;
+export type DeleteCampaignMutationResult =
+  Apollo.MutationResult<DeleteCampaignMutation>;
+export type DeleteCampaignMutationOptions = Apollo.BaseMutationOptions<
+  DeleteCampaignMutation,
+  DeleteCampaignMutationVariables
 >;
 export const AddTestDocument = gql`
   mutation AddTest($text: String!) {

@@ -22,9 +22,9 @@ export default class ResponseResolver {
 
   @Query(() => [Response])
   async responsesByUrlId(
-    @Arg("urlId", () => Int) urlId: number
+    @Arg("campaignUrlId", () => Int) campaignUrlId: number
   ): Promise<Response[]> {
-    return await this.responseService.listResponsesByUrlId(urlId);
+    return await this.responseService.listResponsesByUrlId(campaignUrlId);
   }
 
   @Mutation(() => Response)

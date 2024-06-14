@@ -46,9 +46,13 @@ export interface SettingsProps {
   data: UserProfile;
 }
 
-export interface AddUrlToCampaignProps {
+export interface AddUrlToCampaignToastProps {
   showAddUrlModal: boolean;
   setShowAddUrlModal: Dispatch<SetStateAction<boolean>>;
   urlToAdd: string | undefined;
   setUrlPath: Dispatch<SetStateAction<string>> | null;
+}
+
+export interface AddUrlToCampaignProps {
+  campaignId: string;
 }
