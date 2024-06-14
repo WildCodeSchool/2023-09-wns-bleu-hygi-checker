@@ -27,7 +27,9 @@ import {
   useCampaignByIdQuery,
   useDeleteCampaignMutation,
   useCampaignsByUserIdQuery,
+  useGetUrlFromCampaignQuery,
 } from "@/types/graphql";
+// import { useResponsesByUrlIdQuery } from "@/types/graphql";
 import { Button } from "@/components/ui/button";
 import Loading from "@/components/Loading";
 
@@ -85,14 +87,22 @@ export default function CampaignDetail() {
       variant: "success",
     });
   };
-  // données des table row des urls
-  const responses = [
-    {
-      routes: "app/v1/users.com",
-      status: "Alerte",
-      actions: "",
+  const { data: getUrlFromCampaign } = useGetUrlFromCampaignQuery({
+    variables: {
+      campaignId: typeof id === "string" ? parseInt(id) : 0,
     },
-  ];
+    skip: typeof id === "undefined",
+  });
+  const urls = getUrlFromCampaign?.getUrlFromCampaign;
+
+  // const { data: responsesByUrlId } = useResponsesByUrlIdQuery({
+  //   variables: {
+  //     urlId: typeof id === "string" ? parseInt(id) : 0,
+  //   },
+  //   skip: typeof id === "undefined",
+  // });
+
+  // const status = responsesByUrlId?.responsesByUrlId;
   // données des card/carousel
   const table = [
     "Graphiques multiples 1",
@@ -173,7 +183,7 @@ export default function CampaignDetail() {
             <Table className="w-full text-white">
               <TableHeader className="bg-stone-500 text-white">
                 <TableRow>
-                  <TableHead className="w-[100px] text-white">Routes</TableHead>
+                  <TableHead className="w-[100px] text-white">Url</TableHead>
                   <TableHead className="text-white">Status</TableHead>
                   <TableHead className="text-right text-white">
                     Actions
@@ -182,12 +192,12 @@ export default function CampaignDetail() {
               </TableHeader>
               {/* ----------------  Table Body  ------------- */}
               <TableBody>
-                {responses?.map((response) => (
-                  <TableRow key={response.routes}>
+                {urls?.map((response) => (
+                  <TableRow key={response.url.urlPath}>
                     <TableCell className="font-medium">
-                      {response.routes}
+                      {response.url.urlPath}
                     </TableCell>
-                    <TableCell>{response.status}</TableCell>
+                    <TableCell>{}</TableCell>
                     <TableCell className="text-right gap-4">
                       <div className="flex justify-end gap-4 md:hidden">
                         <Dropdown />
