@@ -10,11 +10,6 @@ export const GET_CAMPAIGNS = gql`
       isMailAlert
       isWorking
       userId
-      urls {
-        id
-        urlPath
-        type
-      }
     }
   }
 `;

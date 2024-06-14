@@ -35,7 +35,7 @@ export default function CampaignDetail() {
 
   const { data: campaignById, loading } = useCampaignByIdQuery({
     variables: {
-      campaignByIdId: typeof id === "string" ? parseInt(id) : 0,
+      campaignId: typeof id === "string" ? parseInt(id) : 0,
     },
     skip: typeof id === "undefined",
   });

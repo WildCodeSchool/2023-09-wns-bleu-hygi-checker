@@ -6,6 +6,8 @@ import { Input } from "./ui/input";
 import { toast } from "./ui/use-toast";
 import { useLazyQuery } from "@apollo/client";
 import { CHECK_URL } from "@/requests/queries/check-url.queries";
+import { AddUrlToCampaign } from "./check/AddUrlToCampaign";
+import { Plus } from "lucide-react";
 
 interface FormCheckProps {
   inputId: string;
@@ -24,21 +26,31 @@ export default function FormCheck({
 }: FormCheckProps) {
   const router = useRouter();
   const [urlPath, setUrlPath] = useState("");
+  const [showAddUrlModal, setShowAddUrlModal] = useState(false);
+
+  const handleOpenForm = () => {
+    setShowAddUrlModal(true);
+  };
 
   const [checkURL] = useLazyQuery(CHECK_URL, {
     onCompleted: (data) => {
       if (source === "navbar") {
         const { status, responseTime, responseDate } = data.checkUrl;
         toast({
-          title: `URL vérifiée:`,
+          title: `✅ URL verified :`,
           description: (
             <pre className="flex-col gap-4 mt-5">
               <div>URL: {urlPath}</div>
               <div>Status: {status}</div>
               <div>Time: {responseTime}ms</div>
               <div>Date: {new Date(responseDate).toLocaleString()}</div>
-              <Button variant="outline" className="mt-5">
-                Add URL to campaign
+              <Button
+                className="mt-5"
+                variant="outline"
+                onClick={handleOpenForm}
+              >
+                <Plus className="md:mr-2 h-4 w-4" />
+                <span className="hidden md:block">Add URL to campaign</span>
               </Button>
             </pre>
           ),
@@ -49,7 +61,7 @@ export default function FormCheck({
     onError: (error) => {
       if (source === "navbar") {
         toast({
-          title: `Erreur lors de la vérification: ${error.message}`,
+          title: `❌ Erreur lors de la vérification: ${error.message}`,
           variant: "destructive",
         });
       }
@@ -58,6 +70,18 @@ export default function FormCheck({
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    const urlPattern =
+      /^(https?:\/\/)?(www\.)?[\w-]+\.[\w-]+(?:\.[\w-]+)*(\/[\w-]*)*$/;
+
+    const isValidUrlFormat = urlPattern.test(urlPath);
+
+    if (isValidUrlFormat === false) {
+      toast({
+        title: "URL doesn't match the required format",
+        variant: "destructive",
+      });
+      return;
+    }
     try {
       if (source === "homepage") {
         router.push(`/check/response?url=${encodeURIComponent(urlPath)}`);
@@ -72,7 +96,8 @@ export default function FormCheck({
       );
     }
   };
-  // Détermine si le bouton doit être désactivé
+
+  // Check if button must be disabled
   const isSubmitDisabled = urlPath.trim() === "";
 
   return (
@@ -90,6 +115,15 @@ export default function FormCheck({
             <Search className="mr-2 h-4 w-4" />
             {checkText}
           </Button>
+
+          {showAddUrlModal === true && (
+            <AddUrlToCampaign
+              showAddUrlModal={showAddUrlModal}
+              setShowAddUrlModal={setShowAddUrlModal}
+              urlToAdd={urlPath}
+              setUrlPath={setUrlPath}
+            />
+          )}
         </div>
       </form>
     </div>

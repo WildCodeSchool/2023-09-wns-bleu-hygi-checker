@@ -40,7 +40,7 @@ const formSchema = z
     }),
     newPassword: z.string().regex(passwordRegex, {
       message:
-        "Password must contain at least 10 characters, including one uppercase letter, one digit, and one special character.", // TODO : Regex the URL Format
+        "Password must contain at least 10 characters, including one uppercase letter, one digit, and one special character.",
     }),
     confirmPassword: z.string(),
   })

@@ -48,6 +48,13 @@ export default function DropdownMenuNav({ isConnected }: DropdownMenuProps) {
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => router.push("/dashboard/settings")}
+          >
+            Settings
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
             className="cursor-pointer text-destructive focus:text-destructive"
             onClick={handleLogout}
           >

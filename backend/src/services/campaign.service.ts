@@ -16,7 +16,6 @@ export default class CampaignService {
   async listActiveCampaigns(): Promise<Campaign[]> {
     return this.db.find({
       where: { isWorking: true },
-      relations: ["urls"],
     });
   }
 
@@ -41,7 +40,6 @@ export default class CampaignService {
   ): Promise<Campaign | null> {
     const campaign = await this.db.findOne({
       where: { id: campaignId },
-      relations: ["urls"],
     });
     if (campaign && userId && campaign.userId !== userId) {
       throw new Error("Acces denied.");
