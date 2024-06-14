@@ -12,9 +12,12 @@ export default class ResponseService {
     return this.db.find();
   }
 
-  async listResponsesByUrlId(campaignUrlId: number): Promise<Response[]> {
+  async listResponsesByCampaignUrlId(
+    campaignUrlId: number
+  ): Promise<Response[]> {
     return this.db.find({
       where: { campaignUrlId },
+      relations: ["campaign"],
     });
   }
 
