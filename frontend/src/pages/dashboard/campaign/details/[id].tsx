@@ -23,8 +23,12 @@ import { Badge } from "@/components/ui/badge";
 import { useRouter } from "next/router";
 import { useToast } from "@/components/ui/use-toast";
 import Dropdown from "@/components/dashboard/Dropdown";
-import { useCampaignByIdQuery } from "@/types/graphql";
-import { useGetUrlFromCampaignQuery } from "@/types/graphql";
+import {
+  useCampaignByIdQuery,
+  useDeleteCampaignMutation,
+  useCampaignsByUserIdQuery,
+  useGetUrlFromCampaignQuery,
+} from "@/types/graphql";
 // import { useResponsesByUrlIdQuery } from "@/types/graphql";
 import { Button } from "@/components/ui/button";
 import Loading from "@/components/Loading";
@@ -34,6 +38,8 @@ export default function CampaignDetail() {
   const { toast } = useToast();
 
   const { id } = router.query;
+
+  const { refetch } = useCampaignsByUserIdQuery();
 
   const {
     data: campaignById,
@@ -51,14 +57,29 @@ export default function CampaignDetail() {
   const campaign = campaignById?.campaignById;
 
   const deleteCampaign = () => {
+    deleteCampaignMutation({
+      variables: {
+        campaignId: parseInt(id as string),
+      },
+    });
     router.push("/dashboard/campaign/lists");
-    setTimeout(() => {
+  };
+
+  const [deleteCampaignMutation] = useDeleteCampaignMutation({
+    onCompleted: (data) => {
       toast({
-        title: "This campaign has been deleted",
+        title: `${data.deleteCampaign.message}`,
         variant: "success",
       });
-    }, 500);
-  };
+      refetch();
+    },
+    onError: (err) => {
+      toast({
+        title: `${err.message}`,
+        variant: "destructive",
+      });
+    },
+  });
 
   const deleteURL = () => {
     toast({
@@ -105,25 +126,26 @@ export default function CampaignDetail() {
             </div>
             {/* **************  HEADER BUTTONS  *************** */}
             <div className="flex justify-end">
-              <UrlForm />
+              {id && <UrlForm campaignId={id as string} />}
               <CampaignForm
                 isNewCampaign={false}
                 buttonText={"Edit campaign"}
                 buttonVariant={"edit"}
                 title={"Edit this campaign"}
               />
-
-              <ConfirmationModal
-                isLargeButton={false}
-                forDelete={true}
-                buttonText={"Delete campaign"}
-                buttonVariant={"destructive"}
-                title={"Delete this campaign"}
-                message={"WARNING : Datas will be delete forever"}
-                noText={"No, keep it"}
-                yesText={"Yes, delete it"}
-                action={deleteCampaign}
-              />
+              {id && (
+                <ConfirmationModal
+                  isLargeButton={false}
+                  forDelete={true}
+                  buttonText={"Delete campaign"}
+                  buttonVariant={"destructive"}
+                  title={"Delete this campaign"}
+                  message={"WARNING : Datas will be delete forever"}
+                  noText={"No, keep it"}
+                  yesText={"Yes, delete it"}
+                  action={deleteCampaign}
+                />
+              )}
             </div>
           </div>
           {/* *********************************************** */}
