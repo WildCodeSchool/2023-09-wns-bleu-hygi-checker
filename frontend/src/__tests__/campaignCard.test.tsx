@@ -15,13 +15,6 @@ describe("CampaignCard component", () => {
           isMailAlert: false,
           isWorking: true,
           userId: "c83135a6-3bd7-46b1-b6d8-6b4117cfabf7",
-          urls: [
-            {
-              id: 1,
-              urlPath: "https://nextjs.org/",
-              type: "PAGE",
-            },
-          ],
         }}
       />
     );

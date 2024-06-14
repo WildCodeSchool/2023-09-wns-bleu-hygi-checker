@@ -40,8 +40,7 @@ export default class CampaignService {
     userId?: string
   ): Promise<Campaign | null> {
     const campaign = await this.db.findOne({
-      where: { id: campaignId },
-      relations: ["urls"],
+      where: { id },
     });
     if (campaign && userId && campaign.userId !== userId) {
       throw new Error("Acces denied.");
