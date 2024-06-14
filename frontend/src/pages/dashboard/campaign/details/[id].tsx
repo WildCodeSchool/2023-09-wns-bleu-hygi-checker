@@ -33,32 +33,20 @@ export default function CampaignDetail() {
 
   const { id } = router.query;
 
-  const { data: campaignById, loading } = useCampaignByIdQuery({
+  const {
+    data: campaignById,
+    loading,
+    error,
+  } = useCampaignByIdQuery({
     variables: {
       campaignId: typeof id === "string" ? parseInt(id) : 0,
     },
     skip: typeof id === "undefined",
   });
-
+  if (error) {
+    console.error("GraphQL Error:", error);
+  }
   const campaign = campaignById?.campaignById;
-
-  const responses = [
-    {
-      routes: "app/v1/users.com",
-      status: "Alerte",
-      actions: "",
-    },
-    {
-      routes: "app/v1/campus.com",
-      status: "Off",
-      actions: "",
-    },
-    {
-      routes: "app/v1/trainings.com",
-      status: "Alerte",
-      actions: "",
-    },
-  ];
 
   const deleteCampaign = () => {
     router.push("/dashboard/campaign/lists");
@@ -76,7 +64,7 @@ export default function CampaignDetail() {
       variant: "success",
     });
   };
-
+  const responses = [];
   // données des card/carousel
   const table = [
     "Graphiques multiples 1",
@@ -165,7 +153,7 @@ export default function CampaignDetail() {
               </TableHeader>
               {/* ----------------  Table Body  ------------- */}
               <TableBody>
-                {responses.map((response) => (
+                {responses?.map((response) => (
                   <TableRow key={response.routes}>
                     <TableCell className="font-medium">
                       {response.routes}
