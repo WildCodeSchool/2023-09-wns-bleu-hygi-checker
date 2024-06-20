@@ -4,7 +4,6 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
@@ -15,26 +14,22 @@ import CampaignUrl from "./campaignUrl.entity";
 export default class Response extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
-  uuid: number;
+  id: number;
 
-  @Field()
-  @Column()
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   responseTime: number;
 
-  @Field()
-  @Column()
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   statusCode: string;
 
   @Field()
   @CreateDateColumn({ type: "timestamp" })
   createdAt: Date;
 
-  @Field()
-  @Column({ name: "campaign_url_id" })
-  campaignUrlId: number;
-
+  @Field(() => CampaignUrl)
   @ManyToOne(() => CampaignUrl, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "campaign_url_id" })
   campaignUrl: CampaignUrl;
 }
 

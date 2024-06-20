@@ -9,20 +9,22 @@ export default class ResponseService {
   }
 
   async listResponses() {
-    return this.db.find();
+    return this.db.find({
+      relations: ["campaignUrl"],
+    });
   }
 
   async listResponsesByCampaignUrlId(
     campaignUrlId: number
   ): Promise<Response[]> {
     return this.db.find({
-      where: { campaignUrlId },
-      relations: ["campaign"],
+      where: { campaignUrl: { id: campaignUrlId } },
+      relations: ["campaignUrl"],
     });
   }
 
-  async findResponseById(uuid: number) {
-    return await this.db.findOneBy({ uuid });
+  async findResponseById(id: number) {
+    return await this.db.findOneBy({ id });
   }
 
   async createResponse({
@@ -31,12 +33,12 @@ export default class ResponseService {
     createdAt,
     campaignUrlId,
   }: InputCreateResponse) {
-    const newUrl = this.db.create({
+    const newReponse = this.db.create({
       responseTime,
       statusCode,
       createdAt,
-      campaignUrlId,
+      campaignUrl: { id: campaignUrlId },
     });
-    return await this.db.save(newUrl);
+    return await this.db.save(newReponse);
   }
 }

@@ -27,18 +27,18 @@ export default class ResponseResolver {
   async responsesByCampaignUrlId(
     @Arg("campaignId", () => Int) campaignId: number
   ) {
-    const allCampaignUrlId =
+    const allCampaignUrl =
       await this.campaignUrlService.getAllUrlByCampaignId(campaignId);
-    if (!allCampaignUrlId) {
+    if (!allCampaignUrl) {
       throw new Error("No url in this campaign");
     }
-    const responses = [];
-    allCampaignUrlId.forEach(async (url) => {
-      responses.push(
-        ...allCampaignUrlId,
-        await this.responseService.listResponsesByCampaignUrlId(url.id)
-      );
-    });
+    const responses: Response[] = [];
+    for (const campaignUrl of allCampaignUrl) {
+      const urlResponses =
+        await this.responseService.listResponsesByCampaignUrlId(campaignUrl.id);
+      responses.push(...urlResponses);
+    }
+    return responses;
   }
 
   @Mutation(() => Response)
