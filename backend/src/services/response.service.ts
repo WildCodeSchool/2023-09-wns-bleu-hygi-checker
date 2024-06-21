@@ -23,6 +23,18 @@ export default class ResponseService {
     });
   }
 
+  async listLatestResponseByCampaignUrlId(
+    campaignUrlId: number
+  ): Promise<Response | null> {
+    return this.db.findOne({
+      where: { campaignUrl: { id: campaignUrlId } },
+      relations: ["campaignUrl"],
+      order: {
+        createdAt: "DESC",
+      },
+    });
+  }
+
   async findResponseById(id: number) {
     return await this.db.findOneBy({ id });
   }

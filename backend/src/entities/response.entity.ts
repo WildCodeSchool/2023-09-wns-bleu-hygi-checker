@@ -46,4 +46,7 @@ export class InputCreateResponse {
 
   @Field()
   campaignUrlId: number;
+
+  @Field()
+  campaignId: number;
 }
