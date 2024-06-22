@@ -5,8 +5,6 @@ import CampaignUrl, {
 } from "../entities/campaignUrl.entity";
 import CampaignUrlService from "../services/campaignUrl.service";
 import UrlService from "../services/url.service";
-import UserService from "../services/user.service";
-import CampaignService from "../services/campaign.service";
 import { Message } from "../entities/user.entity";
 import { MyContext } from "..";
 import AccessCheckResolver from "./accessCheck.resolver";
@@ -15,14 +13,12 @@ import AccessCheckResolver from "./accessCheck.resolver";
 export default class CampaignUrlResolver {
   private campaignUrlService: CampaignUrlService;
   private urlService: UrlService;
-  private userService: UserService;
-  private campaignService: CampaignService;
+  private accessChecker: AccessCheckResolver;
 
   constructor() {
     this.campaignUrlService = new CampaignUrlService();
     this.urlService = new UrlService();
-    this.userService = new UserService();
-    this.campaignService = new CampaignService();
+    this.accessChecker = new AccessCheckResolver();
   }
 
   /** ------------------------------------------------------------------------------------------------------------------
@@ -37,8 +33,7 @@ export default class CampaignUrlResolver {
     @Arg("campaignId") campaignId: number
   ): Promise<CampaignUrl[] | undefined> {
     // ------------------------ VERIFICATION -----------------------
-    const accessChecker = await new AccessCheckResolver();
-    const validation = await accessChecker.verifyIfCampaignBelongToUser(
+    const validation = await this.accessChecker.verifyIfCampaignBelongToUser(
       ctx,
       campaignId
     );
@@ -65,8 +60,7 @@ export default class CampaignUrlResolver {
     m.success = false;
 
     // ------------------------ START VERIFICATION -----------------------
-    const accessChecker = await new AccessCheckResolver();
-    const validation = await accessChecker.verifyIfCampaignBelongToUser(
+    const validation = await this.accessChecker.verifyIfCampaignBelongToUser(
       ctx,
       campaignId
     );
@@ -144,8 +138,7 @@ export default class CampaignUrlResolver {
     const m = new Message();
 
     // ------------------------ START VERIFICATION -----------------------
-    const accessChecker = await new AccessCheckResolver();
-    const validation = await accessChecker.verifyIfCampaignBelongToUser(
+    const validation = await this.accessChecker.verifyIfCampaignBelongToUser(
       ctx,
       campaignId
     );

@@ -1,11 +1,16 @@
-import { Repository } from "typeorm";
+import { Repository, MoreThan } from "typeorm";
 import Response, { InputCreateResponse } from "../entities/response.entity";
 import datasource from "../lib/datasource";
+import getDateInUTCPlus2 from "../utils/getTimeUTC2";
 
 export default class ResponseService {
   db: Repository<Response>;
   constructor() {
     this.db = datasource.getRepository(Response);
+  }
+
+  async findResponseById(id: number) {
+    return await this.db.findOneBy({ id });
   }
 
   async listResponses() {
@@ -35,20 +40,35 @@ export default class ResponseService {
     });
   }
 
-  async findResponseById(id: number) {
-    return await this.db.findOneBy({ id });
+  async listLatestDayResponsesByCampaignUrlId(
+    campaignUrlId: number
+  ): Promise<Response[] | null> {
+    const twentyFourHoursAgo = getDateInUTCPlus2();
+    twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
+
+    return this.db.find({
+      where: {
+        campaignUrl: { id: campaignUrlId },
+        createdAt: MoreThan(twentyFourHoursAgo),
+      },
+      relations: ["campaignUrl"],
+      order: {
+        createdAt: "DESC",
+      },
+    });
   }
 
   async createResponse({
     responseTime,
     statusCode,
-    createdAt,
     campaignUrlId,
   }: InputCreateResponse) {
+    const dateInUTCPlus2 = getDateInUTCPlus2();
+
     const newReponse = this.db.create({
       responseTime,
       statusCode,
-      createdAt,
+      createdAt: dateInUTCPlus2.toISOString(),
       campaignUrl: { id: campaignUrlId },
     });
     return await this.db.save(newReponse);

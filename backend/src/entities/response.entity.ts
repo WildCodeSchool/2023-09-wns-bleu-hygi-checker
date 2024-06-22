@@ -42,9 +42,6 @@ export class InputCreateResponse {
   statusCode: string;
 
   @Field()
-  createdAt: Date;
-
-  @Field()
   campaignUrlId: number;
 
   @Field()

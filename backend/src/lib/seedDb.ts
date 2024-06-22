@@ -7,6 +7,7 @@ import CampaignUrl from "../entities/campaignUrl.entity";
 import argon2 from "argon2";
 import db from "./datasource";
 import { GENDER } from "../entities/user.entity";
+import getDateInUTCPlus2 from "../utils/getTimeUTC2";
 
 async function seedDB() {
   await db.initialize();
@@ -192,39 +193,47 @@ async function seedDB() {
   ]);
 
   // Création des réponses pour chaque URL
+  const dateInUTCPlus2 = getDateInUTCPlus2();
+
   const responses1_200 = Response.create({
     responseTime: 300,
     statusCode: "200 OK",
+    createdAt: dateInUTCPlus2.toISOString(),
     campaignUrl: { id: campaignUrl7.id },
   });
 
   const responses2_200 = Response.create({
     responseTime: 100,
     statusCode: "200 OK",
+    createdAt: dateInUTCPlus2.toISOString(),
     campaignUrl: { id: campaignUrl7.id },
   });
 
   const responses3_200 = Response.create({
     responseTime: 150,
     statusCode: "200 OK",
+    createdAt: dateInUTCPlus2.toISOString(),
     campaignUrl: { id: campaignUrl7.id },
   });
 
   const responses4_404 = Response.create({
     responseTime: 300,
     statusCode: "404 Not Found",
+    createdAt: dateInUTCPlus2.toISOString(),
     campaignUrl: { id: campaignUrl7.id },
   });
 
   const responses5_500 = Response.create({
     responseTime: 250,
     statusCode: "500 Internal Server Error",
+    createdAt: dateInUTCPlus2.toISOString(),
     campaignUrl: { id: campaignUrl7.id },
   });
 
   const responses6_200 = Response.create({
     responseTime: 150,
     statusCode: "200 OK",
+    createdAt: dateInUTCPlus2.toISOString(),
     campaignUrl: { id: campaignUrl5.id },
   });
   await Response.save([
