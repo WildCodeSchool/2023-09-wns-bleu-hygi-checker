@@ -16,7 +16,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { ConfirmationModal } from "@/components/ConfirmationModal";
-import { CampaignForm } from "@/components/campaign/CampaignForm";
+import { EditCampaignForm } from "@/components/campaign/EditCampaignForm";
 import { UrlForm } from "@/components/campaign/UrlForm";
 import { Badge } from "@/components/ui/badge";
 
@@ -126,25 +126,22 @@ export default function CampaignDetail() {
             </div>
             {/* **************  HEADER BUTTONS  *************** */}
             <div className="flex justify-end">
-              {id && <UrlForm campaignId={id as string} />}
-              <CampaignForm
-                isNewCampaign={false}
-                buttonText={"Edit campaign"}
-                buttonVariant={"edit"}
-                title={"Edit this campaign"}
-              />
-              {id && (
-                <ConfirmationModal
-                  isLargeButton={false}
-                  forDelete={true}
-                  buttonText={"Delete campaign"}
-                  buttonVariant={"destructive"}
-                  title={"Delete this campaign"}
-                  message={"WARNING : Datas will be delete forever"}
-                  noText={"No, keep it"}
-                  yesText={"Yes, delete it"}
-                  action={deleteCampaign}
-                />
+              {id && campaign && (
+                <>
+                  <UrlForm campaignId={id as string} />
+                  <EditCampaignForm campaignId={id as string} />
+                  <ConfirmationModal
+                    isLargeButton={false}
+                    forDelete={true}
+                    buttonText={"Delete campaign"}
+                    buttonVariant={"destructive"}
+                    title={"Delete this campaign"}
+                    message={"WARNING : Datas will be delete forever"}
+                    noText={"No, keep it"}
+                    yesText={"Yes, delete it"}
+                    action={deleteCampaign}
+                  />
+                </>
               )}
             </div>
           </div>

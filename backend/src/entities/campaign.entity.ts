@@ -67,6 +67,33 @@ export class InputCreateCampaign {
   isWorking?: boolean;
 }
 
+@InputType()
+export class InputEditCampaign {
+  @Field()
+  id: number;
+
+  @Field()
+  name: string;
+
+  @Field({ nullable: true })
+  intervalTest?: number;
+
+  @Field({ nullable: true })
+  isMailAlert?: boolean;
+
+  @Field({ nullable: true })
+  isWorking?: boolean;
+}
+
+@InputType()
+export class InputEditCampaignImage {
+  @Field()
+  id: number;
+
+  @Field()
+  image: string;
+}
+
 @ObjectType()
 export class CampaignIds {
   @Field()

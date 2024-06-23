@@ -6,7 +6,6 @@ import { z } from "zod";
 
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/router";
-import { CampaignFormProps } from "@/types/interfaces";
 import { useState } from "react";
 import {
   useCampaignsByUserIdQuery,
@@ -31,7 +30,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Loader2, Plus, Wrench } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 // ****************************************************
 
 // Define the form schema for validation
@@ -40,12 +39,7 @@ const formSchema = z.object({
     message: "Name must be at least 2 characters.",
   }),
 });
-export function CampaignForm({
-  isNewCampaign,
-  buttonText,
-  buttonVariant,
-  title,
-}: CampaignFormProps) {
+export function AddCampaignForm() {
   const { toast } = useToast();
   const router = useRouter();
 
@@ -60,11 +54,9 @@ export function CampaignForm({
       setTimeout(() => {
         setFakeLoading(false);
         setOpenForm(false);
-        if (isNewCampaign === true) {
-          router.push(`/dashboard/campaign/details/${campaignId}`);
-        }
+        router.push(`/dashboard/campaign/details/${campaignId}`);
         toast({
-          title: `Campaign ${isNewCampaign ? "created" : "edited"} successfully`,
+          title: `Campaign created successfully`,
           variant: "success",
         });
         refetch();
@@ -111,24 +103,17 @@ export function CampaignForm({
     }
   }
 
-  // the following variable is used for avoiding a ternary in a ternary
-  const EditOrCreate = isNewCampaign === true ? "Create" : "Confirm changes";
-
   return (
     <Dialog open={openForm} onOpenChange={handleCloseForm}>
       <DialogTrigger asChild>
-        <Button className="bg-blue-500 text-white mx-4" variant={buttonVariant}>
-          {isNewCampaign === true ? (
-            <Plus className="md:mr-2 h-4 w-4" />
-          ) : (
-            <Wrench className="md:mr-2 h-4 w-4" />
-          )}
-          <span className="hidden md:block">{buttonText}</span>
+        <Button className="bg-blue-500 text-white mx-4" variant={"edit"}>
+          <Plus className="md:mr-2 h-4 w-4" />
+          <span className="hidden md:block">Create new campaign</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
+          <DialogTitle>Create new campaign</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -150,7 +135,7 @@ export function CampaignForm({
               {fakeLoading === true && (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               )}
-              {fakeLoading === true ? "Please wait" : EditOrCreate}
+              {fakeLoading === true ? "Please wait" : "Create"}
             </Button>
           </form>
         </Form>

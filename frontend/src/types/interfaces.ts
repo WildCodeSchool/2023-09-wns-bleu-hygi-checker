@@ -21,21 +21,13 @@ export interface ConfirmationModalProps {
   yesText: string;
   action: () => void;
 }
-export interface CampaignFormProps {
-  isNewCampaign: boolean;
-  buttonText: string;
-  buttonVariant:
-    | "link"
-    | "default"
-    | "destructive"
-    | "outline"
-    | "secondary"
-    | "white"
-    | "ghost"
-    | "edit"
-    | null
-    | undefined;
-  title: string;
+export interface EditCampaignFormProps {
+  campaignId: string;
+}
+
+export interface ChangeImageCampaignFormProps {
+  campaignId: number;
+  imageSrc: string;
 }
 
 export interface CampaignCardProps {

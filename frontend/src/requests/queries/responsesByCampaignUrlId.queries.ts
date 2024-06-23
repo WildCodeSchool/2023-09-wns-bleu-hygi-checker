@@ -1,13 +1,15 @@
 import { gql } from "@apollo/client";
 
 export const RESPONSES_BY_CAMPAIGNURLID = gql`
-  query responsesByCampaignUrlId($campaignId: Int!) {
+  query ResponsesByCampaignUrlId($campaignId: Int!) {
     responsesByCampaignUrlId(campaignId: $campaignId) {
-      uuid
+      id
       responseTime
       statusCode
       createdAt
-      campaignUrlId
+      campaignUrl {
+        id
+      }
     }
   }
 `;

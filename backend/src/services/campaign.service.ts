@@ -1,5 +1,9 @@
 import { Repository } from "typeorm";
-import Campaign, { InputCreateCampaign } from "../entities/campaign.entity";
+import Campaign, {
+  InputCreateCampaign,
+  InputEditCampaign,
+  InputEditCampaignImage,
+} from "../entities/campaign.entity";
 import User from "../entities/user.entity";
 import datasource from "../lib/datasource";
 
@@ -82,11 +86,34 @@ export default class CampaignService {
     return this.db.remove(campaign);
   }
 
-  // async deleteCampaign(id: number): Promise<void> {
-  //   const campaign = await this.findCampaignById(id);
-  //   if (!campaign) {
-  //     throw new Error(`Campaign with id ${id} not found`);
-  //   }
-  //   await this.db.remove(campaign);
-  // }
+  async updateCampaign(input: InputEditCampaign) {
+    const campaign = await this.db.findOneOrFail({
+      where: {
+        id: input.id,
+      },
+    });
+    if (!campaign) {
+      throw new Error(`Campaign not found`);
+    }
+    const editedCampaign = this.db.create({ ...campaign });
+    editedCampaign.name = input.name;
+    editedCampaign.intervalTest = input.intervalTest;
+    editedCampaign.isWorking = input.isWorking;
+    editedCampaign.isMailAlert = input.isMailAlert;
+    return await this.db.save(editedCampaign);
+  }
+
+  async updateImageCampaign(input: InputEditCampaignImage) {
+    const campaign = await this.db.findOneOrFail({
+      where: {
+        id: input.id,
+      },
+    });
+    if (!campaign) {
+      throw new Error(`Campaign not found`);
+    }
+    const editedCampaign = this.db.create({ ...campaign });
+    editedCampaign.image = input.image;
+    return await this.db.save(editedCampaign);
+  }
 }

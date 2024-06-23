@@ -1,5 +1,9 @@
 import { Arg, Int, Mutation, Ctx, Query, Resolver } from "type-graphql";
-import Campaign, { InputCreateCampaign } from "../entities/campaign.entity";
+import Campaign, {
+  InputCreateCampaign,
+  InputEditCampaign,
+  InputEditCampaignImage,
+} from "../entities/campaign.entity";
 import CampaignService from "../services/campaign.service";
 import { MyContext } from "..";
 import UserService from "../services/user.service";
@@ -93,6 +97,50 @@ export default class CampaignResolver {
     await this.campaignService.deleteCampaign(campaignId);
     const m = new Message();
     m.message = "Campaign deleted successfully";
+    m.success = true;
+    return m;
+  }
+
+  @Mutation(() => Message)
+  async modifyCampaign(
+    @Ctx() ctx: MyContext,
+    @Arg("input") input: InputEditCampaign
+  ) {
+    // ------------------------ START VERIFICATION -----------------------
+    const validation = await this.accessChecker.verifyIfCampaignBelongToUser(
+      ctx,
+      input.id
+    );
+
+    if (validation !== true) {
+      throw new Error("You can't perform this action");
+    }
+    // ------------------------ END VERIFICATION -----------------------
+    await this.campaignService.updateCampaign(input);
+    const m = new Message();
+    m.message = "Campaign updated successfully";
+    m.success = true;
+    return m;
+  }
+
+  @Mutation(() => Message)
+  async modifyImageOfCampaign(
+    @Ctx() ctx: MyContext,
+    @Arg("input") input: InputEditCampaignImage
+  ) {
+    // ------------------------ START VERIFICATION -----------------------
+    const validation = await this.accessChecker.verifyIfCampaignBelongToUser(
+      ctx,
+      input.id
+    );
+
+    if (validation !== true) {
+      throw new Error("You can't perform this action");
+    }
+    // ------------------------ END VERIFICATION -----------------------
+    await this.campaignService.updateImageCampaign(input);
+    const m = new Message();
+    m.message = "Image of this campaign updated successfully";
     m.success = true;
     return m;
   }
