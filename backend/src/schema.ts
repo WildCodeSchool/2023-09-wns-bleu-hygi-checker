@@ -7,6 +7,7 @@ import TestResolver from "./resolvers/test.resolver";
 import UrlResolver from "./resolvers/url.resolver";
 import UserResolver from "./resolvers/user.resolver";
 import CampaignUrlResolver from "./resolvers/campaignUrl.resolver";
+import AccessCheckResolver from "./resolvers/accessCheck.resolver";
 
 export default buildSchema({
   resolvers: [
@@ -16,6 +17,7 @@ export default buildSchema({
     ResponseResolver,
     CampaignResolver,
     CampaignUrlResolver,
+    AccessCheckResolver,
   ],
   validate: true,
   authChecker: customAuthChecker,

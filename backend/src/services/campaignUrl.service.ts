@@ -29,6 +29,17 @@ export default class CampaignUrlService {
     });
   }
 
+  async findCampaignWithCampaignUrlId(
+    campaignUrlId: number
+  ): Promise<CampaignUrl | null> {
+    return this.db.findOne({
+      where: {
+        id: campaignUrlId,
+      },
+      relations: ["campaign"],
+    });
+  }
+
   async addUrlToCampaign(
     urlId: number,
     campaignId: number

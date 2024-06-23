@@ -4,11 +4,13 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  OneToMany,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
 import Url from "./url.entity";
 import Campaign from "./campaign.entity";
+import Response from "./response.entity";
 
 @ObjectType()
 @Entity()
@@ -30,6 +32,11 @@ export default class CampaignUrl extends BaseEntity {
   @ManyToOne(() => Url, (url) => url.id, { onDelete: "CASCADE" })
   @JoinColumn({ name: "url_id" })
   url: Url;
+
+  @OneToMany(() => Response, (response) => response.id, {
+    onDelete: "CASCADE",
+  })
+  response: Response[];
 }
 
 @InputType()

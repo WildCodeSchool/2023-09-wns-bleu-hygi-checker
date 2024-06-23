@@ -7,6 +7,7 @@ import CampaignUrl from "../entities/campaignUrl.entity";
 import argon2 from "argon2";
 import db from "./datasource";
 import { GENDER } from "../entities/user.entity";
+import getDateInUTCPlus2 from "../utils/getTimeUTC2";
 
 async function seedDB() {
   await db.initialize();
@@ -177,7 +178,7 @@ async function seedDB() {
     url: { id: url6.id },
   });
   const campaignUrl7 = CampaignUrl.create({
-    campaign: { id: campaign1.id },
+    campaign: { id: campaign5.id },
     url: { id: url7.id },
   });
 
@@ -192,43 +193,56 @@ async function seedDB() {
   ]);
 
   // Création des réponses pour chaque URL
+  const dateInUTCPlus2 = getDateInUTCPlus2();
+
   const responses1_200 = Response.create({
     responseTime: 300,
     statusCode: "200 OK",
+    createdAt: dateInUTCPlus2.toISOString(),
+    campaignUrl: { id: campaignUrl7.id },
   });
 
   const responses2_200 = Response.create({
     responseTime: 100,
     statusCode: "200 OK",
+    createdAt: dateInUTCPlus2.toISOString(),
+    campaignUrl: { id: campaignUrl7.id },
   });
 
   const responses3_200 = Response.create({
     responseTime: 150,
     statusCode: "200 OK",
+    createdAt: dateInUTCPlus2.toISOString(),
+    campaignUrl: { id: campaignUrl7.id },
   });
 
   const responses4_404 = Response.create({
     responseTime: 300,
     statusCode: "404 Not Found",
+    createdAt: dateInUTCPlus2.toISOString(),
+    campaignUrl: { id: campaignUrl7.id },
   });
 
   const responses5_500 = Response.create({
     responseTime: 250,
     statusCode: "500 Internal Server Error",
+    createdAt: dateInUTCPlus2.toISOString(),
+    campaignUrl: { id: campaignUrl7.id },
   });
 
-  responses1_200.campaignUrlId = campaignUrl1.id;
-  responses2_200.campaignUrlId = campaignUrl1.id;
-  responses3_200.campaignUrlId = campaignUrl1.id;
-  responses4_404.campaignUrlId = campaignUrl1.id;
-  responses5_500.campaignUrlId = campaignUrl1.id;
-
+  const responses6_200 = Response.create({
+    responseTime: 150,
+    statusCode: "200 OK",
+    createdAt: dateInUTCPlus2.toISOString(),
+    campaignUrl: { id: campaignUrl5.id },
+  });
   await Response.save([
     responses1_200,
     responses2_200,
     responses3_200,
     responses4_404,
     responses5_500,
+    responses6_200,
   ]);
 
   await db.destroy();
