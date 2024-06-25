@@ -7,7 +7,11 @@ import Loading from "@/components/Loading";
 export default function Campaign() {
   const { data, loading } = useCampaignsByUserIdQuery();
 
-  const campaigns = data?.campaignsByUserId;
+  const campaigns = data?.campaignsByUserId ? [...data.campaignsByUserId] : [];
+
+  campaigns.sort((a, b) => {
+    return a.id - b.id;
+  });
 
   return (
     <Layout title="Campaign">
