@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/carousel";
 import { ConfirmationModal } from "@/components/ConfirmationModal";
 import { EditCampaignForm } from "@/components/campaign/EditCampaignForm";
+import QuickUrlTest from "@/components/check/QuickUrlTest";
 import { UrlForm } from "@/components/campaign/UrlForm";
 import { Badge } from "@/components/ui/badge";
 
@@ -189,17 +190,21 @@ export default function CampaignDetail() {
               </TableHeader>
               {/* ----------------  Table Body  ------------- */}
               <TableBody>
-                {urls?.map((response) => (
-                  <TableRow key={response.url.urlPath}>
+                {urls?.map((urlResponse) => (
+                  <TableRow key={urlResponse.url.urlPath}>
                     <TableCell className="font-medium">
-                      {response.url.urlPath}
+                      {urlResponse.url.urlPath}
                     </TableCell>
                     <TableCell>{}</TableCell>
                     <TableCell className="text-right gap-4">
                       <div className="flex justify-end gap-4 md:hidden">
-                        <Dropdown />
+                        <Dropdown data={urlResponse} />
                       </div>
                       <div className="hidden md:flex justify-end gap-4">
+                        <QuickUrlTest
+                          urlPath={urlResponse.url.urlPath}
+                          onDropdown={false}
+                        />
                         <ConfirmationModal
                           isLargeButton={false}
                           forDelete={true}

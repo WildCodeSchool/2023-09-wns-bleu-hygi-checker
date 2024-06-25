@@ -1,6 +1,7 @@
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
-
+import QuickUrlTest from "../check/QuickUrlTest";
+import { Url } from "@/types/graphql";
 // ************ IMPORT UI COMPONENTS  *****************
 import { Button } from "../ui/button";
 import {
@@ -20,7 +21,16 @@ import {
 import { ChevronDown, Trash, Loader2 } from "lucide-react";
 // ****************************************************
 
-export default function Dropdown() {
+interface DropdownProps {
+  data: {
+    campaign: {
+      id: number | undefined;
+    };
+    url: Url;
+  };
+}
+
+export default function Dropdown({ data }: DropdownProps) {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false); // to show the loader in the button
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -49,6 +59,7 @@ export default function Dropdown() {
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end">
+          <QuickUrlTest urlPath={data.url.urlPath} onDropdown={true} />
           <DropdownMenuItem
             className="cursor-pointer text-red-500"
             onClick={() => setOpenDeleteModal(true)}
