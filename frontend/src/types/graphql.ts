@@ -534,6 +534,22 @@ export type CampaignsByUserIdQuery = {
   }>;
 };
 
+export type LastDayResponsesOfOneUrlQueryVariables = Exact<{
+  campaignUrlId: Scalars["Int"]["input"];
+}>;
+
+export type LastDayResponsesOfOneUrlQuery = {
+  __typename?: "Query";
+  lastDayResponsesOfOneUrl: Array<{
+    __typename?: "Response";
+    id: number;
+    responseTime?: number | null;
+    statusCode?: string | null;
+    createdAt: Date;
+    campaignUrl: { __typename?: "CampaignUrl"; id: number };
+  }>;
+};
+
 export type GetUrlFromCampaignQueryVariables = Exact<{
   campaignId: Scalars["Float"]["input"];
 }>;
@@ -1613,6 +1629,85 @@ export type CampaignsByUserIdSuspenseQueryHookResult = ReturnType<
 export type CampaignsByUserIdQueryResult = Apollo.QueryResult<
   CampaignsByUserIdQuery,
   CampaignsByUserIdQueryVariables
+>;
+export const LastDayResponsesOfOneUrlDocument = gql`
+  query LastDayResponsesOfOneUrl($campaignUrlId: Int!) {
+    lastDayResponsesOfOneUrl(campaignUrlId: $campaignUrlId) {
+      id
+      responseTime
+      statusCode
+      createdAt
+      campaignUrl {
+        id
+      }
+    }
+  }
+`;
+
+/**
+ * __useLastDayResponsesOfOneUrlQuery__
+ *
+ * To run a query within a React component, call `useLastDayResponsesOfOneUrlQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLastDayResponsesOfOneUrlQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useLastDayResponsesOfOneUrlQuery({
+ *   variables: {
+ *      campaignUrlId: // value for 'campaignUrlId'
+ *   },
+ * });
+ */
+export function useLastDayResponsesOfOneUrlQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    LastDayResponsesOfOneUrlQuery,
+    LastDayResponsesOfOneUrlQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    LastDayResponsesOfOneUrlQuery,
+    LastDayResponsesOfOneUrlQueryVariables
+  >(LastDayResponsesOfOneUrlDocument, options);
+}
+export function useLastDayResponsesOfOneUrlLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    LastDayResponsesOfOneUrlQuery,
+    LastDayResponsesOfOneUrlQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    LastDayResponsesOfOneUrlQuery,
+    LastDayResponsesOfOneUrlQueryVariables
+  >(LastDayResponsesOfOneUrlDocument, options);
+}
+export function useLastDayResponsesOfOneUrlSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    LastDayResponsesOfOneUrlQuery,
+    LastDayResponsesOfOneUrlQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    LastDayResponsesOfOneUrlQuery,
+    LastDayResponsesOfOneUrlQueryVariables
+  >(LastDayResponsesOfOneUrlDocument, options);
+}
+export type LastDayResponsesOfOneUrlQueryHookResult = ReturnType<
+  typeof useLastDayResponsesOfOneUrlQuery
+>;
+export type LastDayResponsesOfOneUrlLazyQueryHookResult = ReturnType<
+  typeof useLastDayResponsesOfOneUrlLazyQuery
+>;
+export type LastDayResponsesOfOneUrlSuspenseQueryHookResult = ReturnType<
+  typeof useLastDayResponsesOfOneUrlSuspenseQuery
+>;
+export type LastDayResponsesOfOneUrlQueryResult = Apollo.QueryResult<
+  LastDayResponsesOfOneUrlQuery,
+  LastDayResponsesOfOneUrlQueryVariables
 >;
 export const GetUrlFromCampaignDocument = gql`
   query GetUrlFromCampaign($campaignId: Float!) {

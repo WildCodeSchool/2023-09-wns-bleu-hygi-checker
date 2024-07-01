@@ -1,6 +1,7 @@
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import QuickUrlTest from "../check/QuickUrlTest";
+import UrlResponsesDetailChart from "../response/UrlResponsesDetailChart";
 import { Url } from "@/types/graphql";
 // ************ IMPORT UI COMPONENTS  *****************
 import { Button } from "../ui/button";
@@ -18,11 +19,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { ChevronDown, Trash, Loader2 } from "lucide-react";
+import { ChevronDown, Trash, Loader2, ZoomIn } from "lucide-react";
 // ****************************************************
 
 interface DropdownProps {
   data: {
+    id: number;
     campaign: {
       id: number | undefined;
     };
@@ -34,6 +36,7 @@ export default function Dropdown({ data }: DropdownProps) {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false); // to show the loader in the button
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
+  const [openDetailDropdown, setOpenDetailDropdown] = useState(false);
 
   const deleteURL = () => {
     setLoading(true);
@@ -59,6 +62,13 @@ export default function Dropdown({ data }: DropdownProps) {
         </DropdownMenuTrigger>
 
         <DropdownMenuContent align="end">
+          <DropdownMenuItem
+            className="cursor-pointer text-green-500"
+            onClick={() => setOpenDetailDropdown(true)}
+          >
+            <ZoomIn className="mr-2 h-4 w-4" />
+            Detail
+          </DropdownMenuItem>
           <QuickUrlTest urlPath={data.url.urlPath} onDropdown={true} />
           <DropdownMenuItem
             className="cursor-pointer text-red-500"
@@ -93,6 +103,19 @@ export default function Dropdown({ data }: DropdownProps) {
                 {loading === true ? "Please wait" : "Yes"}
               </Button>
             </div>
+          </DialogContent>
+        </Dialog>
+      )}
+      {openDetailDropdown === true && (
+        <Dialog open={openDetailDropdown} onOpenChange={setOpenDetailDropdown}>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>URL responses detail</DialogTitle>
+              <DialogDescription>
+                This is the response on this URL for the last 24 hours
+              </DialogDescription>
+            </DialogHeader>
+            <UrlResponsesDetailChart campaignUrlId={data.id} />
           </DialogContent>
         </Dialog>
       )}

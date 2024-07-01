@@ -18,6 +18,7 @@ import {
 import { ConfirmationModal } from "@/components/ConfirmationModal";
 import { EditCampaignForm } from "@/components/campaign/EditCampaignForm";
 import QuickUrlTest from "@/components/check/QuickUrlTest";
+import UrlResponsesDetail from "@/components/response/UrlResponsesDetail";
 import { UrlForm } from "@/components/campaign/UrlForm";
 import { Badge } from "@/components/ui/badge";
 
@@ -201,6 +202,7 @@ export default function CampaignDetail() {
                         <Dropdown data={urlResponse} />
                       </div>
                       <div className="hidden md:flex justify-end gap-4">
+                        <UrlResponsesDetail campaignUrlId={urlResponse.id} />
                         <QuickUrlTest
                           urlPath={urlResponse.url.urlPath}
                           onDropdown={false}
