@@ -1,13 +1,17 @@
 import CampaignCard from "@/components/campaign/CampaignCard";
 import Layout from "@/components/dashboard/Layout";
-import { CampaignForm } from "@/components/campaign/CampaignForm";
+import { AddCampaignForm } from "@/components/campaign/AddCampaignForm";
 import { useCampaignsByUserIdQuery } from "@/types/graphql";
 import Loading from "@/components/Loading";
 
 export default function Campaign() {
   const { data, loading } = useCampaignsByUserIdQuery();
 
-  const campaigns = data?.campaignsByUserId;
+  const campaigns = data?.campaignsByUserId ? [...data.campaignsByUserId] : [];
+
+  campaigns.sort((a, b) => {
+    return a.id - b.id;
+  });
 
   return (
     <Layout title="Campaign">
@@ -18,12 +22,7 @@ export default function Campaign() {
           <>
             <div className="flex flex-col min-h-full gap-8">
               <div>
-                <CampaignForm
-                  isNewCampaign={true}
-                  buttonText={"Create new campaign"}
-                  buttonVariant={"edit"}
-                  title={"Create new campaign"}
-                />
+                <AddCampaignForm />
               </div>
               {campaigns !== undefined && campaigns!.length > 0 ? (
                 <div className="flex flex-wrap gap-8 justify-center">

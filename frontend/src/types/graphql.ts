@@ -79,8 +79,8 @@ export type InputCreateCampaign = {
 };
 
 export type InputCreateResponse = {
+  campaignId: Scalars["Float"]["input"];
   campaignUrlId: Scalars["Float"]["input"];
-  createdAt: Scalars["DateTimeISO"]["input"];
   responseTime: Scalars["Float"]["input"];
   statusCode: Scalars["String"]["input"];
 };
@@ -88,6 +88,19 @@ export type InputCreateResponse = {
 export type InputDeleteUrlToCampaign = {
   campaignId: Scalars["String"]["input"];
   urlId: Scalars["String"]["input"];
+};
+
+export type InputEditCampaign = {
+  id: Scalars["Float"]["input"];
+  intervalTest?: InputMaybe<Scalars["Float"]["input"]>;
+  isMailAlert?: InputMaybe<Scalars["Boolean"]["input"]>;
+  isWorking?: InputMaybe<Scalars["Boolean"]["input"]>;
+  name: Scalars["String"]["input"];
+};
+
+export type InputEditCampaignImage = {
+  id: Scalars["Float"]["input"];
+  image: Scalars["String"]["input"];
 };
 
 export type InputLogin = {
@@ -120,6 +133,8 @@ export type Mutation = {
   deleteCampaign: Message;
   deleteTest: Test;
   deleteUrlFromCampaign: Message;
+  modifyCampaign: Message;
+  modifyImageOfCampaign: Message;
   register: UserWithoutPassword;
   updateName: UserProfile;
   updateProfile: UserProfile;
@@ -162,6 +177,14 @@ export type MutationDeleteUrlFromCampaignArgs = {
   infos: InputDeleteUrlToCampaign;
 };
 
+export type MutationModifyCampaignArgs = {
+  input: InputEditCampaign;
+};
+
+export type MutationModifyImageOfCampaignArgs = {
+  input: InputEditCampaignImage;
+};
+
 export type MutationRegisterArgs = {
   infos: InputRegister;
 };
@@ -193,6 +216,8 @@ export type Query = {
   getAvatar: User;
   getUrlFromCampaign: Array<CampaignUrl>;
   getUserProfile: UserProfile;
+  lastDayResponsesOfOneUrl: Array<Response>;
+  latestResponsesByCampaignUrlId: Array<Response>;
   login: Message;
   logout: Message;
   response?: Maybe<Response>;
@@ -216,6 +241,14 @@ export type QueryGetUrlFromCampaignArgs = {
   campaignId: Scalars["Float"]["input"];
 };
 
+export type QueryLastDayResponsesOfOneUrlArgs = {
+  campaignUrlId: Scalars["Int"]["input"];
+};
+
+export type QueryLatestResponsesByCampaignUrlIdArgs = {
+  campaignId: Scalars["Int"]["input"];
+};
+
 export type QueryLoginArgs = {
   infos: InputLogin;
 };
@@ -234,11 +267,11 @@ export type QueryUrlArgs = {
 
 export type Response = {
   __typename?: "Response";
-  campaignUrlId: Scalars["Float"]["output"];
+  campaignUrl: CampaignUrl;
   createdAt: Scalars["DateTimeISO"]["output"];
-  responseTime: Scalars["Float"]["output"];
-  statusCode: Scalars["String"]["output"];
-  uuid: Scalars["Float"]["output"];
+  id: Scalars["Float"]["output"];
+  responseTime?: Maybe<Scalars["Float"]["output"]>;
+  statusCode?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type Test = {
@@ -333,6 +366,19 @@ export type ChangeAvatarMutation = {
   changeAvatar: { __typename?: "NewUserAvatar"; avatar: string };
 };
 
+export type ModifyImageOfCampaignMutationVariables = Exact<{
+  input: InputEditCampaignImage;
+}>;
+
+export type ModifyImageOfCampaignMutation = {
+  __typename?: "Mutation";
+  modifyImageOfCampaign: {
+    __typename?: "Message";
+    success: boolean;
+    message: string;
+  };
+};
+
 export type ChangePasswordMutationVariables = Exact<{
   passwordData: InputUpdatePassword;
 }>;
@@ -373,6 +419,15 @@ export type DeleteCampaignMutationVariables = Exact<{
 export type DeleteCampaignMutation = {
   __typename?: "Mutation";
   deleteCampaign: { __typename?: "Message"; message: string; success: boolean };
+};
+
+export type ModifyCampaignMutationVariables = Exact<{
+  input: InputEditCampaign;
+}>;
+
+export type ModifyCampaignMutation = {
+  __typename?: "Mutation";
+  modifyCampaign: { __typename?: "Message"; success: boolean; message: string };
 };
 
 export type AddTestMutationVariables = Exact<{
@@ -479,6 +534,22 @@ export type CampaignsByUserIdQuery = {
   }>;
 };
 
+export type LastDayResponsesOfOneUrlQueryVariables = Exact<{
+  campaignUrlId: Scalars["Int"]["input"];
+}>;
+
+export type LastDayResponsesOfOneUrlQuery = {
+  __typename?: "Query";
+  lastDayResponsesOfOneUrl: Array<{
+    __typename?: "Response";
+    id: number;
+    responseTime?: number | null;
+    statusCode?: string | null;
+    createdAt: Date;
+    campaignUrl: { __typename?: "CampaignUrl"; id: number };
+  }>;
+};
+
 export type GetUrlFromCampaignQueryVariables = Exact<{
   campaignId: Scalars["Float"]["input"];
 }>;
@@ -517,11 +588,11 @@ export type ResponsesByCampaignUrlIdQuery = {
   __typename?: "Query";
   responsesByCampaignUrlId: Array<{
     __typename?: "Response";
-    uuid: number;
-    responseTime: number;
-    statusCode: string;
+    id: number;
+    responseTime?: number | null;
+    statusCode?: string | null;
     createdAt: Date;
-    campaignUrlId: number;
+    campaignUrl: { __typename?: "CampaignUrl"; id: number };
   }>;
 };
 
@@ -680,6 +751,57 @@ export type ChangeAvatarMutationResult =
 export type ChangeAvatarMutationOptions = Apollo.BaseMutationOptions<
   ChangeAvatarMutation,
   ChangeAvatarMutationVariables
+>;
+export const ModifyImageOfCampaignDocument = gql`
+  mutation ModifyImageOfCampaign($input: InputEditCampaignImage!) {
+    modifyImageOfCampaign(input: $input) {
+      success
+      message
+    }
+  }
+`;
+export type ModifyImageOfCampaignMutationFn = Apollo.MutationFunction<
+  ModifyImageOfCampaignMutation,
+  ModifyImageOfCampaignMutationVariables
+>;
+
+/**
+ * __useModifyImageOfCampaignMutation__
+ *
+ * To run a mutation, you first call `useModifyImageOfCampaignMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useModifyImageOfCampaignMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [modifyImageOfCampaignMutation, { data, loading, error }] = useModifyImageOfCampaignMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useModifyImageOfCampaignMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ModifyImageOfCampaignMutation,
+    ModifyImageOfCampaignMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    ModifyImageOfCampaignMutation,
+    ModifyImageOfCampaignMutationVariables
+  >(ModifyImageOfCampaignDocument, options);
+}
+export type ModifyImageOfCampaignMutationHookResult = ReturnType<
+  typeof useModifyImageOfCampaignMutation
+>;
+export type ModifyImageOfCampaignMutationResult =
+  Apollo.MutationResult<ModifyImageOfCampaignMutation>;
+export type ModifyImageOfCampaignMutationOptions = Apollo.BaseMutationOptions<
+  ModifyImageOfCampaignMutation,
+  ModifyImageOfCampaignMutationVariables
 >;
 export const ChangePasswordDocument = gql`
   mutation ChangePassword($passwordData: inputUpdatePassword!) {
@@ -887,6 +1009,57 @@ export type DeleteCampaignMutationResult =
 export type DeleteCampaignMutationOptions = Apollo.BaseMutationOptions<
   DeleteCampaignMutation,
   DeleteCampaignMutationVariables
+>;
+export const ModifyCampaignDocument = gql`
+  mutation ModifyCampaign($input: InputEditCampaign!) {
+    modifyCampaign(input: $input) {
+      success
+      message
+    }
+  }
+`;
+export type ModifyCampaignMutationFn = Apollo.MutationFunction<
+  ModifyCampaignMutation,
+  ModifyCampaignMutationVariables
+>;
+
+/**
+ * __useModifyCampaignMutation__
+ *
+ * To run a mutation, you first call `useModifyCampaignMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useModifyCampaignMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [modifyCampaignMutation, { data, loading, error }] = useModifyCampaignMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useModifyCampaignMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    ModifyCampaignMutation,
+    ModifyCampaignMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    ModifyCampaignMutation,
+    ModifyCampaignMutationVariables
+  >(ModifyCampaignDocument, options);
+}
+export type ModifyCampaignMutationHookResult = ReturnType<
+  typeof useModifyCampaignMutation
+>;
+export type ModifyCampaignMutationResult =
+  Apollo.MutationResult<ModifyCampaignMutation>;
+export type ModifyCampaignMutationOptions = Apollo.BaseMutationOptions<
+  ModifyCampaignMutation,
+  ModifyCampaignMutationVariables
 >;
 export const AddTestDocument = gql`
   mutation AddTest($text: String!) {
@@ -1457,6 +1630,85 @@ export type CampaignsByUserIdQueryResult = Apollo.QueryResult<
   CampaignsByUserIdQuery,
   CampaignsByUserIdQueryVariables
 >;
+export const LastDayResponsesOfOneUrlDocument = gql`
+  query LastDayResponsesOfOneUrl($campaignUrlId: Int!) {
+    lastDayResponsesOfOneUrl(campaignUrlId: $campaignUrlId) {
+      id
+      responseTime
+      statusCode
+      createdAt
+      campaignUrl {
+        id
+      }
+    }
+  }
+`;
+
+/**
+ * __useLastDayResponsesOfOneUrlQuery__
+ *
+ * To run a query within a React component, call `useLastDayResponsesOfOneUrlQuery` and pass it any options that fit your needs.
+ * When your component renders, `useLastDayResponsesOfOneUrlQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useLastDayResponsesOfOneUrlQuery({
+ *   variables: {
+ *      campaignUrlId: // value for 'campaignUrlId'
+ *   },
+ * });
+ */
+export function useLastDayResponsesOfOneUrlQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    LastDayResponsesOfOneUrlQuery,
+    LastDayResponsesOfOneUrlQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    LastDayResponsesOfOneUrlQuery,
+    LastDayResponsesOfOneUrlQueryVariables
+  >(LastDayResponsesOfOneUrlDocument, options);
+}
+export function useLastDayResponsesOfOneUrlLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    LastDayResponsesOfOneUrlQuery,
+    LastDayResponsesOfOneUrlQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    LastDayResponsesOfOneUrlQuery,
+    LastDayResponsesOfOneUrlQueryVariables
+  >(LastDayResponsesOfOneUrlDocument, options);
+}
+export function useLastDayResponsesOfOneUrlSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    LastDayResponsesOfOneUrlQuery,
+    LastDayResponsesOfOneUrlQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    LastDayResponsesOfOneUrlQuery,
+    LastDayResponsesOfOneUrlQueryVariables
+  >(LastDayResponsesOfOneUrlDocument, options);
+}
+export type LastDayResponsesOfOneUrlQueryHookResult = ReturnType<
+  typeof useLastDayResponsesOfOneUrlQuery
+>;
+export type LastDayResponsesOfOneUrlLazyQueryHookResult = ReturnType<
+  typeof useLastDayResponsesOfOneUrlLazyQuery
+>;
+export type LastDayResponsesOfOneUrlSuspenseQueryHookResult = ReturnType<
+  typeof useLastDayResponsesOfOneUrlSuspenseQuery
+>;
+export type LastDayResponsesOfOneUrlQueryResult = Apollo.QueryResult<
+  LastDayResponsesOfOneUrlQuery,
+  LastDayResponsesOfOneUrlQueryVariables
+>;
 export const GetUrlFromCampaignDocument = gql`
   query GetUrlFromCampaign($campaignId: Float!) {
     getUrlFromCampaign(campaignId: $campaignId) {
@@ -1617,13 +1869,15 @@ export type GetUserProfileQueryResult = Apollo.QueryResult<
   GetUserProfileQueryVariables
 >;
 export const ResponsesByCampaignUrlIdDocument = gql`
-  query responsesByCampaignUrlId($campaignId: Int!) {
+  query ResponsesByCampaignUrlId($campaignId: Int!) {
     responsesByCampaignUrlId(campaignId: $campaignId) {
-      uuid
+      id
       responseTime
       statusCode
       createdAt
-      campaignUrlId
+      campaignUrl {
+        id
+      }
     }
   }
 `;

@@ -16,7 +16,9 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { ConfirmationModal } from "@/components/ConfirmationModal";
-import { CampaignForm } from "@/components/campaign/CampaignForm";
+import { EditCampaignForm } from "@/components/campaign/EditCampaignForm";
+import QuickUrlTest from "@/components/check/QuickUrlTest";
+import UrlResponsesDetail from "@/components/response/UrlResponsesDetail";
 import { UrlForm } from "@/components/campaign/UrlForm";
 import { Badge } from "@/components/ui/badge";
 
@@ -126,25 +128,22 @@ export default function CampaignDetail() {
             </div>
             {/* **************  HEADER BUTTONS  *************** */}
             <div className="flex justify-end">
-              {id && <UrlForm campaignId={id as string} />}
-              <CampaignForm
-                isNewCampaign={false}
-                buttonText={"Edit campaign"}
-                buttonVariant={"edit"}
-                title={"Edit this campaign"}
-              />
-              {id && (
-                <ConfirmationModal
-                  isLargeButton={false}
-                  forDelete={true}
-                  buttonText={"Delete campaign"}
-                  buttonVariant={"destructive"}
-                  title={"Delete this campaign"}
-                  message={"WARNING : Datas will be delete forever"}
-                  noText={"No, keep it"}
-                  yesText={"Yes, delete it"}
-                  action={deleteCampaign}
-                />
+              {id && campaign && (
+                <>
+                  <UrlForm campaignId={id as string} />
+                  <EditCampaignForm campaignId={id as string} />
+                  <ConfirmationModal
+                    isLargeButton={false}
+                    forDelete={true}
+                    buttonText={"Delete campaign"}
+                    buttonVariant={"destructive"}
+                    title={"Delete this campaign"}
+                    message={"WARNING : Datas will be delete forever"}
+                    noText={"No, keep it"}
+                    yesText={"Yes, delete it"}
+                    action={deleteCampaign}
+                  />
+                </>
               )}
             </div>
           </div>
@@ -192,17 +191,22 @@ export default function CampaignDetail() {
               </TableHeader>
               {/* ----------------  Table Body  ------------- */}
               <TableBody>
-                {urls?.map((response) => (
-                  <TableRow key={response.url.urlPath}>
+                {urls?.map((urlResponse) => (
+                  <TableRow key={urlResponse.url.urlPath}>
                     <TableCell className="font-medium">
-                      {response.url.urlPath}
+                      {urlResponse.url.urlPath}
                     </TableCell>
                     <TableCell>{}</TableCell>
                     <TableCell className="text-right gap-4">
                       <div className="flex justify-end gap-4 md:hidden">
-                        <Dropdown />
+                        <Dropdown data={urlResponse} />
                       </div>
                       <div className="hidden md:flex justify-end gap-4">
+                        <UrlResponsesDetail campaignUrlId={urlResponse.id} />
+                        <QuickUrlTest
+                          urlPath={urlResponse.url.urlPath}
+                          onDropdown={false}
+                        />
                         <ConfirmationModal
                           isLargeButton={false}
                           forDelete={true}
