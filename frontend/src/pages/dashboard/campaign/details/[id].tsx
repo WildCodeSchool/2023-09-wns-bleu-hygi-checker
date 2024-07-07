@@ -1,5 +1,11 @@
 import Layout from "@/components/dashboard/Layout";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -19,6 +25,8 @@ import { ConfirmationModal } from "@/components/ConfirmationModal";
 import { EditCampaignForm } from "@/components/campaign/EditCampaignForm";
 import QuickUrlTest from "@/components/check/QuickUrlTest";
 import UrlResponsesDetail from "@/components/response/UrlResponsesDetail";
+import PieChart from "@/components/analytics/PieChart";
+import LineChart from "@/components/analytics/LineChart";
 import { UrlForm } from "@/components/campaign/UrlForm";
 import { Badge } from "@/components/ui/badge";
 
@@ -105,12 +113,6 @@ export default function CampaignDetail() {
   // });
 
   // const status = responsesByUrlId?.responsesByUrlId;
-  // données des card/carousel
-  const table = [
-    "Graphiques multiples 1",
-    "Graphiques multiples 2",
-    "Graphiques multiples 3",
-  ];
 
   return (
     <Layout title="Read">
@@ -150,26 +152,109 @@ export default function CampaignDetail() {
           {/* *********************************************** */}
           {/* **************  CHARTS *************** */}
           {/* --------------------  Desktop  -------------------- */}
-          <section className="hidden md:block">
-            <div className="flex justify-center mt-5 gap-4">
-              {table.map((t, index) => (
-                <Card key={index} className="flex justify-center p-10">
-                  <CardContent className="p-0">{t}</CardContent>
-                </Card>
-              ))}
-            </div>
+          <section className="hidden 2xl:flex flex-row flex-wrap justify-around my-4">
+            <Card className="rounded-lg text-2xl w-[400px] h-[400px]">
+              <CardHeader>
+                <CardTitle>Global Campaign Responses</CardTitle>
+                <CardDescription>
+                  Status obtained from all URLs of this campaign
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="w-full h-[200px] md:h-[300px]">
+                <PieChart />
+              </CardContent>
+            </Card>
+            <Card className="flex flex-col justify-center rounded-lg text-2xl w-[600px] h-[400px]">
+              <CardHeader>
+                <CardTitle>Average Response Time</CardTitle>
+                <CardDescription>
+                  Average response time obtained from all URLs of this campaign
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="w-full h-[300px]">
+                <LineChart />
+              </CardContent>
+            </Card>
+            <Card className="flex flex-col justify-center rounded-lg text-2xl w-[400px] h-[400px]">
+              <CardHeader>
+                <CardTitle>Overview</CardTitle>
+              </CardHeader>
+              <CardContent className="w-full h-[300px] text-xs md:text-lg">
+                <div className="flex justify-between py-4">
+                  <p>Total number of URLs in this campaign :</p>
+                  <p className="text-green-500 font-bold">24</p>
+                </div>
+                <div className="flex justify-between py-4">
+                  <p>Number of tests per day :</p>
+                  <p className="text-green-500 font-bold">152</p>
+                </div>
+                <div className="flex justify-between py-4">
+                  <p>Average response time :</p>
+                  <p className="text-green-500 font-bold">352ms</p>
+                </div>
+                <div className="flex justify-between py-4">
+                  <p>Campaign creation date :</p>
+                  <p className="text-green-500 font-bold">27-05-2024</p>
+                </div>
+              </CardContent>
+            </Card>
           </section>
           {/* --------------------  Mobile  -------------------- */}
-          <section className="my-4 px-12 md:hidden">
+          <section className="my-4 px-12 2xl:hidden">
             <Carousel className="flex justify-center items-center">
               <CarouselContent>
-                {table.map((t, index) => (
-                  <CarouselItem key={index}>
-                    <Card className="flex justify-center p-10 rounded-lg text-2xl w-full">
-                      <CardContent>{t}</CardContent>
-                    </Card>
-                  </CarouselItem>
-                ))}
+                <CarouselItem className="flex justify-center items-center">
+                  <Card className="rounded-lg text-2xl w-full md:w-[600px]">
+                    <CardHeader>
+                      <CardTitle>Global Campaign Responses</CardTitle>
+                      <CardDescription>
+                        Status obtained from all URLs of this campaign
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="w-full h-[200px] md:h-[300px]">
+                      <PieChart />
+                    </CardContent>
+                  </Card>
+                </CarouselItem>
+                <CarouselItem>
+                  <Card className="flex flex-col justify-center rounded-lg text-2xl w-full">
+                    <CardHeader>
+                      <CardTitle>Average Response Time</CardTitle>
+                      <CardDescription>
+                        Average response time obtained from all URLs of this
+                        campaign
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="w-full h-[300px]">
+                      <LineChart />
+                    </CardContent>
+                  </Card>
+                </CarouselItem>
+                <CarouselItem className="flex justify-center items-center">
+                  <Card className="flex flex-col justify-center rounded-lg text-2xl w-full md:w-[600px]">
+                    <CardHeader>
+                      <CardTitle>Overview</CardTitle>
+                    </CardHeader>
+                    <CardContent className="w-full h-[300px] text-xs md:text-lg">
+                      <div className="flex justify-between py-4">
+                        <p>Total number of URLs in this campaign :</p>
+                        <p className="text-green-500 font-bold">24</p>
+                      </div>
+                      <div className="flex justify-between py-4">
+                        <p>Number of tests per day :</p>
+                        <p className="text-green-500 font-bold">152</p>
+                      </div>
+                      <div className="flex justify-between py-4">
+                        <p>Average response time :</p>
+                        <p className="text-green-500 font-bold">352ms</p>
+                      </div>
+                      <div className="flex justify-between py-4">
+                        <p>Campaign creation date :</p>
+                        <p className="text-green-500 font-bold">27-05-2024</p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </CarouselItem>
               </CarouselContent>
               <CarouselPrevious />
               <CarouselNext />
