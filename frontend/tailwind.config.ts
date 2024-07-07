@@ -26,8 +26,8 @@ const config = {
         xl: "1280px",
         // => @media (min-width: 1280px) { ... }
 
-        "2xl": "1536px",
-        // => @media (min-width: 1536px) { ... }
+        "2xl": "1468px",
+        // => @media (min-width: 1468px) { ... }
       },
     },
     extend: {
