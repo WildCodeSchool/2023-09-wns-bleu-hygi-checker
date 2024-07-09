@@ -1,5 +1,6 @@
 import { Campaign, UserProfile } from "./graphql";
 import { Dispatch, SetStateAction } from "react";
+import { DataItem } from "@/utils/chartFunction/countStatusCodes";
 
 export interface ConfirmationModalProps {
   isLargeButton: boolean;
@@ -47,4 +48,8 @@ export interface AddUrlToCampaignToastProps {
 
 export interface AddUrlToCampaignProps {
   campaignId: string;
+}
+
+export interface ChartSectionProps {
+  PieChartData: DataItem[] | undefined | null;
 }

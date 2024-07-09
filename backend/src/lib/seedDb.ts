@@ -197,42 +197,48 @@ async function seedDB() {
 
   const responses1_200 = Response.create({
     responseTime: 300,
-    statusCode: "200 OK",
+    statusCode: 200,
+    statusText: "200 OK",
     createdAt: dateInUTCPlus2.toISOString(),
     campaignUrl: { id: campaignUrl7.id },
   });
 
   const responses2_200 = Response.create({
     responseTime: 100,
-    statusCode: "200 OK",
+    statusCode: 200,
+    statusText: "200 OK",
     createdAt: dateInUTCPlus2.toISOString(),
     campaignUrl: { id: campaignUrl7.id },
   });
 
   const responses3_200 = Response.create({
     responseTime: 150,
-    statusCode: "200 OK",
+    statusText: "200 OK",
+    statusCode: 200,
     createdAt: dateInUTCPlus2.toISOString(),
     campaignUrl: { id: campaignUrl7.id },
   });
 
   const responses4_404 = Response.create({
     responseTime: 300,
-    statusCode: "404 Not Found",
+    statusCode: 404,
+    statusText: "404 Not Found",
     createdAt: dateInUTCPlus2.toISOString(),
     campaignUrl: { id: campaignUrl7.id },
   });
 
   const responses5_500 = Response.create({
     responseTime: 250,
-    statusCode: "500 Internal Server Error",
+    statusCode: 500,
+    statusText: "500 Internal Server Error",
     createdAt: dateInUTCPlus2.toISOString(),
     campaignUrl: { id: campaignUrl7.id },
   });
 
   const responses6_200 = Response.create({
     responseTime: 150,
-    statusCode: "200 OK",
+    statusCode: 200,
+    statusText: "200 OK",
     createdAt: dateInUTCPlus2.toISOString(),
     campaignUrl: { id: campaignUrl5.id },
   });

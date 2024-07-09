@@ -5,42 +5,48 @@ const ResponsivePie = dynamic(
   { ssr: false }
 );
 
+import { DataItem } from "@/utils/chartFunction/countStatusCodes";
+
+interface PieChartProps {
+  chartData: DataItem[];
+}
+
 // make sure parent container have a defined height when using
 // responsive component, otherwise height will be 0 and
 // no chart will be rendered.
 // website examples showcase many properties,
 // you'll often use just a few of them.
-const data = [
-  {
-    id: "200",
-    label: "200",
-    value: 315,
-    color: "hsl(113, 48%, 52%)",
-  },
-  {
-    id: "404",
-    label: "404",
-    value: 48,
-    color: "hsl(20, 100%, 48%)",
-  },
-  {
-    id: "500",
-    label: "500",
-    value: 35,
-    color: "hsl(0, 100%, 50%)",
-  },
-  {
-    id: "other",
-    label: "other",
-    value: 63,
-    color: "hsl(58, 76%, 55%)",
-  },
-];
+// const data = [
+//   {
+//     id: "200",
+//     label: "200",
+//     value: 315, // total number of response with statusCode : 200
+//     color: "hsl(113, 48%, 52%)",
+//   },
+//   {
+//     id: "404",
+//     label: "404",
+//     value: 48,
+//     color: "hsl(20, 100%, 48%)",
+//   },
+//   {
+//     id: "500",
+//     label: "500",
+//     value: 35,
+//     color: "hsl(0, 100%, 50%)",
+//   },
+//   {
+//     id: "other",
+//     label: "other",
+//     value: 63,
+//     color: "hsl(58, 76%, 55%)",
+//   },
+// ];
 
-const PieChart = () => (
+const PieChart = ({ chartData }: PieChartProps) => (
   <ResponsivePie
-    data={data}
-    margin={{ top: 40, right: 80, bottom: 20, left: 80 }}
+    data={chartData}
+    margin={{ top: 20, right: 80, bottom: 30, left: 80 }}
     innerRadius={0.5}
     padAngle={0.7}
     cornerRadius={3}

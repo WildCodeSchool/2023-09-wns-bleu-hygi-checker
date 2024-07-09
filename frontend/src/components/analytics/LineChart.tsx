@@ -118,7 +118,7 @@ const data = [
 const LineChart = () => (
   <ResponsiveLine
     data={data}
-    margin={{ top: 50, right: 15, bottom: 50, left: 50 }}
+    margin={{ top: 20, right: 15, bottom: 40, left: 50 }}
     colors={{ datum: "color" }}
     xScale={{ type: "point" }}
     yScale={{
@@ -149,7 +149,7 @@ const LineChart = () => (
       legendPosition: "middle",
       truncateTickAt: 0,
     }}
-    pointSize={20}
+    pointSize={8}
     pointColor={{ theme: "background" }}
     pointBorderWidth={8}
     pointBorderColor={{ from: "serieColor" }}
