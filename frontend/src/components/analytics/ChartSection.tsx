@@ -13,7 +13,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import PieChart from "@/components/analytics/PieChart";
-import LineChart from "@/components/analytics/LineChart";
+// import LineChart from "@/components/analytics/LineChart";
 
 import { ChartSectionProps } from "@/types/interfaces";
 
@@ -48,7 +48,7 @@ const ChartSection = ({ PieChartData }: ChartSectionProps) => {
             </CardDescription>
           </CardHeader>
           <CardContent className="w-full h-[300px]">
-            <LineChart />
+            {/* <LineChart /> */}
           </CardContent>
         </Card>
         <Card className="flex flex-col justify-center rounded-lg text-2xl w-[400px] h-[400px]">
@@ -108,7 +108,7 @@ const ChartSection = ({ PieChartData }: ChartSectionProps) => {
                   </CardDescription>
                 </CardHeader>
                 <CardContent className="w-full h-[300px]">
-                  <LineChart />
+                  {/* <LineChart /> */}
                 </CardContent>
               </Card>
             </CarouselItem>
