@@ -22,7 +22,11 @@ export default class Response extends BaseEntity {
 
   @Field({ nullable: true })
   @Column({ nullable: true })
-  statusCode: string;
+  statusCode: number;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  statusText: string;
 
   @Field()
   @CreateDateColumn({ type: "timestamp" })
@@ -39,7 +43,10 @@ export class InputCreateResponse {
   responseTime: number;
 
   @Field()
-  statusCode: string;
+  statusCode: number;
+
+  @Field()
+  statusText: string;
 
   @Field()
   campaignUrlId: number;

@@ -82,7 +82,8 @@ export type InputCreateResponse = {
   campaignId: Scalars["Float"]["input"];
   campaignUrlId: Scalars["Float"]["input"];
   responseTime: Scalars["Float"]["input"];
-  statusCode: Scalars["String"]["input"];
+  statusCode: Scalars["Float"]["input"];
+  statusText: Scalars["String"]["input"];
 };
 
 export type InputDeleteUrlToCampaign = {
@@ -271,7 +272,8 @@ export type Response = {
   createdAt: Scalars["DateTimeISO"]["output"];
   id: Scalars["Float"]["output"];
   responseTime?: Maybe<Scalars["Float"]["output"]>;
-  statusCode?: Maybe<Scalars["String"]["output"]>;
+  statusCode?: Maybe<Scalars["Float"]["output"]>;
+  statusText?: Maybe<Scalars["String"]["output"]>;
 };
 
 export type Test = {
@@ -544,7 +546,7 @@ export type LastDayResponsesOfOneUrlQuery = {
     __typename?: "Response";
     id: number;
     responseTime?: number | null;
-    statusCode?: string | null;
+    statusCode?: number | null;
     createdAt: Date;
     campaignUrl: { __typename?: "CampaignUrl"; id: number };
   }>;
@@ -588,11 +590,7 @@ export type ResponsesByCampaignUrlIdQuery = {
   __typename?: "Query";
   responsesByCampaignUrlId: Array<{
     __typename?: "Response";
-    id: number;
-    responseTime?: number | null;
-    statusCode?: string | null;
-    createdAt: Date;
-    campaignUrl: { __typename?: "CampaignUrl"; id: number };
+    statusCode?: number | null;
   }>;
 };
 
@@ -1871,13 +1869,7 @@ export type GetUserProfileQueryResult = Apollo.QueryResult<
 export const ResponsesByCampaignUrlIdDocument = gql`
   query ResponsesByCampaignUrlId($campaignId: Int!) {
     responsesByCampaignUrlId(campaignId: $campaignId) {
-      id
-      responseTime
       statusCode
-      createdAt
-      campaignUrl {
-        id
-      }
     }
   }
 `;
