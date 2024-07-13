@@ -2,7 +2,7 @@ import Response from "../entities/response.entity";
 import db from "./datasource";
 import getDateInUTCPlus2 from "../utils/getTimeUTC2";
 
-async function seedDB() {
+async function seedResponses() {
   await db.initialize();
 
   const dateInUTCPlus2 = getDateInUTCPlus2();
@@ -34,7 +34,7 @@ async function seedDB() {
       statusCode: randomStatusCode.code,
       statusText: randomStatusCode.text,
       createdAt: dateInUTCPlus2.toISOString(),
-      campaignUrl: { id: getRandomInt(1, 7) },
+      campaignUrl: { id: getRandomInt(1, 6) },
     });
     responses.push(response);
   }
@@ -64,4 +64,4 @@ function chooseStatusCode(
   return statusCodes[statusCodes.length - 1];
 }
 
-seedDB();
+seedResponses();

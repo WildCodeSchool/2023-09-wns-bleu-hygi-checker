@@ -31,7 +31,7 @@ export const formatResponseTime = (inputData: InputData[]): OutputData[] => {
       response.responseTime !== undefined
     ) {
       const date = new Date(response.createdAt);
-      const hours = date.getHours().toString().padStart(2, "0");
+      const hours = date.getUTCHours().toString().padStart(2, "0");
 
       const exists = outputData.data.some((entry) => entry.x === hours);
 

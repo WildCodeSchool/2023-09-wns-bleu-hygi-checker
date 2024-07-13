@@ -7,7 +7,6 @@ import CampaignUrl from "../entities/campaignUrl.entity";
 import argon2 from "argon2";
 import db from "./datasource";
 import { GENDER } from "../entities/user.entity";
-import getDateInUTCPlus2 from "../utils/getTimeUTC2";
 
 async function seedDB() {
   await db.initialize();
@@ -192,64 +191,31 @@ async function seedDB() {
     campaignUrl7,
   ]);
 
-  // Création des réponses pour chaque URL
-  const dateInUTCPlus2 = getDateInUTCPlus2();
+  // Création de réponses sur une journée pour une URL
+  function getRandomInt(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
 
-  const responses1_200 = Response.create({
-    responseTime: 300,
-    statusCode: 200,
-    statusText: "200 OK",
-    createdAt: dateInUTCPlus2.toISOString(),
-    campaignUrl: { id: campaignUrl7.id },
-  });
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, "0");
+  const day = String(today.getDate()).padStart(2, "0");
+  const formatedDate = `${year}-${month}-${day}`;
 
-  const responses2_200 = Response.create({
-    responseTime: 100,
-    statusCode: 200,
-    statusText: "200 OK",
-    createdAt: dateInUTCPlus2.toISOString(),
-    campaignUrl: { id: campaignUrl7.id },
-  });
+  const responses = [];
 
-  const responses3_200 = Response.create({
-    responseTime: 150,
-    statusText: "200 OK",
-    statusCode: 200,
-    createdAt: dateInUTCPlus2.toISOString(),
-    campaignUrl: { id: campaignUrl7.id },
-  });
+  for (let i = 0; i < 24; i++) {
+    const response = Response.create({
+      responseTime: getRandomInt(100, 600),
+      statusCode: 200,
+      statusText: "200 OK",
+      createdAt: `${formatedDate}T${i.toString().padStart(2, "0")}:30:00.855Z`,
+      campaignUrl: { id: 7 },
+    });
+    responses.push(response);
+  }
 
-  const responses4_404 = Response.create({
-    responseTime: 300,
-    statusCode: 404,
-    statusText: "404 Not Found",
-    createdAt: dateInUTCPlus2.toISOString(),
-    campaignUrl: { id: campaignUrl7.id },
-  });
-
-  const responses5_500 = Response.create({
-    responseTime: 250,
-    statusCode: 500,
-    statusText: "500 Internal Server Error",
-    createdAt: dateInUTCPlus2.toISOString(),
-    campaignUrl: { id: campaignUrl7.id },
-  });
-
-  const responses6_200 = Response.create({
-    responseTime: 150,
-    statusCode: 200,
-    statusText: "200 OK",
-    createdAt: dateInUTCPlus2.toISOString(),
-    campaignUrl: { id: campaignUrl5.id },
-  });
-  await Response.save([
-    responses1_200,
-    responses2_200,
-    responses3_200,
-    responses4_404,
-    responses5_500,
-    responses6_200,
-  ]);
+  await Response.save(responses);
 
   await db.destroy();
   console.info("Database reseeded successfully !");
