@@ -17,6 +17,15 @@ export default class CampaignUrlService {
     });
   }
 
+  async countUrlByCampaignId(campaignId: number) {
+    return this.db.count({
+      where: {
+        campaign: { id: campaignId },
+      },
+      relations: ["url", "campaign"],
+    });
+  }
+
   async findIfUrlIsInCampaign(
     urlId: number,
     campaignId: number

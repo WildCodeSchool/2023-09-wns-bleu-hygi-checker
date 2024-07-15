@@ -2,7 +2,6 @@ import Test from "../entities/test.entity";
 import User from "../entities/user.entity";
 import Campaign from "../entities/campaign.entity";
 import Url from "../entities/url.entity";
-import Response from "../entities/response.entity";
 import CampaignUrl from "../entities/campaignUrl.entity";
 import argon2 from "argon2";
 import db from "./datasource";
@@ -190,32 +189,6 @@ async function seedDB() {
     campaignUrl6,
     campaignUrl7,
   ]);
-
-  // Création de réponses sur une journée pour une URL
-  function getRandomInt(min: number, max: number) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
-
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, "0");
-  const day = String(today.getDate()).padStart(2, "0");
-  const formatedDate = `${year}-${month}-${day}`;
-
-  const responses = [];
-
-  for (let i = 0; i < 24; i++) {
-    const response = Response.create({
-      responseTime: getRandomInt(100, 600),
-      statusCode: 200,
-      statusText: "200 OK",
-      createdAt: `${formatedDate}T${i.toString().padStart(2, "0")}:30:00.855Z`,
-      campaignUrl: { id: 7 },
-    });
-    responses.push(response);
-  }
-
-  await Response.save(responses);
 
   await db.destroy();
   console.info("Database reseeded successfully !");

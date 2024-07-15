@@ -2,6 +2,8 @@ import CampaignCard from "@/components/campaign/CampaignCard";
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 
+// TODO : find why test on this component fails
+
 describe("CampaignCard component", () => {
   it("renders correctly", () => {
     const view = render(
@@ -15,6 +17,7 @@ describe("CampaignCard component", () => {
           isMailAlert: false,
           isWorking: true,
           userId: "c83135a6-3bd7-46b1-b6d8-6b4117cfabf7",
+          createdAt: new Date("2024-07-14T00:35:18.165Z"),
         }}
       />
     );

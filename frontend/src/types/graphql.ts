@@ -33,6 +33,7 @@ export type Scalars = {
 
 export type Campaign = {
   __typename?: "Campaign";
+  createdAt: Date;
   id: Scalars["Float"]["output"];
   image?: Maybe<Scalars["String"]["output"]>;
   intervalTest?: Maybe<Scalars["Float"]["output"]>;
@@ -56,6 +57,11 @@ export type CheckUrl = {
   responseTime: Scalars["Float"]["output"];
   status: Scalars["Float"]["output"];
   statusText: Scalars["String"]["output"];
+};
+
+export type CountResult = {
+  __typename?: "CountResult";
+  count: Scalars["Float"]["output"];
 };
 
 /** The gender of the user */
@@ -214,6 +220,7 @@ export type Query = {
   campaigns: Array<Campaign>;
   campaignsByUserId: Array<Campaign>;
   checkUrl: CheckUrl;
+  countUrlFromCampaign: CountResult;
   getAvatar: User;
   getUrlFromCampaign: Array<CampaignUrl>;
   getUserProfile: UserProfile;
@@ -236,6 +243,10 @@ export type QueryCampaignByIdArgs = {
 
 export type QueryCheckUrlArgs = {
   urlPath: Scalars["String"]["input"];
+};
+
+export type QueryCountUrlFromCampaignArgs = {
+  campaignId: Scalars["Float"]["input"];
 };
 
 export type QueryGetUrlFromCampaignArgs = {
@@ -517,6 +528,7 @@ export type CampaignByIdQuery = {
     isMailAlert?: boolean | null;
     isWorking?: boolean | null;
     userId: string;
+    createdAt: Date;
   } | null;
 };
 
@@ -533,6 +545,7 @@ export type CampaignsByUserIdQuery = {
     isMailAlert?: boolean | null;
     isWorking?: boolean | null;
     userId: string;
+    createdAt: Date;
   }>;
 };
 
@@ -1481,6 +1494,7 @@ export const CampaignByIdDocument = gql`
       isMailAlert
       isWorking
       userId
+      createdAt
     }
   }
 `;
@@ -1560,6 +1574,7 @@ export const CampaignsByUserIdDocument = gql`
       isMailAlert
       isWorking
       userId
+      createdAt
     }
   }
 `;

@@ -49,7 +49,7 @@ interface LineChartProps {
 const LineChart = ({ chartData }: LineChartProps) => (
   <ResponsiveLine
     data={chartData}
-    animate={false}
+    // animate={false} // uncomment to resolve the following problem :"react-spring_web.modern.mjs:58 Error: <g> attribute transform"
     margin={{ top: 20, right: 15, bottom: 40, left: 50 }}
     colors={{ datum: "color" }}
     xScale={{ type: "point" }}

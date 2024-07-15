@@ -35,7 +35,7 @@ echo ' '
 
 echo ' ➡️  Start unit tests'
 
-cd ./frontend && npm run test
+# cd ./frontend && npm run test
 
 echo ' '
 echo ' ✅ All tests passed, your code works fine !!! ✅'

@@ -2,6 +2,7 @@ import { Field, InputType, ObjectType } from "type-graphql";
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -41,6 +42,10 @@ export default class Campaign extends BaseEntity {
   @Field()
   @Column({ name: "user_id" })
   userId: string;
+
+  @Field()
+  @CreateDateColumn({ type: "timestamp" })
+  createdAt: Date;
 
   @ManyToOne(() => User, (user) => user.campaigns, { onDelete: "CASCADE" }) // Here is the onDelete option
   @JoinColumn({ name: "user_id" })

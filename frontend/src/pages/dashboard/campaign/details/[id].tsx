@@ -87,8 +87,13 @@ export default function CampaignDetail() {
             <div className="flex flex-col text-white md:flex-row justify-center items-center">
               <p className="font-bold text-xl md:text-2xl">{campaign?.name}</p>
 
-              <Badge variant="secondary" className="mt-1 ml-0 md:ml-4">
-                Active
+              <Badge
+                variant={
+                  campaign?.isWorking === true ? "secondary" : "destructive"
+                }
+                className="mt-1 ml-0 md:ml-4"
+              >
+                {campaign?.isWorking === true ? "Active" : "Stopped"}
               </Badge>
             </div>
             {/* **************  HEADER BUTTONS  *************** */}
@@ -113,9 +118,7 @@ export default function CampaignDetail() {
             </div>
           </div>
           {/* *********************************************** */}
-
-          {/* **************  RESPONSE TABLE *************** */}
-          {/* ----------------  Table Header  ------------- */}
+          {/* **************  MAIN DISPLAY *************** */}
           {urls && (
             <>
               <DesktopLayout urls={urls} />
@@ -126,7 +129,7 @@ export default function CampaignDetail() {
         </div>
       ) : (
         <div className="flex justify-center items-center h-full mt-4 flex-col gap-2 text-white">
-          <p className="text-center text-2xl font-bold">
+          <p className="text-center text-4xl font-bold">
             Campaign {id} unavailable.
           </p>
           <Button

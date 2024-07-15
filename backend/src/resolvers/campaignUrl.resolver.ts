@@ -2,6 +2,7 @@ import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import CampaignUrl, {
   InputAddUrlToCampaign,
   InputDeleteUrlToCampaign,
+  CountResult,
 } from "../entities/campaignUrl.entity";
 import CampaignUrlService from "../services/campaignUrl.service";
 import UrlService from "../services/url.service";
@@ -40,6 +41,30 @@ export default class CampaignUrlResolver {
     if (validation === true) {
       // if verification succeed
       return await this.campaignUrlService.getAllUrlByCampaignId(campaignId);
+    }
+  }
+
+  /** ------------------------------------------------------------------------------------------------------------------
+   * countUrlFromCampaign : Count all URLs associated with a campaign belonging to the currently logged in user
+   * @param ctx Context with user infos
+   * @param campaignId ID of the campaign
+   * @returns a number of count of all URL in this campaign.
+   */
+  @Query(() => CountResult)
+  async countUrlFromCampaign(
+    @Ctx() ctx: MyContext,
+    @Arg("campaignId") campaignId: number
+  ): Promise<CountResult | undefined> {
+    // ------------------------ VERIFICATION -----------------------
+    const validation = await this.accessChecker.verifyIfCampaignBelongToUser(
+      ctx,
+      campaignId
+    );
+    if (validation === true) {
+      // if verification succeed
+      const count =
+        await this.campaignUrlService.countUrlByCampaignId(campaignId);
+      return { count };
     }
   }
 
