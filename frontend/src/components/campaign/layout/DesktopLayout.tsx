@@ -163,13 +163,13 @@ export default function DesktopLayout({ urls }: DesktopLayoutProps) {
             {lastResponses && lastResponses.length > 0 ? (
               <div className="min-h-24 my-4 grid grid-cols-4 gap-2">
                 <div className="col-span-1 border-2 border-white flex flex-col justify-between items-center py-2 bg-slate-800 rounded-md">
-                  <p className="text-white font-bold">Latest Repsponse</p>
+                  <p className="text-white font-bold">Latest Response</p>
                   <p className="font-bold text-green-500 text-lg lg:text-2xl">
                     {lastResponses[lastResponses.length - 1].responseTime} ms
                   </p>
                 </div>
                 <div className="col-span-1 border-2 border-white flex flex-col justify-between items-center py-2 bg-slate-800 rounded-md">
-                  <p className="text-white font-bold">Avg Repsponse</p>
+                  <p className="text-white font-bold">Avg Response</p>
                   <p className="font-bold text-green-500 text-lg lg:text-2xl">
                     {averageTime} ms
                   </p>
@@ -193,14 +193,14 @@ export default function DesktopLayout({ urls }: DesktopLayoutProps) {
               </div>
             )}
             <div className="flex flex-col justify-center items-center">
-              {lineData !== null && lineData !== undefined && (
-                <div className="w-full h-[300px] p-4 bg-slate-200 my-4 rounded-md">
-                  <LineChart chartData={lineData} />
-                </div>
-              )}
               {pieData !== null && pieData !== undefined && (
                 <div className="w-full h-[300px] bg-slate-200 rounded-md">
                   <PieChart chartData={pieData} />
+                </div>
+              )}
+              {lineData !== null && lineData !== undefined && (
+                <div className="w-full h-[300px] p-4 bg-slate-200 my-4 rounded-md">
+                  <LineChart chartData={lineData} />
                 </div>
               )}
             </div>

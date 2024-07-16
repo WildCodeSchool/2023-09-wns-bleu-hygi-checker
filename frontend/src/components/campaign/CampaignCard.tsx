@@ -64,9 +64,10 @@ export default function CampaignCard({ data }: CampaignCardProps) {
       </CardContent>
       <CardFooter className="flex justify-between">
         <div>
-          <Badge>{count} urls</Badge>
-          <Badge className="ml-2">{testEachDay} tests / day</Badge>
+          <Badge>{count ?? 0} urls</Badge>
+          <Badge className="ml-2">{testEachDay ?? 0} tests / day</Badge>
         </div>
+
         <Link href={`/dashboard/campaign/details/${data.id}`}>
           <Button data-testid="watch-button" variant="outline">
             Voir
