@@ -25,7 +25,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Loader2, Plus } from "lucide-react";
-import { useAddUrlToCampaignMutation } from "@/types/graphql";
+import {
+  useAddUrlToCampaignMutation,
+  useGetUrlFromCampaignQuery,
+} from "@/types/graphql";
 import { AddUrlToCampaignProps } from "@/types/interfaces";
 
 // ****************************************************
@@ -48,6 +51,12 @@ export function UrlForm({ campaignId }: AddUrlToCampaignProps) {
   const [loading, setLoading] = useState(false); // to show the loader in the button
   const [openForm, setOpenForm] = useState(false); // to close the form after submit
 
+  const { refetch } = useGetUrlFromCampaignQuery({
+    variables: {
+      campaignId: typeof campaignId === "string" ? parseInt(campaignId) : 0,
+    },
+  });
+
   const [addUrlToCampaignMutation] = useAddUrlToCampaignMutation({
     onCompleted: (data) => {
       setTimeout(() => {
@@ -57,6 +66,7 @@ export function UrlForm({ campaignId }: AddUrlToCampaignProps) {
           title: `${data.addUrlToCampaign.message}`,
           variant: "success",
         });
+        refetch();
       }, 1000);
     },
     onError: (err) => {
