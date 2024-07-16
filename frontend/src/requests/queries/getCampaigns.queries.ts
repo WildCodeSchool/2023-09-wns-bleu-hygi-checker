@@ -10,6 +10,7 @@ export const GET_CAMPAIGNS = gql`
       isMailAlert
       isWorking
       userId
+      createdAt
     }
   }
 `;

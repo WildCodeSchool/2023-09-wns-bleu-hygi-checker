@@ -42,7 +42,7 @@ export default function UrlResponsesDetailChart({
   }, [lastResponses]);
 
   return (
-    <div className="w-full h-[300px] flex justify-center items-center">
+    <div className="w-full h-[300px] flex justify-center items-center rounded-md">
       {pieData !== undefined &&
       pieData !== null &&
       pieData?.length &&

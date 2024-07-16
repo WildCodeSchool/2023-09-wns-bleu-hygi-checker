@@ -53,3 +53,15 @@ export interface AddUrlToCampaignProps {
 export interface ChartSectionProps {
   PieChartData: DataItem[] | undefined | null;
 }
+
+export interface InputData {
+  __typename?: "Response" | undefined;
+  id: number | null | undefined;
+  responseTime?: number | null | undefined;
+  statusCode?: number | null | undefined;
+  createdAt?: Date | null | undefined;
+  campaignUrl: {
+    __typename?: "CampaignUrl" | undefined;
+    id: number;
+  };
+}

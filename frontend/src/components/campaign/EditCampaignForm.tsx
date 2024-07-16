@@ -6,8 +6,7 @@ import { z } from "zod";
 
 // import Image from "next/image";
 import { useToast } from "@/components/ui/use-toast";
-import { useRouter } from "next/router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   useCampaignByIdQuery,
   useModifyCampaignMutation,
@@ -72,7 +71,6 @@ const formSchema = z.object({
 });
 export function EditCampaignForm({ campaignId }: EditCampaignFormProps) {
   const { toast } = useToast();
-  const router = useRouter();
 
   const [fakeLoading, setFakeLoading] = useState(false);
   const [openForm, setOpenForm] = useState(false);
@@ -95,7 +93,7 @@ export function EditCampaignForm({ campaignId }: EditCampaignFormProps) {
           variant: "success",
         });
         refreshData();
-        router.reload(); // TODO : currently, the data in the form does not update after the modification when you reopen the form. For now, I'm using a router.reload but I need to find another solution
+        //  TODO : currently, the data in the form does not update after the modification when you reopen the form. For now, I'm using a router.reload but I need to find another solution
       }, 1000);
     },
     onError: () => {
@@ -117,6 +115,22 @@ export function EditCampaignForm({ campaignId }: EditCampaignFormProps) {
       isMailAlert: campaignData ? (campaignData.isMailAlert as boolean) : false,
     },
   });
+
+  const { reset } = form;
+
+  useEffect(() => {
+    if (campaignData) {
+      reset({
+        id: campaignData.id,
+        name: campaignData.name,
+        intervalTest: campaignData ? (campaignData.intervalTest as number) : 60,
+        isWorking: campaignData ? (campaignData.isWorking as boolean) : false,
+        isMailAlert: campaignData
+          ? (campaignData.isMailAlert as boolean)
+          : false,
+      });
+    }
+  }, [campaignData, reset]);
 
   // to reset form inputs when closing the dialog
   const handleCloseForm = () => {

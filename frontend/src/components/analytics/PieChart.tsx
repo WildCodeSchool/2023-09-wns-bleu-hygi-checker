@@ -52,7 +52,7 @@ const PieChart = ({ chartData }: PieChartProps) => (
     cornerRadius={3}
     activeOuterRadiusOffset={8}
     colors={{ datum: "data.color" }}
-    borderWidth={1}
+    borderWidth={4}
     borderColor={{
       from: "color",
       modifiers: [["darker", 0.2]],

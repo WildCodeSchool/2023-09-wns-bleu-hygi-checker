@@ -56,3 +56,9 @@ export class InputDeleteUrlToCampaign {
   @Field()
   campaignId: string;
 }
+
+@ObjectType()
+export class CountResult {
+  @Field()
+  count: number;
+}
