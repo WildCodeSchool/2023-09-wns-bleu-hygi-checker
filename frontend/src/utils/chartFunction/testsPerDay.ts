@@ -1,5 +1,5 @@
-export const testPerDay = (count: number, interval: number): number => {
+export const testPerDay = (urlCount: number, interval: number): number => {
   const countTestByhour = 60 / interval;
-  const testsByHour = countTestByhour * count;
+  const testsByHour = countTestByhour * urlCount;
   return Math.ceil(testsByHour * 24);
 };

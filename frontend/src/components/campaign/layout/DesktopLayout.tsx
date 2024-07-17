@@ -16,6 +16,7 @@ import QuickUrlTest from "@/components/check/QuickUrlTest";
 import { ConfirmationModal } from "@/components/ConfirmationModal";
 import PieChart from "@/components/analytics/PieChart";
 import LineChart from "@/components/analytics/LineChart";
+import StatusBar from "../StatusBar";
 import {
   countStatusCodes,
   DataItem,
@@ -24,11 +25,13 @@ import {
   formatResponseTime,
   OutputData,
 } from "@/utils/chartFunction/formatResponseTime";
+import { Campaign } from "@/types/graphql";
 import { calculateAverageResponseTime } from "@/utils/chartFunction/calculateAverageResponseTime ";
 import { calculateAvailability } from "@/utils/chartFunction/calculateAvailability";
 import { formatDate } from "@/utils/chartFunction/formatDate";
+import { testPerDay } from "@/utils/chartFunction/testsPerDay";
 
-export type Campaign = {
+export type Campaign2 = {
   __typename?: "Campaign";
   id: number;
   name?: string;
@@ -36,7 +39,7 @@ export type Campaign = {
 };
 export type CampaignUrl = {
   __typename?: "CampaignUrl";
-  campaign: Campaign;
+  campaign: Campaign2;
   createdAt: Date;
   id: number;
   url: Url;
@@ -44,9 +47,13 @@ export type CampaignUrl = {
 
 interface DesktopLayoutProps {
   urls: CampaignUrl[];
+  campaignData: Campaign;
 }
 //useLastDayResponsesOfOneUrlLazyQuery
-export default function DesktopLayout({ urls }: DesktopLayoutProps) {
+export default function DesktopLayout({
+  urls,
+  campaignData,
+}: DesktopLayoutProps) {
   const [selectedUrl, setSelectedUrl] = useState<string>("");
   const [selectedUrlId, setSelectedUrlId] = useState<number>(0);
   const [pieData, setPieData] = useState<DataItem[] | undefined | null>(null);
@@ -56,10 +63,23 @@ export default function DesktopLayout({ urls }: DesktopLayoutProps) {
   const [averageTime, setAverageTime] = useState<number | null>(null);
   const [availability, setAvailability] = useState<number | null>(null);
   const [urlCreatedAt, setUrlCreatedAt] = useState<string | null>(null);
+  const [campaignCreatedAt] = useState<string | null>(
+    formatDate(new Date(campaignData.createdAt))
+  );
 
   const handleSetUrl = (url: string, campainUrlId: number): void => {
-    setSelectedUrl(url);
-    setSelectedUrlId(campainUrlId);
+    if (selectedUrl === "") {
+      setSelectedUrl(url);
+      setSelectedUrlId(campainUrlId);
+    }
+    if (selectedUrl !== url) {
+      setSelectedUrl(url);
+      setSelectedUrlId(campainUrlId);
+    }
+    if (selectedUrl === url) {
+      setSelectedUrl("");
+      setSelectedUrlId(0);
+    }
   };
 
   const [getLastReponses, { data }] = useLastDayResponsesOfOneUrlLazyQuery();
@@ -74,15 +94,20 @@ export default function DesktopLayout({ urls }: DesktopLayoutProps) {
         },
       });
       if (lastResponses && lastResponses.length > 0) {
+        // Set PieData
         const chartData = countStatusCodes(lastResponses);
         setPieData(chartData);
+        // Set LineData
         const outputData = formatResponseTime(lastResponses);
         setLineData(outputData);
+        // Set average time for urls
         const calculatedAverageTime =
           calculateAverageResponseTime(lastResponses);
         setAverageTime(calculatedAverageTime);
+        // Set availability of url
         const calculatedAvailability = calculateAvailability(lastResponses);
         setAvailability(calculatedAvailability);
+        // Set creation date of url
         const urlDate = urls.find((url) => url.url.urlPath === selectedUrl);
         const createdAtDate = urlDate?.createdAt;
 
@@ -92,7 +117,14 @@ export default function DesktopLayout({ urls }: DesktopLayoutProps) {
         setUrlCreatedAt(formattedDate);
       }
     }
-  }, [getLastReponses, lastResponses, selectedUrl, selectedUrlId, urls]);
+  }, [
+    campaignData,
+    getLastReponses,
+    lastResponses,
+    selectedUrl,
+    selectedUrlId,
+    urls,
+  ]);
 
   const deleteURL = () => {
     // TODO : make the API call to delete this CampaignURL from this campaign
@@ -142,6 +174,7 @@ export default function DesktopLayout({ urls }: DesktopLayoutProps) {
                     <MoveUpRight className="ml-1 mt-1 h-4 w-4" />
                   </span>
                 </a>
+                <p className="text-gray-300">{urlCreatedAt}</p>
               </div>
               <div>
                 <QuickUrlTest urlPath={selectedUrl} onDropdown={false} />
@@ -160,10 +193,23 @@ export default function DesktopLayout({ urls }: DesktopLayoutProps) {
                 />
               </div>
             </div>
+            <div>
+              {lastResponses && lastResponses.length > 0 && (
+                <figure className="border-2 border-white rounded-md h-24 flex justify-start items-center pl-6 mt-2">
+                  <StatusBar data={lastResponses} />
+                </figure>
+              )}
+            </div>
             {lastResponses && lastResponses.length > 0 ? (
               <div className="min-h-24 my-4 grid grid-cols-4 gap-2">
                 <div className="col-span-1 border-2 border-white flex flex-col justify-between items-center py-2 bg-slate-800 rounded-md">
-                  <p className="text-white font-bold">Latest Response</p>
+                  <p className="text-white font-bold ">Last Status</p>
+                  <p className="font-bold text-green-500 text-lg lg:text-2xl">
+                    {lastResponses[lastResponses.length - 1].statusCode}
+                  </p>
+                </div>
+                <div className="col-span-1 border-2 border-white flex flex-col justify-between items-center py-2 bg-slate-800 rounded-md">
+                  <p className="text-white font-bold">Last Response</p>
                   <p className="font-bold text-green-500 text-lg lg:text-2xl">
                     {lastResponses[lastResponses.length - 1].responseTime} ms
                   </p>
@@ -178,12 +224,6 @@ export default function DesktopLayout({ urls }: DesktopLayoutProps) {
                   <p className="text-white font-bold">Uptime</p>
                   <p className="font-bold text-green-500 text-lg lg:text-2xl">
                     {availability} %
-                  </p>
-                </div>
-                <div className="col-span-1 border-2 border-white flex flex-col justify-between items-center py-2 bg-slate-800 rounded-md">
-                  <p className="text-white font-bold">Created At</p>
-                  <p className="font-bold text-green-500 text-lg lg:text-2xl">
-                    {urlCreatedAt}
                   </p>
                 </div>
               </div>
@@ -206,8 +246,44 @@ export default function DesktopLayout({ urls }: DesktopLayoutProps) {
             </div>
           </div>
         ) : (
-          <div className="flex justify-center items-center h-full text-white font-bold text-4xl">
-            <p>Please select an URL</p>
+          <div>
+            <h3 className="text-white font-bold text-4xl my-4 w-fit mx-auto">
+              Overview
+            </h3>
+            {campaignData && (
+              <div className="min-h-24 my-4 grid grid-cols-4 gap-2">
+                <div className="col-span-1 border-2 border-white flex flex-col justify-between items-center py-2 bg-slate-800 rounded-md">
+                  <p className="text-white font-bold text-lg lg:text-2xl">
+                    URL Count
+                  </p>
+                  <p className="font-bold text-green-500 text-lg lg:text-2xl">
+                    {urls.length ?? 0} urls
+                  </p>
+                </div>
+                <div className="col-span-1 border-2 border-white flex flex-col justify-between items-center py-2 bg-slate-800 rounded-md">
+                  <p className="text-white font-bold">Tests / Day</p>
+                  <p className="font-bold text-green-500 text-lg lg:text-2xl">
+                    {testPerDay(
+                      urls.length,
+                      campaignData.intervalTest as number
+                    )}{" "}
+                    tests
+                  </p>
+                </div>
+                <div className="col-span-1 border-2 border-white flex flex-col justify-between items-center py-2 bg-slate-800 rounded-md">
+                  <p className="text-white font-bold">Interval Test</p>
+                  <p className="font-bold text-green-500 text-lg lg:text-2xl">
+                    {campaignData.intervalTest} min
+                  </p>
+                </div>
+                <div className="col-span-1 border-2 border-white flex flex-col justify-between items-center py-2 bg-slate-800 rounded-md">
+                  <p className="text-white font-bold">Created At</p>
+                  <p className="font-bold text-green-500 text-lg lg:text-2xl">
+                    {campaignCreatedAt}
+                  </p>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

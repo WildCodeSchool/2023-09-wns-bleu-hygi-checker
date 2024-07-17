@@ -119,9 +119,9 @@ export default function CampaignDetail() {
           </div>
           {/* *********************************************** */}
           {/* **************  MAIN DISPLAY *************** */}
-          {urls && (
+          {urls && campaign && (
             <>
-              <DesktopLayout urls={urls} />
+              <DesktopLayout urls={urls} campaignData={campaign} />
               <MobileLayout urls={urls} />
             </>
           )}
