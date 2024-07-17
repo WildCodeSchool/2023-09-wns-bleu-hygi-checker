@@ -6,38 +6,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { FormatHoursAndMinutes } from "@/utils/chartFunction/FormatHoursAndMinutes";
+import { getStatusColor } from "@/utils/chartFunction/getColor";
 
 interface StatusBarProps {
   data: InputData[];
 }
 
 const StatusBar = ({ data }: StatusBarProps) => {
-  // Function to get color based on statusCode
-  const getColor = (
-    statusCode: number | null | undefined,
-    isBackground: boolean
-  ) => {
-    if (statusCode === 200) {
-      return `${isBackground === true ? "bg" : "text"}-green-500`;
-    }
-    if (statusCode === 404) {
-      return `${isBackground === true ? "bg" : "text"}-orange-500`;
-    }
-    if (statusCode === 500) {
-      return `${isBackground === true ? "bg" : "text"}-red-600`;
-    }
-    if (
-      statusCode !== null &&
-      statusCode !== undefined &&
-      statusCode !== 200 &&
-      statusCode !== 404 &&
-      statusCode !== 500
-    ) {
-      return `${isBackground === true ? "bg" : "text"}-yellow-400`;
-    }
-    return `${isBackground === true ? "bg" : "text"}-white`;
-  };
-
   // Fonction pour compléter les réponses jusqu'à 24 éléments
   const completeResponses = (responses: InputData[]): InputData[] => {
     const filledResponses = [...responses];
@@ -63,7 +38,7 @@ const StatusBar = ({ data }: StatusBarProps) => {
           <Tooltip key={response.id}>
             <TooltipTrigger asChild>
               <div
-                className={`${getColor(response.statusCode, true)} h-12 w-2 rounded-lg mx-1 my-2 transform transition-transform duration-200 hover:scale-110 lg:w-4`}
+                className={`${getStatusColor(response.statusCode, true)} h-12 w-2 rounded-lg mx-1 my-2 transform transition-transform duration-200 hover:scale-110 lg:w-4`}
               ></div>
             </TooltipTrigger>
             {response.createdAt !== null &&
@@ -82,7 +57,7 @@ const StatusBar = ({ data }: StatusBarProps) => {
                   <p>
                     Status :{" "}
                     <span
-                      className={`${getColor(response.statusCode, false)} font-bold`}
+                      className={`${getStatusColor(response.statusCode, false)} font-bold`}
                     >
                       {response.statusCode}
                     </span>

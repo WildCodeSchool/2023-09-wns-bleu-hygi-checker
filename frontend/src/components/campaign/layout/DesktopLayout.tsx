@@ -30,6 +30,11 @@ import { calculateAverageResponseTime } from "@/utils/chartFunction/calculateAve
 import { calculateAvailability } from "@/utils/chartFunction/calculateAvailability";
 import { formatDate } from "@/utils/chartFunction/formatDate";
 import { testPerDay } from "@/utils/chartFunction/testsPerDay";
+import {
+  getStatusColor,
+  getResponseColor,
+  getAvailabilityColor,
+} from "@/utils/chartFunction/getColor";
 
 export type Campaign2 = {
   __typename?: "Campaign";
@@ -204,25 +209,33 @@ export default function DesktopLayout({
               <div className="min-h-24 my-4 grid grid-cols-4 gap-2">
                 <div className="col-span-1 border-2 border-white flex flex-col justify-between items-center py-2 bg-slate-800 rounded-md">
                   <p className="text-white font-bold ">Last Status</p>
-                  <p className="font-bold text-green-500 text-lg lg:text-2xl">
-                    {lastResponses[lastResponses.length - 1].statusCode}
+                  <p
+                    className={`${getStatusColor(lastResponses[0].statusCode, false)} font-bold text-lg lg:text-2xl`}
+                  >
+                    {lastResponses[0].statusCode}
                   </p>
                 </div>
                 <div className="col-span-1 border-2 border-white flex flex-col justify-between items-center py-2 bg-slate-800 rounded-md">
                   <p className="text-white font-bold">Last Response</p>
-                  <p className="font-bold text-green-500 text-lg lg:text-2xl">
-                    {lastResponses[lastResponses.length - 1].responseTime} ms
+                  <p
+                    className={`${getResponseColor(lastResponses[0].responseTime)} font-bold text-lg lg:text-2xl`}
+                  >
+                    {lastResponses[0].responseTime} ms
                   </p>
                 </div>
                 <div className="col-span-1 border-2 border-white flex flex-col justify-between items-center py-2 bg-slate-800 rounded-md">
                   <p className="text-white font-bold">Avg Response</p>
-                  <p className="font-bold text-green-500 text-lg lg:text-2xl">
+                  <p
+                    className={`${getResponseColor(averageTime)} font-bold text-lg lg:text-2xl`}
+                  >
                     {averageTime} ms
                   </p>
                 </div>
                 <div className="col-span-1 border-2 border-white flex flex-col justify-between items-center py-2 bg-slate-800 rounded-md">
                   <p className="text-white font-bold">Uptime</p>
-                  <p className="font-bold text-green-500 text-lg lg:text-2xl">
+                  <p
+                    className={`${getAvailabilityColor(availability)} font-bold text-lg lg:text-2xl`}
+                  >
                     {availability} %
                   </p>
                 </div>
