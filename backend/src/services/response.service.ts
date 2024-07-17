@@ -58,6 +58,21 @@ export default class ResponseService {
     });
   }
 
+  async getResponsesByCampaignUrlIdByPage(
+    campaignId: number,
+    page: number,
+    pageSize: number
+  ): Promise<Response[]> {
+    const offset = (page - 1) * pageSize;
+
+    return this.db.find({
+      where: { campaignUrl: { campaign: { id: campaignId } } },
+      relations: ["campaignUrl"],
+      skip: offset,
+      take: pageSize,
+    });
+  }
+
   async createResponse({
     responseTime,
     statusCode,
