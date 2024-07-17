@@ -142,6 +142,39 @@ export default class ResponseResolver {
 
     return latestDayResponsesOfThisUrl;
   }
+  // -------------------------------------------------------------------------
+  /**
+   * responsesByCampaignUrlId : get paginated responses on all URLs belonging to a given campaign
+   * @param campaignId the ID of the campaign you want to get the responses from
+   * @param page the page number you want to retrieve
+   * @param pageSize the number of responses per page
+   * @returns an array of Responses
+   */
+  @Query(() => [Response])
+  async responsesByCampaignUrlIdByPage(
+    @Ctx() ctx: MyContext,
+    @Arg("campaignId", () => Int) campaignId: number,
+    @Arg("page", () => Int, { defaultValue: 1 }) page: number,
+    @Arg("pageSize", () => Int, { defaultValue: 10 }) pageSize: number
+  ): Promise<Response[]> {
+    // ------------------------ START VERIFICATION -----------------------
+    const validation = await this.accessChecker.verifyIfCampaignBelongToUser(
+      ctx,
+      campaignId
+    );
+
+    if (validation !== true) {
+      throw new Error("You can't perform this action");
+    }
+    // ------------------------ END VERIFICATION -----------------------
+
+    // Fetch the responses with pagination
+    return this.responseService.getResponsesByCampaignUrlIdByPage(
+      campaignId,
+      page,
+      pageSize
+    );
+  }
 
   // -------------------------------------------------------------------------
   /**
