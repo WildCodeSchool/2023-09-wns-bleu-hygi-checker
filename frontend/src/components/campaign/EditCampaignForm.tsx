@@ -158,7 +158,7 @@ export function EditCampaignForm({ campaignId }: EditCampaignFormProps) {
               <span className="hidden md:block">Edit campaign</span>
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className="sm:max-w-[425px] dialog-content max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>Edit this campaign</DialogTitle>
             </DialogHeader>
