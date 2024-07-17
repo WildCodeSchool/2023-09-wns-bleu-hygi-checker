@@ -157,23 +157,22 @@ export default class CampaignUrlResolver {
     @Ctx() ctx: MyContext,
     @Arg("infos") infos: InputDeleteUrlToCampaign
   ) {
-    const campaignId = parseInt(infos.campaignId);
-    const urlId = parseInt(infos.urlId);
-
+    // id de campaignUrl
+    const id = infos.id;
     const m = new Message();
 
     // ------------------------ START VERIFICATION -----------------------
-    const validation = await this.accessChecker.verifyIfCampaignBelongToUser(
+    const validation = await this.accessChecker.verifyIfUrlBelongToUserCampaign(
       ctx,
-      campaignId
+      id
     );
 
-    if (validation !== true) {
+    if (!validation) {
       throw new Error("You can't perform this action");
     }
     // ------------------------ END VERIFICATION -----------------------
 
-    await this.campaignUrlService.removeUrlFromCampaign(urlId, campaignId);
+    await this.campaignUrlService.removeUrlFromCampaign(id);
     // TODO : verifiy that the url that was just deleted is present in someone's campaign.
     // If so, do nothing. If not, delete this url from the url table
 
