@@ -59,14 +59,14 @@ export default class ResponseService {
   }
 
   async getResponsesByCampaignUrlIdByPage(
-    campaignId: number,
+    campaignUrlId: number,
     page: number,
     pageSize: number
   ): Promise<Response[]> {
     const offset = (page - 1) * pageSize;
 
     return this.db.find({
-      where: { campaignUrl: { campaign: { id: campaignId } } },
+      where: { campaignUrl: { id: campaignUrlId } },
       relations: ["campaignUrl"],
       skip: offset,
       take: pageSize,
