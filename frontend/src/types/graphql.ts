@@ -93,8 +93,7 @@ export type InputCreateResponse = {
 };
 
 export type InputDeleteUrlToCampaign = {
-  campaignId: Scalars["String"]["input"];
-  urlId: Scalars["String"]["input"];
+  id: Scalars["Float"]["input"];
 };
 
 export type InputEditCampaign = {

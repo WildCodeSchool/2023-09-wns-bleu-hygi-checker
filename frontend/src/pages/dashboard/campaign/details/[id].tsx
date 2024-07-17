@@ -67,12 +67,13 @@ export default function CampaignDetail() {
   });
 
   // ******************* GET ALL URLs ************************
-  const { data: getUrlFromCampaign } = useGetUrlFromCampaignQuery({
-    variables: {
-      campaignId: typeof id === "string" ? parseInt(id) : 0,
-    },
-    skip: typeof id === "undefined",
-  });
+  const { data: getUrlFromCampaign, refetch: refetchUrl } =
+    useGetUrlFromCampaignQuery({
+      variables: {
+        campaignId: typeof id === "string" ? parseInt(id) : 0,
+      },
+      skip: typeof id === "undefined",
+    });
   const urls = getUrlFromCampaign?.getUrlFromCampaign;
 
   return (
@@ -121,7 +122,11 @@ export default function CampaignDetail() {
           {/* **************  MAIN DISPLAY *************** */}
           {urls && campaign && (
             <>
-              <DesktopLayout urls={urls} campaignData={campaign} />
+              <DesktopLayout
+                urls={urls}
+                campaignData={campaign}
+                refetch={refetchUrl}
+              />
               <MobileLayout urls={urls} />
             </>
           )}

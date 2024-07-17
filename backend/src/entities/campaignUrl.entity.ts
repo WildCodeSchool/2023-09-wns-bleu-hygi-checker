@@ -51,10 +51,7 @@ export class InputAddUrlToCampaign {
 @InputType()
 export class InputDeleteUrlToCampaign {
   @Field()
-  urlId: string;
-
-  @Field()
-  campaignId: string;
+  id: number;
 }
 
 @ObjectType()

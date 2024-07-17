@@ -93,7 +93,7 @@ export default class AccessCheckResolver {
         (element: CampaignIds) => element.id === campaignUrl?.campaign.id
       );
       if (!isUserOwnThisCampaign) {
-        throw new Error("You can't perform this action");
+        throw new Error(`You can't perform this action ${campaignUrlId}`);
       }
       return true;
     } else {
