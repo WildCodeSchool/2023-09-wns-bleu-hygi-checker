@@ -153,14 +153,14 @@ export default class ResponseResolver {
   @Query(() => [Response])
   async responsesByCampaignUrlIdByPage(
     @Ctx() ctx: MyContext,
-    @Arg("campaignId", () => Int) campaignId: number,
+    @Arg("campaignUrlId", () => Int) campaignUrlId: number,
     @Arg("page", () => Int, { defaultValue: 1 }) page: number,
     @Arg("pageSize", () => Int, { defaultValue: 10 }) pageSize: number
   ): Promise<Response[]> {
     // ------------------------ START VERIFICATION -----------------------
     const validation = await this.accessChecker.verifyIfCampaignBelongToUser(
       ctx,
-      campaignId
+      campaignUrlId
     );
 
     if (validation !== true) {
@@ -170,7 +170,7 @@ export default class ResponseResolver {
 
     // Fetch the responses with pagination
     return this.responseService.getResponsesByCampaignUrlIdByPage(
-      campaignId,
+      campaignUrlId,
       page,
       pageSize
     );
