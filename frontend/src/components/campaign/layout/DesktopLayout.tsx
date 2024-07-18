@@ -17,6 +17,7 @@ import { ConfirmationModal } from "@/components/ConfirmationModal";
 import PieChart from "@/components/analytics/PieChart";
 import LineChart from "@/components/analytics/LineChart";
 import StatusBar from "../StatusBar";
+import PaginatedResponses from "../PaginatedResponses";
 import {
   countStatusCodes,
   DataItem,
@@ -36,7 +37,7 @@ import {
   getAvailabilityColor,
 } from "@/utils/chartFunction/getColor";
 
-export type Campaign2 = {
+export type CampaignMini = {
   __typename?: "Campaign";
   id: number;
   name?: string;
@@ -44,7 +45,7 @@ export type Campaign2 = {
 };
 export type CampaignUrl = {
   __typename?: "CampaignUrl";
-  campaign: Campaign2;
+  campaign: CampaignMini;
   createdAt: Date;
   id: number;
   url: Url;
@@ -54,7 +55,6 @@ interface DesktopLayoutProps {
   urls: CampaignUrl[];
   campaignData: Campaign;
 }
-//useLastDayResponsesOfOneUrlLazyQuery
 export default function DesktopLayout({
   urls,
   campaignData,
@@ -138,21 +138,32 @@ export default function DesktopLayout({
   return (
     <section className="hidden md:grid grid-cols-3 gap-6 h-[98%] mt-6">
       {/* ---------------------  START LEFT BLOC : URL TABLE ------------------------*/}
-      <div className="col-span-1 bg-slate-300 rounded-md  overflow-auto">
+      <div className="col-span-1 border-2 border-slate-200 bg-slate-200 rounded-md overflow-auto">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>URLs</TableHead>
+              <TableHead className="text-primary border-b-2 border-gray-500 font-bold text-center">
+                URLs
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {urls.map((url) => (
               <TableRow key={url.id}>
                 <TableCell
-                  onClick={() => handleSetUrl(url.url.urlPath, url.id)}
-                  className={`font-medium cursor-pointer ${selectedUrl === url.url.urlPath ? "bg-green-500" : ""}`}
+                  className={`p-0 flex justify-between items-center font-medium cursor-pointer text-black ${selectedUrl === url.url.urlPath ? "bg-primary text-white" : ""} hover:${selectedUrl === url.url.urlPath ? "" : "bg-slate-300 hover:text-black"}`}
                 >
-                  {url.url.urlPath}
+                  <button
+                    onClick={() => handleSetUrl(url.url.urlPath, url.id)}
+                    className={`h-[50px] px-4 w-full flex justify-between items-center font-medium cursor-pointer text-black ${selectedUrl === url.url.urlPath ? "bg-primary text-white" : ""} hover:${selectedUrl === url.url.urlPath ? "" : "bg-slate-300 hover:text-black"}`}
+                  >
+                    {url.url.urlPath}
+                  </button>
+                  <QuickUrlTest
+                    urlPath={url.url.urlPath}
+                    onDropdown={false}
+                    iconOnly={true}
+                  />
                 </TableCell>
               </TableRow>
             ))}
@@ -161,7 +172,7 @@ export default function DesktopLayout({
       </div>
       {/* ---------------------  END LEFT BLOC : URL TABLE ------------------------*/}
       {/* ---------------------  START RIGHT BLOC : URL TABLE ------------------------*/}
-      <div className="col-span-2 p-4 bg-slate-600 rounded-md overflow-auto">
+      <div className="col-span-2 p-4 border-2 border-white rounded-md overflow-auto">
         {selectedUrl !== "" ? (
           <div>
             <div className="flex justify-between items-center">
@@ -182,7 +193,11 @@ export default function DesktopLayout({
                 <p className="text-gray-300">{urlCreatedAt}</p>
               </div>
               <div>
-                <QuickUrlTest urlPath={selectedUrl} onDropdown={false} />
+                <QuickUrlTest
+                  urlPath={selectedUrl}
+                  onDropdown={false}
+                  iconOnly={false}
+                />
                 <ConfirmationModal
                   isLargeButton={false}
                   forDelete={true}
@@ -200,7 +215,7 @@ export default function DesktopLayout({
             </div>
             <div>
               {lastResponses && lastResponses.length > 0 && (
-                <figure className="border-2 border-white rounded-md h-24 flex justify-start items-center pl-6 mt-2">
+                <figure className="border-2 border-white bg-slate-800 rounded-md h-24 flex justify-start items-center pl-6 mt-2">
                   <StatusBar data={lastResponses} />
                 </figure>
               )}
@@ -256,11 +271,16 @@ export default function DesktopLayout({
                   <LineChart chartData={lineData} />
                 </div>
               )}
+              {selectedUrlId !== null &&
+                selectedUrlId !== undefined &&
+                selectedUrlId !== 0 && (
+                  <PaginatedResponses campaignUrlId={selectedUrlId} />
+                )}
             </div>
           </div>
         ) : (
           <div>
-            <h3 className="text-white font-bold text-4xl my-4 w-fit mx-auto">
+            <h3 className="text-white font-bold text-4xl my-12 w-fit mx-auto">
               Overview
             </h3>
             {campaignData && (

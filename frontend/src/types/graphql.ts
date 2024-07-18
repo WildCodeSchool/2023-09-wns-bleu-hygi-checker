@@ -59,6 +59,11 @@ export type CheckUrl = {
   statusText: Scalars["String"]["output"];
 };
 
+export type CountResponses = {
+  __typename?: "CountResponses";
+  count: Scalars["Float"]["output"];
+};
+
 export type CountResult = {
   __typename?: "CountResult";
   count: Scalars["Float"]["output"];
@@ -220,6 +225,7 @@ export type Query = {
   campaigns: Array<Campaign>;
   campaignsByUserId: Array<Campaign>;
   checkUrl: CheckUrl;
+  countResponsesByCampaignUrlId: CountResponses;
   countUrlFromCampaign: CountResult;
   getAvatar: User;
   getUrlFromCampaign: Array<CampaignUrl>;
@@ -231,6 +237,7 @@ export type Query = {
   response?: Maybe<Response>;
   responses: Array<Response>;
   responsesByCampaignUrlId: Array<Response>;
+  responsesByCampaignUrlIdByPage: Array<Response>;
   tests: Array<Test>;
   url?: Maybe<Url>;
   urls: Array<Url>;
@@ -243,6 +250,10 @@ export type QueryCampaignByIdArgs = {
 
 export type QueryCheckUrlArgs = {
   urlPath: Scalars["String"]["input"];
+};
+
+export type QueryCountResponsesByCampaignUrlIdArgs = {
+  campaignUrlId: Scalars["Int"]["input"];
 };
 
 export type QueryCountUrlFromCampaignArgs = {
@@ -271,6 +282,12 @@ export type QueryResponseArgs = {
 
 export type QueryResponsesByCampaignUrlIdArgs = {
   campaignId: Scalars["Int"]["input"];
+};
+
+export type QueryResponsesByCampaignUrlIdByPageArgs = {
+  campaignUrlId: Scalars["Int"]["input"];
+  page?: Scalars["Int"]["input"];
+  pageSize?: Scalars["Int"]["input"];
 };
 
 export type QueryUrlArgs = {
@@ -506,6 +523,27 @@ export type CheckUrlQuery = {
   };
 };
 
+export type CountResponsesByCampaignUrlIdQueryVariables = Exact<{
+  campaignUrlId: Scalars["Int"]["input"];
+}>;
+
+export type CountResponsesByCampaignUrlIdQuery = {
+  __typename?: "Query";
+  countResponsesByCampaignUrlId: {
+    __typename?: "CountResponses";
+    count: number;
+  };
+};
+
+export type CountUrlFromCampaignQueryVariables = Exact<{
+  campaignId: Scalars["Float"]["input"];
+}>;
+
+export type CountUrlFromCampaignQuery = {
+  __typename?: "Query";
+  countUrlFromCampaign: { __typename?: "CountResult"; count: number };
+};
+
 export type GetAvatarQueryVariables = Exact<{ [key: string]: never }>;
 
 export type GetAvatarQuery = {
@@ -562,6 +600,24 @@ export type LastDayResponsesOfOneUrlQuery = {
     statusCode?: number | null;
     createdAt: Date;
     campaignUrl: { __typename?: "CampaignUrl"; id: number };
+  }>;
+};
+
+export type ResponsesByCampaignUrlIdByPageQueryVariables = Exact<{
+  pageSize: Scalars["Int"]["input"];
+  page: Scalars["Int"]["input"];
+  campaignUrlId: Scalars["Int"]["input"];
+}>;
+
+export type ResponsesByCampaignUrlIdByPageQuery = {
+  __typename?: "Query";
+  responsesByCampaignUrlIdByPage: Array<{
+    __typename?: "Response";
+    id: number;
+    responseTime?: number | null;
+    statusCode?: number | null;
+    statusText?: string | null;
+    createdAt: Date;
   }>;
 };
 
@@ -1417,6 +1473,152 @@ export type CheckUrlQueryResult = Apollo.QueryResult<
   CheckUrlQuery,
   CheckUrlQueryVariables
 >;
+export const CountResponsesByCampaignUrlIdDocument = gql`
+  query CountResponsesByCampaignUrlId($campaignUrlId: Int!) {
+    countResponsesByCampaignUrlId(campaignUrlId: $campaignUrlId) {
+      count
+    }
+  }
+`;
+
+/**
+ * __useCountResponsesByCampaignUrlIdQuery__
+ *
+ * To run a query within a React component, call `useCountResponsesByCampaignUrlIdQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCountResponsesByCampaignUrlIdQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCountResponsesByCampaignUrlIdQuery({
+ *   variables: {
+ *      campaignUrlId: // value for 'campaignUrlId'
+ *   },
+ * });
+ */
+export function useCountResponsesByCampaignUrlIdQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    CountResponsesByCampaignUrlIdQuery,
+    CountResponsesByCampaignUrlIdQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    CountResponsesByCampaignUrlIdQuery,
+    CountResponsesByCampaignUrlIdQueryVariables
+  >(CountResponsesByCampaignUrlIdDocument, options);
+}
+export function useCountResponsesByCampaignUrlIdLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    CountResponsesByCampaignUrlIdQuery,
+    CountResponsesByCampaignUrlIdQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    CountResponsesByCampaignUrlIdQuery,
+    CountResponsesByCampaignUrlIdQueryVariables
+  >(CountResponsesByCampaignUrlIdDocument, options);
+}
+export function useCountResponsesByCampaignUrlIdSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    CountResponsesByCampaignUrlIdQuery,
+    CountResponsesByCampaignUrlIdQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    CountResponsesByCampaignUrlIdQuery,
+    CountResponsesByCampaignUrlIdQueryVariables
+  >(CountResponsesByCampaignUrlIdDocument, options);
+}
+export type CountResponsesByCampaignUrlIdQueryHookResult = ReturnType<
+  typeof useCountResponsesByCampaignUrlIdQuery
+>;
+export type CountResponsesByCampaignUrlIdLazyQueryHookResult = ReturnType<
+  typeof useCountResponsesByCampaignUrlIdLazyQuery
+>;
+export type CountResponsesByCampaignUrlIdSuspenseQueryHookResult = ReturnType<
+  typeof useCountResponsesByCampaignUrlIdSuspenseQuery
+>;
+export type CountResponsesByCampaignUrlIdQueryResult = Apollo.QueryResult<
+  CountResponsesByCampaignUrlIdQuery,
+  CountResponsesByCampaignUrlIdQueryVariables
+>;
+export const CountUrlFromCampaignDocument = gql`
+  query CountUrlFromCampaign($campaignId: Float!) {
+    countUrlFromCampaign(campaignId: $campaignId) {
+      count
+    }
+  }
+`;
+
+/**
+ * __useCountUrlFromCampaignQuery__
+ *
+ * To run a query within a React component, call `useCountUrlFromCampaignQuery` and pass it any options that fit your needs.
+ * When your component renders, `useCountUrlFromCampaignQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useCountUrlFromCampaignQuery({
+ *   variables: {
+ *      campaignId: // value for 'campaignId'
+ *   },
+ * });
+ */
+export function useCountUrlFromCampaignQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    CountUrlFromCampaignQuery,
+    CountUrlFromCampaignQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    CountUrlFromCampaignQuery,
+    CountUrlFromCampaignQueryVariables
+  >(CountUrlFromCampaignDocument, options);
+}
+export function useCountUrlFromCampaignLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    CountUrlFromCampaignQuery,
+    CountUrlFromCampaignQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    CountUrlFromCampaignQuery,
+    CountUrlFromCampaignQueryVariables
+  >(CountUrlFromCampaignDocument, options);
+}
+export function useCountUrlFromCampaignSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    CountUrlFromCampaignQuery,
+    CountUrlFromCampaignQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    CountUrlFromCampaignQuery,
+    CountUrlFromCampaignQueryVariables
+  >(CountUrlFromCampaignDocument, options);
+}
+export type CountUrlFromCampaignQueryHookResult = ReturnType<
+  typeof useCountUrlFromCampaignQuery
+>;
+export type CountUrlFromCampaignLazyQueryHookResult = ReturnType<
+  typeof useCountUrlFromCampaignLazyQuery
+>;
+export type CountUrlFromCampaignSuspenseQueryHookResult = ReturnType<
+  typeof useCountUrlFromCampaignSuspenseQuery
+>;
+export type CountUrlFromCampaignQueryResult = Apollo.QueryResult<
+  CountUrlFromCampaignQuery,
+  CountUrlFromCampaignQueryVariables
+>;
 export const GetAvatarDocument = gql`
   query GetAvatar {
     getAvatar {
@@ -1721,6 +1923,93 @@ export type LastDayResponsesOfOneUrlSuspenseQueryHookResult = ReturnType<
 export type LastDayResponsesOfOneUrlQueryResult = Apollo.QueryResult<
   LastDayResponsesOfOneUrlQuery,
   LastDayResponsesOfOneUrlQueryVariables
+>;
+export const ResponsesByCampaignUrlIdByPageDocument = gql`
+  query ResponsesByCampaignUrlIdByPage(
+    $pageSize: Int!
+    $page: Int!
+    $campaignUrlId: Int!
+  ) {
+    responsesByCampaignUrlIdByPage(
+      pageSize: $pageSize
+      page: $page
+      campaignUrlId: $campaignUrlId
+    ) {
+      id
+      responseTime
+      statusCode
+      statusText
+      createdAt
+    }
+  }
+`;
+
+/**
+ * __useResponsesByCampaignUrlIdByPageQuery__
+ *
+ * To run a query within a React component, call `useResponsesByCampaignUrlIdByPageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useResponsesByCampaignUrlIdByPageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useResponsesByCampaignUrlIdByPageQuery({
+ *   variables: {
+ *      pageSize: // value for 'pageSize'
+ *      page: // value for 'page'
+ *      campaignUrlId: // value for 'campaignUrlId'
+ *   },
+ * });
+ */
+export function useResponsesByCampaignUrlIdByPageQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    ResponsesByCampaignUrlIdByPageQuery,
+    ResponsesByCampaignUrlIdByPageQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    ResponsesByCampaignUrlIdByPageQuery,
+    ResponsesByCampaignUrlIdByPageQueryVariables
+  >(ResponsesByCampaignUrlIdByPageDocument, options);
+}
+export function useResponsesByCampaignUrlIdByPageLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ResponsesByCampaignUrlIdByPageQuery,
+    ResponsesByCampaignUrlIdByPageQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    ResponsesByCampaignUrlIdByPageQuery,
+    ResponsesByCampaignUrlIdByPageQueryVariables
+  >(ResponsesByCampaignUrlIdByPageDocument, options);
+}
+export function useResponsesByCampaignUrlIdByPageSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    ResponsesByCampaignUrlIdByPageQuery,
+    ResponsesByCampaignUrlIdByPageQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    ResponsesByCampaignUrlIdByPageQuery,
+    ResponsesByCampaignUrlIdByPageQueryVariables
+  >(ResponsesByCampaignUrlIdByPageDocument, options);
+}
+export type ResponsesByCampaignUrlIdByPageQueryHookResult = ReturnType<
+  typeof useResponsesByCampaignUrlIdByPageQuery
+>;
+export type ResponsesByCampaignUrlIdByPageLazyQueryHookResult = ReturnType<
+  typeof useResponsesByCampaignUrlIdByPageLazyQuery
+>;
+export type ResponsesByCampaignUrlIdByPageSuspenseQueryHookResult = ReturnType<
+  typeof useResponsesByCampaignUrlIdByPageSuspenseQuery
+>;
+export type ResponsesByCampaignUrlIdByPageQueryResult = Apollo.QueryResult<
+  ResponsesByCampaignUrlIdByPageQuery,
+  ResponsesByCampaignUrlIdByPageQueryVariables
 >;
 export const GetUrlFromCampaignDocument = gql`
   query GetUrlFromCampaign($campaignId: Float!) {

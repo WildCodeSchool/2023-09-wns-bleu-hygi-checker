@@ -55,6 +55,7 @@ export default class ResponseService {
       order: {
         createdAt: "DESC",
       },
+      take: 24,
     });
   }
 
@@ -70,6 +71,13 @@ export default class ResponseService {
       relations: ["campaignUrl"],
       skip: offset,
       take: pageSize,
+    });
+  }
+
+  async countResponsesByCampaignUrlId(campaignUrlId: number): Promise<number> {
+    return this.db.count({
+      where: { campaignUrl: { id: campaignUrlId } },
+      relations: ["campaignUrl"],
     });
   }
 

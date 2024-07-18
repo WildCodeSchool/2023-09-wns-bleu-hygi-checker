@@ -43,7 +43,7 @@ export function ChangeImageForm({
           title: `${data.modifyImageOfCampaign.message}`,
           variant: "success",
         });
-      }, 1000);
+      }, 500);
     },
     onError: (err) => {
       setLoading(false);
@@ -117,7 +117,7 @@ export function ChangeImageForm({
           <Button
             onClick={handleSubmit}
             variant={"outline"}
-            disabled={loading === true}
+            disabled={imageToSet === imageSrc}
           >
             {loading === true && (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
