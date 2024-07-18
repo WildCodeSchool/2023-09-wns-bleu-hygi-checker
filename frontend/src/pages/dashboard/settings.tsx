@@ -19,13 +19,11 @@ export default function Settings() {
       ) : (
         <>
           {/* ---DESKTOP--- */}
-          <div className="hidden xl:flex items-center h-full">
-            <div className="w-full">
-              <div className="flex justify-evenly">
-                <Account data={user} />
-                <Profile data={user} />
-                <Appearance data={user} />
-              </div>
+          <div className="hidden xl:flex items-center justify-center h-full">
+            <div className="flex bg-white rounded-md">
+              <Account data={user} />
+              <Profile data={user} />
+              <Appearance data={user} />
             </div>
           </div>
 
