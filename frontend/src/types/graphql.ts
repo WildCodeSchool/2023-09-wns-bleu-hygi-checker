@@ -33,7 +33,7 @@ export type Scalars = {
 
 export type Campaign = {
   __typename?: "Campaign";
-  createdAt: Date;
+  createdAt: Scalars["DateTimeISO"]["output"];
   id: Scalars["Float"]["output"];
   image?: Maybe<Scalars["String"]["output"]>;
   intervalTest?: Maybe<Scalars["Float"]["output"]>;
@@ -93,8 +93,7 @@ export type InputCreateResponse = {
 };
 
 export type InputDeleteUrlToCampaign = {
-  campaignId: Scalars["String"]["input"];
-  urlId: Scalars["String"]["input"];
+  id: Scalars["Float"]["input"];
 };
 
 export type InputEditCampaign = {
@@ -432,6 +431,19 @@ export type DeleteCampaignMutationVariables = Exact<{
 export type DeleteCampaignMutation = {
   __typename?: "Mutation";
   deleteCampaign: { __typename?: "Message"; message: string; success: boolean };
+};
+
+export type DeleteUrlFromCampaignMutationVariables = Exact<{
+  infos: InputDeleteUrlToCampaign;
+}>;
+
+export type DeleteUrlFromCampaignMutation = {
+  __typename?: "Mutation";
+  deleteUrlFromCampaign: {
+    __typename?: "Message";
+    success: boolean;
+    message: string;
+  };
 };
 
 export type ModifyCampaignMutationVariables = Exact<{
@@ -1020,6 +1032,57 @@ export type DeleteCampaignMutationResult =
 export type DeleteCampaignMutationOptions = Apollo.BaseMutationOptions<
   DeleteCampaignMutation,
   DeleteCampaignMutationVariables
+>;
+export const DeleteUrlFromCampaignDocument = gql`
+  mutation DeleteUrlFromCampaign($infos: InputDeleteUrlToCampaign!) {
+    deleteUrlFromCampaign(infos: $infos) {
+      success
+      message
+    }
+  }
+`;
+export type DeleteUrlFromCampaignMutationFn = Apollo.MutationFunction<
+  DeleteUrlFromCampaignMutation,
+  DeleteUrlFromCampaignMutationVariables
+>;
+
+/**
+ * __useDeleteUrlFromCampaignMutation__
+ *
+ * To run a mutation, you first call `useDeleteUrlFromCampaignMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteUrlFromCampaignMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteUrlFromCampaignMutation, { data, loading, error }] = useDeleteUrlFromCampaignMutation({
+ *   variables: {
+ *      infos: // value for 'infos'
+ *   },
+ * });
+ */
+export function useDeleteUrlFromCampaignMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteUrlFromCampaignMutation,
+    DeleteUrlFromCampaignMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteUrlFromCampaignMutation,
+    DeleteUrlFromCampaignMutationVariables
+  >(DeleteUrlFromCampaignDocument, options);
+}
+export type DeleteUrlFromCampaignMutationHookResult = ReturnType<
+  typeof useDeleteUrlFromCampaignMutation
+>;
+export type DeleteUrlFromCampaignMutationResult =
+  Apollo.MutationResult<DeleteUrlFromCampaignMutation>;
+export type DeleteUrlFromCampaignMutationOptions = Apollo.BaseMutationOptions<
+  DeleteUrlFromCampaignMutation,
+  DeleteUrlFromCampaignMutationVariables
 >;
 export const ModifyCampaignDocument = gql`
   mutation ModifyCampaign($input: InputEditCampaign!) {

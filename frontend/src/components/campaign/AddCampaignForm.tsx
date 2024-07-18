@@ -130,13 +130,14 @@ export function AddCampaignForm() {
                 </FormItem>
               )}
             />
-
-            <Button disabled={fakeLoading === true}>
-              {fakeLoading === true && (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              {fakeLoading === true ? "Please wait" : "Create"}
-            </Button>
+            <div className="flex flex-row justify-end">
+              <Button disabled={fakeLoading === true}>
+                {fakeLoading === true && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                {fakeLoading === true ? "Please wait" : "Create"}
+              </Button>
+            </div>
           </form>
         </Form>
       </DialogContent>

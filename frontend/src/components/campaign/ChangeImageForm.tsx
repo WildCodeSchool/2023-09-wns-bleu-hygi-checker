@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -16,7 +17,10 @@ import {
 
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
-import { useModifyImageOfCampaignMutation } from "@/types/graphql";
+import {
+  useCampaignsByUserIdQuery,
+  useModifyImageOfCampaignMutation,
+} from "@/types/graphql";
 import { ChangeImageCampaignFormProps } from "@/types/interfaces";
 
 // ****************************************************
@@ -34,6 +38,8 @@ export function ChangeImageForm({
   const [loading, setLoading] = useState(false); // to show the loader in the button
   const [openImageForm, setOpenImageForm] = useState(false); // to close the form after submit
 
+  const { refetch } = useCampaignsByUserIdQuery();
+
   const [modifyImageOfCampaign] = useModifyImageOfCampaignMutation({
     onCompleted: (data) => {
       setTimeout(() => {
@@ -43,6 +49,7 @@ export function ChangeImageForm({
           title: `${data.modifyImageOfCampaign.message}`,
           variant: "success",
         });
+        refetch();
       }, 1000);
     },
     onError: (err) => {
@@ -113,17 +120,19 @@ export function ChangeImageForm({
 
         <Input type="hidden" name="image" value={formToSend.image} />
         <div className="flex flex-row items-center justify-around">
-          <Button onClick={handleCloseForm}>Cancel</Button>
-          <Button
-            onClick={handleSubmit}
-            variant={"outline"}
-            disabled={loading === true}
-          >
-            {loading === true && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            {loading === true ? "Please wait" : "Change"}
-          </Button>
+          <DialogFooter>
+            <Button onClick={handleCloseForm}>Cancel</Button>
+            <Button
+              onClick={handleSubmit}
+              variant={"outline"}
+              disabled={imageToSet === imageSrc}
+            >
+              {loading === true && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              {loading === true ? "Please wait" : "Change"}
+            </Button>
+          </DialogFooter>
         </div>
       </DialogContent>
     </Dialog>

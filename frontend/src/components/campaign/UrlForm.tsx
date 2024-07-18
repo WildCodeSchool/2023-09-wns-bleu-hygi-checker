@@ -30,11 +30,9 @@ import {
   useGetUrlFromCampaignQuery,
 } from "@/types/graphql";
 import { AddUrlToCampaignProps } from "@/types/interfaces";
+import { urlPattern } from "@/utils/global/getDomainFromUrl";
 
 // ****************************************************
-
-const urlPattern =
-  /^(https?:\/\/)?(www\.)?[\w-]+\.[\w-]+(?:\.[\w-]+)*(\/[\w-]*)*$/;
 
 // Define the form schema for validation
 const formSchema = z.object({
@@ -135,13 +133,14 @@ export function UrlForm({ campaignId }: AddUrlToCampaignProps) {
                 </FormItem>
               )}
             />
-
-            <Button disabled={loading === true}>
-              {loading === true && (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              {loading === true ? "Please wait" : "Add"}
-            </Button>
+            <div className="flex flex-row justify-end">
+              <Button disabled={loading === true}>
+                {loading === true && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                {loading === true ? "Please wait" : "Add"}
+              </Button>
+            </div>
           </form>
         </Form>
       </DialogContent>

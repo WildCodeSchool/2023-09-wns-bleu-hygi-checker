@@ -4,6 +4,7 @@ import { useLazyQuery } from "@apollo/client";
 import { CHECK_URL } from "@/requests/queries/check-url.queries";
 import { Zap } from "lucide-react";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
+import { urlPattern } from "@/utils/global/getDomainFromUrl";
 
 interface QuickTestProps {
   urlPath: string;
@@ -37,9 +38,6 @@ export default function QuickUrlTest({ urlPath, onDropdown }: QuickTestProps) {
 
   const handleQuickTest = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    const urlPattern =
-      /^(https?:\/\/)?(www\.)?[\w-]+\.[\w-]+(?:\.[\w-]+)*(\/[\w-]*)*$/;
-
     const isValidUrlFormat = urlPattern.test(urlPath);
 
     if (isValidUrlFormat === false) {

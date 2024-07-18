@@ -22,6 +22,7 @@ import {
   RegisterMutationVariables,
 } from "@/types/graphql";
 import { LOGIN } from "@/requests/queries/auth.queries";
+import { CGUModal } from "../CGUModal";
 
 export function Auth() {
   const router = useRouter();
@@ -299,11 +300,17 @@ export function Auth() {
                     htmlFor="terms1"
                     className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                   >
-                    Accept terms and conditions
+                    <CGUModal
+                      buttonText={
+                        "By ticking this box, you agree to the Terms and Conditions of Use."
+                      }
+                      buttonVariant={"link"}
+                      title={"Terms and Conditions"}
+                      noText={"No, I don't agree"}
+                      yesText={"Yes, I agree"}
+                      onConfirm={(isConfirmed) => setAcceptedTerms(isConfirmed)}
+                    />
                   </label>
-                  <p className="text-sm text-muted-foreground">
-                    You agree to our Terms of Service and Privacy Policy.
-                  </p>
                 </div>
               </div>
               <Button

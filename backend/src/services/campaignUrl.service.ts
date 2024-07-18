@@ -60,14 +60,10 @@ export default class CampaignUrlService {
     return this.db.save(newUrlToCampaign);
   }
 
-  async removeUrlFromCampaign(
-    urlId: number,
-    campaignId: number
-  ): Promise<void> {
+  async removeUrlFromCampaign(id: number): Promise<void> {
     const campaignUrl = await this.db.findOneOrFail({
       where: {
-        campaign: { id: campaignId },
-        url: { id: urlId },
+        id: id,
       },
     });
     await this.db.remove(campaignUrl);
