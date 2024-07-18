@@ -15,6 +15,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
 } from "@/components/ui/dialog";
 import {
   Select,
@@ -166,13 +167,14 @@ export function AddUrlToCampaign({
                 </FormItem>
               )}
             />
-
-            <Button disabled={loading === true} className="w-full">
-              {loading === true && (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              {loading === true ? "Please wait" : "Add"}
-            </Button>
+            <DialogFooter>
+              <Button disabled={loading === true}>
+                {loading === true && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                {loading === true ? "Please wait" : "Add"}
+              </Button>
+            </DialogFooter>
           </form>
         </Form>
       </DialogContent>

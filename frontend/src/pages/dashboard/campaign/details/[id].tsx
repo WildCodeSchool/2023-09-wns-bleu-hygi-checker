@@ -109,8 +109,8 @@ export default function CampaignDetail() {
                     buttonVariant={"destructive"}
                     title={"Delete this campaign"}
                     message={"WARNING : Datas will be delete forever"}
-                    noText={"No, keep it"}
-                    yesText={"Yes, delete it"}
+                    noText={"No"}
+                    yesText={"Yes"}
                     action={deleteCampaign}
                   />
                 </>
