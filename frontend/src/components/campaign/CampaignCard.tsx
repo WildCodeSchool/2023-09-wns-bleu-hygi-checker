@@ -15,8 +15,7 @@ import Link from "next/link";
 import { CampaignCardProps } from "@/types/interfaces";
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import { useQuery } from "@apollo/client";
-import { COUNT_URL_FROM_CAMPAIGN } from "@/requests/queries/countUrlFromCampaign";
+import { useCountUrlFromCampaignQuery } from "@/types/graphql";
 import { testPerDay } from "@/utils/chartFunction/testsPerDay";
 import { formatDate } from "@/utils/chartFunction/formatDate";
 
@@ -34,23 +33,24 @@ export default function CampaignCard({ data }: CampaignCardProps) {
     });
   };
 
-  const { data: countUrl } = useQuery(COUNT_URL_FROM_CAMPAIGN, {
+  const { data: countUrl } = useCountUrlFromCampaignQuery({
     variables: {
       campaignId: data?.id,
     },
   });
 
   const count = countUrl?.countUrlFromCampaign.count;
-  const testEachDay = testPerDay(count, data?.intervalTest as number);
+  const testEachDay = testPerDay(count as number, data?.intervalTest as number);
 
   return (
-    <Card className="flex flex-col w-[350px]">
+    <Card className="flex flex-col w-[350px] h-[350px]">
       <Image
         src={data?.image ?? "../../../public/logo_large.svg"}
         alt="image"
         className="w-full rounded-t-lg"
         width={350}
-        height={0}
+        height={200}
+        priority
       />
 
       <CardContent className="flex justify-between p-6 items-center">
