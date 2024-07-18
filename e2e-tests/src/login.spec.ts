@@ -9,10 +9,12 @@ test.afterAll(disconnect);
 
 const email = "user@test.com";
 const password = "Test123456!!";
+const username = "Test";
+const accepted_terms = true;
 
 async function createUser() {
   const userService = new UserService();
-  await userService.createUser({ email, password });
+  await userService.createUser({ email, password, username, accepted_terms });
 }
 
 test("can connect with correct credentials", async ({ page }) => {
