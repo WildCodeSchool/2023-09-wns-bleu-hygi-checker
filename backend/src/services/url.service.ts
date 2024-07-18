@@ -58,7 +58,8 @@ export default class UrlService {
       const endTime = Date.now();
 
       const responseTime = endTime - startTime;
-      const responseDate = response.headers.get("date") || "Not available";
+      const responseDate =
+        response.headers.get("date") || new Date().toISOString();
 
       return {
         status: response.status,
