@@ -95,12 +95,15 @@ export default class CampaignUrlResolver {
     }
     // ------------------------ END VERIFICATION -----------------------
 
+    // on enleve "/" a la fin de l'url si present
+    const newUrl = infos.url.replace(/\/$/, "");
+
     // Step 1 : Verify if the URL format is correct and check if a URL matching the one in the arguments exists in the URL table.
-    const isUrlFormatIsGood = await this.urlService.validateURL(infos.url);
+    const isUrlFormatIsGood = await this.urlService.validateURL(newUrl);
     if (!isUrlFormatIsGood) {
       throw new Error("URL do not match the required format");
     }
-    const existingUrl = await this.urlService.findIdByUrl(infos.url);
+    const existingUrl = await this.urlService.findIdByUrl(newUrl);
 
     // Step 2 : If yes, retrieve its ID and check if the combination of the URL ID and the campaign ID already exists.
     // => If yes, it means the user already has this URL in their campaign = END.
@@ -129,7 +132,7 @@ export default class CampaignUrlResolver {
     // Step 3 : Finally, if the URL was just added to the table or if the combination of the URL ID and the campaign ID does not already exist,
     //this means the URL can be added.
     if (!existingUrl) {
-      const createdUrl = await this.urlService.createUrl(infos.url);
+      const createdUrl = await this.urlService.createUrl(newUrl);
       if (createdUrl) {
         const addedUrlToCampaign =
           await this.campaignUrlService.addUrlToCampaign(
@@ -157,23 +160,22 @@ export default class CampaignUrlResolver {
     @Ctx() ctx: MyContext,
     @Arg("infos") infos: InputDeleteUrlToCampaign
   ) {
-    const campaignId = parseInt(infos.campaignId);
-    const urlId = parseInt(infos.urlId);
-
+    // id de campaignUrl
+    const id = infos.id;
     const m = new Message();
 
     // ------------------------ START VERIFICATION -----------------------
-    const validation = await this.accessChecker.verifyIfCampaignBelongToUser(
+    const validation = await this.accessChecker.verifyIfUrlBelongToUserCampaign(
       ctx,
-      campaignId
+      id
     );
 
-    if (validation !== true) {
+    if (!validation) {
       throw new Error("You can't perform this action");
     }
     // ------------------------ END VERIFICATION -----------------------
 
-    await this.campaignUrlService.removeUrlFromCampaign(urlId, campaignId);
+    await this.campaignUrlService.removeUrlFromCampaign(id);
     // TODO : verifiy that the url that was just deleted is present in someone's campaign.
     // If so, do nothing. If not, delete this url from the url table
 
