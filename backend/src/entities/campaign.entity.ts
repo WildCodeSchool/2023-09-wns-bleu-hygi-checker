@@ -107,3 +107,12 @@ export class CampaignIds {
   @Field()
   id: number;
 }
+
+@InputType()
+export class InputSwitchWorkingCampaign {
+  @Field()
+  campaignId: number;
+
+  @Field()
+  isWorking?: boolean;
+}
