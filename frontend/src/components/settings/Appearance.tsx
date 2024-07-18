@@ -67,7 +67,7 @@ export default function Appearance({ data }: SettingsProps) {
   };
 
   return (
-    <Card className="md:w-2/5 m-auto">
+    <Card className="">
       <CardHeader>
         <CardTitle>Appearance</CardTitle>
         <CardDescription>Modify your appearance information</CardDescription>
@@ -85,14 +85,17 @@ export default function Appearance({ data }: SettingsProps) {
             </button>
           ))}
         </div>
-        {actualAvatar !== selectedAvatar && (
-          <Button onClick={handleSubmit} className="mt-6">
-            {fakeLoading === true && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            {fakeLoading === true ? "Please wait" : "Change avatar"}
-          </Button>
-        )}
+
+        <Button
+          disabled={actualAvatar === selectedAvatar}
+          onClick={handleSubmit}
+          className="mt-6"
+        >
+          {fakeLoading === true && (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          )}
+          {fakeLoading === true ? "Please wait" : "Change avatar"}
+        </Button>
       </CardContent>
     </Card>
   );

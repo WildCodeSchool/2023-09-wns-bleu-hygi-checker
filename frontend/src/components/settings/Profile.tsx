@@ -142,7 +142,7 @@ export default function Profile({ data }: SettingsProps) {
   }, [form, initialValues]);
 
   return (
-    <Card className="md:w-full">
+    <Card>
       <CardHeader>
         <CardTitle>Profile</CardTitle>
         <CardDescription>Modify your profile information</CardDescription>
@@ -160,7 +160,7 @@ export default function Profile({ data }: SettingsProps) {
                     <RadioGroup
                       onValueChange={field.onChange}
                       defaultValue={field.value}
-                      className="flex flex-col justify-center items-center md:flex-row gap-6"
+                      className="flex justify-center items-center gap-6"
                     >
                       <FormItem className="flex items-center space-x-1 space-y-0">
                         <FormControl>

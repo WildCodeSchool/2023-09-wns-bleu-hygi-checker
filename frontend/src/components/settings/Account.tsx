@@ -30,6 +30,11 @@ export default function Account({ data }: SettingsProps) {
   const { toast } = useToast();
   const router = useRouter();
 
+  // const deleteAccount = () => {
+  //   deleteAccountMutation();
+  //   router.push("/auth/login");
+  // };
+
   const [deleteAccountMutation] = useDeleteAccountMutation({
     onCompleted: (data) => {
       toast({
@@ -77,7 +82,7 @@ export default function Account({ data }: SettingsProps) {
   };
 
   return (
-    <Card className="md:w-full">
+    <Card>
       <CardHeader>
         <CardTitle>Account</CardTitle>
         <CardDescription>Modify your account information</CardDescription>
