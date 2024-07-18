@@ -11,6 +11,7 @@ import { jwtVerify } from "jose";
 import "reflect-metadata";
 import User from "./entities/user.entity";
 import datasource from "./lib/datasource";
+import { HealthCheckScheduler } from "./lib/healthCheckScheduler";
 import schemaPromise from "./schema"; // schemaPromise is a alias of the buildSchema that is deported in backend/src/schema.ts
 import UserService from "./services/user.service";
 
@@ -79,6 +80,10 @@ async function main() {
     })
   );
   await datasource.initialize();
+
+  const healthCheckScheduler = new HealthCheckScheduler();
+  healthCheckScheduler.start();
+
   await new Promise<void>((resolve) =>
     httpServer.listen({ port: 4001 }, resolve)
   );

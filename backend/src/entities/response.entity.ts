@@ -53,6 +53,9 @@ export class InputCreateResponse {
 
   @Field()
   campaignId: number;
+
+  @Field()
+  createdAt: Date;
 }
 
 @ObjectType()
