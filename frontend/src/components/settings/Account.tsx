@@ -17,7 +17,11 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { SettingsProps } from "@/types/interfaces";
-import { useUpdateNameMutation, useGetUserProfileQuery } from "@/types/graphql";
+import {
+  useUpdateNameMutation,
+  useGetUserProfileQuery,
+  useDeleteAccountMutation,
+} from "@/types/graphql";
 
 export default function Account({ data }: SettingsProps) {
   const [fakeLoading, setFakeLoading] = useState(false);
@@ -26,14 +30,21 @@ export default function Account({ data }: SettingsProps) {
   const { toast } = useToast();
   const router = useRouter();
 
-  const deleteAccount = () => {
-    // useDeleteAccountMutation
-    toast({
-      title: `Your account has been deleted successfully`,
-      variant: "success",
-    });
-    router.push("/");
-  };
+  const [deleteAccountMutation] = useDeleteAccountMutation({
+    onCompleted: (data) => {
+      toast({
+        title: data.deleteAccount.message,
+        variant: "success",
+      });
+      router.push("/");
+    },
+    onError: (err) => {
+      toast({
+        title: err.message,
+        variant: "destructive",
+      });
+    },
+  });
 
   const { refetch } = useGetUserProfileQuery();
   const [updateNameMutation] = useUpdateNameMutation({
@@ -128,7 +139,7 @@ export default function Account({ data }: SettingsProps) {
           }
           noText={"No, I want to keep my account for now"}
           yesText={"Yes, I want to delete my account forever"}
-          action={deleteAccount}
+          action={deleteAccountMutation}
         />
       </CardContent>
     </Card>

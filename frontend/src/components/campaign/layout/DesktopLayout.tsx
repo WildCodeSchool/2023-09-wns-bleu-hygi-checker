@@ -10,7 +10,7 @@ import {
 
 import { MoveUpRight } from "lucide-react";
 import { getDomainFromUrl } from "@/utils/global/getDomainFromUrl";
-import { Url } from "@/types/graphql";
+import { Url, useDeleteUrlFromCampaignMutation } from "@/types/graphql";
 import { useLastDayResponsesOfOneUrlLazyQuery } from "@/types/graphql";
 import QuickUrlTest from "@/components/check/QuickUrlTest";
 import { ConfirmationModal } from "@/components/ConfirmationModal";
@@ -36,6 +36,7 @@ import {
   getResponseColor,
   getAvailabilityColor,
 } from "@/utils/chartFunction/getColor";
+import { toast } from "@/components/ui/use-toast";
 
 export type CampaignMini = {
   __typename?: "Campaign";
@@ -54,10 +55,12 @@ export type CampaignUrl = {
 interface DesktopLayoutProps {
   urls: CampaignUrl[];
   campaignData: Campaign;
+  refetch: () => void;
 }
 export default function DesktopLayout({
   urls,
   campaignData,
+  refetch,
 }: DesktopLayoutProps) {
   const [selectedUrl, setSelectedUrl] = useState<string>("");
   const [selectedUrlId, setSelectedUrlId] = useState<number>(0);
@@ -133,7 +136,31 @@ export default function DesktopLayout({
 
   const deleteURL = () => {
     // TODO : make the API call to delete this CampaignURL from this campaign
+    deleteUrlMutation({
+      variables: {
+        infos: {
+          id: selectedUrlId,
+        },
+      },
+    });
   };
+
+  const [deleteUrlMutation] = useDeleteUrlFromCampaignMutation({
+    onCompleted: (data) => {
+      toast({
+        title: data.deleteUrlFromCampaign.message,
+        variant: "success",
+      });
+      refetch();
+      setSelectedUrl("");
+    },
+    onError: (err) => {
+      toast({
+        title: err.message,
+        variant: "destructive",
+      });
+    },
+  });
 
   return (
     <section className="hidden md:grid grid-cols-3 gap-6 h-[98%] mt-6">
