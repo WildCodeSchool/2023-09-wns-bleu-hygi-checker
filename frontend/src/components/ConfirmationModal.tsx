@@ -7,6 +7,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -62,21 +63,21 @@ export function ConfirmationModal({
           <DialogDescription>{message}</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <DialogTrigger asChild>
-            <Button variant="outline" type="submit">
+          <DialogFooter>
+            <Button variant="default" type="submit">
               {noText}
             </Button>
-          </DialogTrigger>
-          <Button
-            variant="destructive"
-            disabled={loading === true}
-            onClick={onSubmit}
-          >
-            {loading === true && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            {loading === true ? "Please wait" : yesText}
-          </Button>
+            <Button
+              variant="destructive"
+              disabled={loading === true}
+              onClick={onSubmit}
+            >
+              {loading === true && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              {loading === true ? "Please wait" : yesText}
+            </Button>
+          </DialogFooter>
         </div>
       </DialogContent>
     </Dialog>

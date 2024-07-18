@@ -57,7 +57,6 @@ export default function Nav() {
 
   const navLink = [
     { name: "Campaign", link: "/dashboard/campaign/lists" },
-    { name: "Analytics", link: "/dashboard/analytics" },
     { name: "Settings", link: "/dashboard/settings" },
   ];
 
@@ -85,7 +84,7 @@ export default function Nav() {
           ))}
         </div>
 
-        <div className="hidden lg:block">
+        <div className="hidden md:block">
           <FormCheck
             checkText="Check"
             inputId="nav_check"
