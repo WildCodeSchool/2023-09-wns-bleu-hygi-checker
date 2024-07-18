@@ -44,7 +44,7 @@ describe("CampaignCard component", () => {
     );
 
     expect(screen.getByText(/Campaign1_User1/)).toBeInTheDocument();
-    expect(screen.getByText(/Voir/)).toBeInTheDocument();
+    expect(screen.getByText(/Details/)).toBeInTheDocument();
     expect(view.baseElement).toMatchSnapshot();
   });
 });

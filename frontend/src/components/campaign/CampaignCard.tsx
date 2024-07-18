@@ -70,7 +70,7 @@ export default function CampaignCard({ data }: CampaignCardProps) {
 
         <Link href={`/dashboard/campaign/details/${data.id}`}>
           <Button data-testid="watch-button" variant="outline">
-            Voir
+            Details
           </Button>
         </Link>
       </CardFooter>
