@@ -7,3 +7,8 @@ export function getDomainFromUrl(url: string) {
 
   return domain;
 }
+
+// urlPattern
+export const urlPattern =
+  // /^(https?:\/\/)?(www\.)?[\w-]+\.[\w-]+(?:\.[\w-]+)*(\/[\w-]*)*$/;
+  /^(https?:\/\/)[\w-]+\.[\w-]+(?:\.[\w-]+)*(\/[\w-]*)*$/;

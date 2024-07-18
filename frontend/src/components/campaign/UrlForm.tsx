@@ -30,11 +30,9 @@ import {
   useGetUrlFromCampaignQuery,
 } from "@/types/graphql";
 import { AddUrlToCampaignProps } from "@/types/interfaces";
+import { urlPattern } from "@/utils/global/getDomainFromUrl";
 
 // ****************************************************
-
-const urlPattern =
-  /^(https?:\/\/)?(www\.)?[\w-]+\.[\w-]+(?:\.[\w-]+)*(\/[\w-]*)*$/;
 
 // Define the form schema for validation
 const formSchema = z.object({

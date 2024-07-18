@@ -152,6 +152,7 @@ export default function DesktopLayout({
         variant: "success",
       });
       refetch();
+      setSelectedUrl("");
     },
     onError: (err) => {
       toast({
