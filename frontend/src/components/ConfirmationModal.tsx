@@ -7,6 +7,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -15,6 +16,7 @@ import { Trash, Loader2 } from "lucide-react";
 // ****************************************************
 
 export function ConfirmationModal({
+  isLargeButton,
   forDelete,
   buttonText,
   buttonVariant,
@@ -39,9 +41,20 @@ export function ConfirmationModal({
   return (
     <Dialog open={openForm} onOpenChange={setOpenForm}>
       <DialogTrigger asChild>
-        <Button variant={buttonVariant} className="mx-4">
-          {forDelete === true ? <Trash className="md:mr-2 h-4 w-4" /> : null}
-          <span className="hidden md:block">{buttonText}</span>
+        <Button
+          variant={buttonVariant}
+          className={` ${isLargeButton === true ? "w-1/2" : "mx-4"}`}
+        >
+          {forDelete === true ? (
+            <Trash
+              className={`${isLargeButton === true ? "mr-2 h-4 w-4" : ""}md:mr-2 h-4 w-4`}
+            />
+          ) : null}
+          <span
+            className={`${isLargeButton === true ? "block" : "hidden"} md:block`}
+          >
+            {buttonText}
+          </span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
@@ -50,21 +63,21 @@ export function ConfirmationModal({
           <DialogDescription>{message}</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
-          <DialogTrigger asChild>
-            <Button variant="outline" type="submit">
+          <DialogFooter>
+            <Button variant="default" type="submit">
               {noText}
             </Button>
-          </DialogTrigger>
-          <Button
-            variant="destructive"
-            disabled={loading === true}
-            onClick={onSubmit}
-          >
-            {loading === true && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            {loading === true ? "Please wait" : yesText}
-          </Button>
+            <Button
+              variant="destructive"
+              disabled={loading === true}
+              onClick={onSubmit}
+            >
+              {loading === true && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              {loading === true ? "Please wait" : yesText}
+            </Button>
+          </DialogFooter>
         </div>
       </DialogContent>
     </Dialog>

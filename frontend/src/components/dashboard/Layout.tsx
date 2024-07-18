@@ -21,7 +21,7 @@ export default function Layout({ children, title }: LayoutProps) {
       <main
         className="p-4 bg-primary overflow-y-auto"
         // -80px car taille du header
-        style={{ maxHeight: "calc(100vh - 80px)" }}
+        style={{ height: "calc(100vh - 80px)" }}
       >
         {children}
       </main>

@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
 export const GET_CAMPAIGNS = gql`
-  query Campaigns {
-    campaigns {
+  query CampaignsByUserId {
+    campaignsByUserId {
       id
       name
       image
@@ -10,11 +10,7 @@ export const GET_CAMPAIGNS = gql`
       isMailAlert
       isWorking
       userId
-      urls {
-        id
-        urlPath
-        type
-      }
+      createdAt
     }
   }
 `;

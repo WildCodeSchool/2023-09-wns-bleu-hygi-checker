@@ -5,36 +5,20 @@ import Link from "next/link";
 import { AlignJustify, X } from "lucide-react";
 import DropdownMenuNav from "./DropdownMenuNav";
 import { useEffect, useState } from "react";
+import { useGetAvatarQuery, useGetUserProfileQuery } from "@/types/graphql";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
-import { useLazyQuery } from "@apollo/client";
-import { LogoutQuery, LogoutQueryVariables } from "@/types/graphql";
-import { LOGOUT } from "@/requests/queries/auth.queries";
-import { useToast } from "../ui/use-toast";
+import { useLogout } from "../auth/Logout";
 
 export default function Nav() {
   const router = useRouter();
+  const { data } = useGetAvatarQuery();
 
-  const { toast } = useToast();
+  const { data: currentUser } = useGetUserProfileQuery({
+    errorPolicy: "ignore",
+  });
 
-  const [isConnected, setIsConnected] = useState<boolean>(false);
-
-  const [mail, setMail] = useState("");
-
-  useEffect(() => {
-    const checkMail = () => {
-      const mail = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("email="));
-
-      setIsConnected(!!mail);
-      if (mail) {
-        const newMail = mail.split("=")[1];
-        setMail(decodeURIComponent(newMail));
-      }
-    };
-
-    checkMail();
-  }, []);
+  const isConnected = !!currentUser?.getUserProfile;
 
   const [openNavMobile, setOpenNavMobile] = useState(false);
 
@@ -45,6 +29,8 @@ export default function Nav() {
   const handleCloseButton = () => {
     setOpenNavMobile(false);
   };
+
+  const handleLogout = useLogout();
 
   // ferme la nav mobile quand on resize l'écran
   useEffect(() => {
@@ -71,26 +57,8 @@ export default function Nav() {
 
   const navLink = [
     { name: "Campaign", link: "/dashboard/campaign/lists" },
-    { name: "Analytics", link: "/dashboard/analytics" },
     { name: "Settings", link: "/dashboard/settings" },
   ];
-
-  const [logout] = useLazyQuery<LogoutQuery, LogoutQueryVariables>(LOGOUT);
-
-  const handleLogout = () => {
-    logout({
-      onCompleted: (data) => {
-        if (data.logout.success) {
-          router.push("/");
-          setTimeout(() => {
-            toast({
-              title: data.logout.message,
-            });
-          }, 500);
-        }
-      },
-    });
-  };
 
   return (
     <>
@@ -116,8 +84,14 @@ export default function Nav() {
           ))}
         </div>
 
-        <div className="hidden lg:block">
-          <FormCheck checkText="Check" className="flex-row" variant="outline" />
+        <div className="hidden md:block">
+          <FormCheck
+            checkText="Check"
+            inputId="nav_check"
+            className="flex-row"
+            variant="outline"
+            source="navbar"
+          />
         </div>
 
         <div className="md:flex hidden w-[150px] lg:w-auto justify-end">
@@ -155,17 +129,31 @@ export default function Nav() {
           <div className="flex justify-center">
             <FormCheck
               checkText="Check"
+              inputId="mobile_check"
               className="flex-row"
               variant="outline"
+              source="navbar"
             />
           </div>
           <div className="flex-grow"></div>
-          <hr />
-          <div className="flex justify-between items-center">
-            <p className="text-white">{mail}</p>
-            <Button variant={"destructive"} onClick={handleLogout}>
-              Déconnexion
-            </Button>
+
+          <div className="flex flex-col gap-6">
+            <hr />
+            <div className="flex justify-between">
+              <Avatar>
+                <AvatarImage
+                  src={
+                    isConnected
+                      ? `../../../avatars/${data?.getAvatar.avatar}.jpg`
+                      : "https://i.stack.imgur.com/vaDPM.png?s=256&g=1"
+                  }
+                />
+                <AvatarFallback>HC</AvatarFallback>
+              </Avatar>
+              <Button variant={"destructive"} onClick={handleLogout}>
+                Log out
+              </Button>
+            </div>
           </div>
         </div>
       </div>

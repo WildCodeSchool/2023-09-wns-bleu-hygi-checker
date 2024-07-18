@@ -6,6 +6,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Checkbox } from "../ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -21,16 +22,26 @@ import {
   RegisterMutationVariables,
 } from "@/types/graphql";
 import { LOGIN } from "@/requests/queries/auth.queries";
+import { CGUModal } from "../CGUModal";
 
 export function Auth() {
   const router = useRouter();
   const { toast } = useToast();
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [usernameError, setUsernameError] = useState("");
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
+  const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [selectedTab, setSelectedTab] = useState("Log in");
 
+  const validateUsername = (username: string) => {
+    const re = /^[a-zA-Z0-9]{4,24}$/;
+    return re.test(username);
+  };
   const validateEmail = (email: string) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(email);
@@ -87,7 +98,7 @@ export function Auth() {
           router.push("/dashboard/campaign/lists");
           setTimeout(() => {
             toast({
-              title: data.login.message,
+              title: `${data.login.message} ${username} !`,
               variant: "success",
             });
           }, 500);
@@ -108,6 +119,13 @@ export function Auth() {
 
   const handleSubmitRegister = (e: { preventDefault: () => void }) => {
     e.preventDefault();
+    if (!validateUsername(username)) {
+      setUsernameError(
+        "Username must be between 3 and 25 characters and not contain any special characters"
+      );
+      return;
+    }
+    setUsernameError("");
     if (!validateEmail(email)) {
       setEmailError("Please enter a valid email address.");
       return;
@@ -120,14 +138,31 @@ export function Auth() {
       return;
     }
     setPasswordError("");
-    register({ variables: { infos: { email, password } } });
+    if (confirmPassword === "") {
+      setConfirmPasswordError("Type your password again");
+      return;
+    }
+    setConfirmPasswordError("");
+    if (password !== confirmPassword) {
+      setConfirmPasswordError("Passwords does not match.");
+      return;
+    }
+    setConfirmPasswordError("");
+    if (acceptedTerms === false) {
+      return;
+    }
+    register({
+      variables: {
+        infos: { email, password, username, accepted_terms: acceptedTerms },
+      },
+    });
   };
 
   return (
     <Tabs
       value={selectedTab}
       className="w-[400px]"
-      onValueChange={(newValue) => setSelectedTab(newValue)}
+      onValueChange={(newValue: string) => setSelectedTab(newValue)}
     >
       <TabsList className="grid w-full grid-cols-2">
         <TabsTrigger value="Log in">Log in</TabsTrigger>
@@ -196,6 +231,22 @@ export function Auth() {
           <CardContent className="space-y-2">
             <form onSubmit={handleSubmitRegister} className="grid gap-2">
               <div className="space-y-1">
+                <Label htmlFor="email">Username</Label>
+                <Input
+                  id="username"
+                  placeholder="John Smith"
+                  type="text"
+                  autoCapitalize="none"
+                  autoCorrect="off"
+                  name="username"
+                  onChange={(e) => setUsername(e.target.value)}
+                  data-testid="login-email"
+                />
+                {usernameError && (
+                  <p className="text-red-500">{usernameError}</p>
+                )}
+              </div>
+              <div className="space-y-1">
                 <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
@@ -225,7 +276,48 @@ export function Auth() {
                   <p className="text-red-500">{passwordError}</p>
                 )}
               </div>
-              <Button type="submit" className="w-full bg-primary">
+              <div className="space-y-1">
+                <Label htmlFor="confirm_password">Confirm password</Label>
+                <Input
+                  id="confirm_password"
+                  type="password"
+                  name="confirm_password"
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  data-testid="login-password"
+                />
+                {confirmPasswordError && (
+                  <p className="text-red-500">{confirmPasswordError}</p>
+                )}
+              </div>
+              <div className="items-top flex space-x-2 my-4">
+                <Checkbox
+                  id="terms1"
+                  checked={acceptedTerms}
+                  onCheckedChange={() => setAcceptedTerms(!acceptedTerms)}
+                />
+                <div className="grid gap-1.5 leading-none">
+                  <label
+                    htmlFor="terms1"
+                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                  >
+                    <CGUModal
+                      buttonText={
+                        "By ticking this box, you agree to the Terms and Conditions of Use."
+                      }
+                      buttonVariant={"link"}
+                      title={"Terms and Conditions"}
+                      noText={"No, I don't agree"}
+                      yesText={"Yes, I agree"}
+                      onConfirm={(isConfirmed) => setAcceptedTerms(isConfirmed)}
+                    />
+                  </label>
+                </div>
+              </div>
+              <Button
+                type="submit"
+                disabled={acceptedTerms === false}
+                className="w-full bg-primary"
+              >
                 Sign up
               </Button>
             </form>

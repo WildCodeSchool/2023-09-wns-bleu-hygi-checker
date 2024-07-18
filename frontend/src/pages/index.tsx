@@ -3,38 +3,32 @@ import { Button } from "@/components/ui/button";
 import { useRouter } from "next/router";
 import FormCheck from "../components/FormCheck";
 import Home from "../components/check/Home";
-import { useEffect, useState } from "react";
+import { useGetUserProfileQuery } from "@/types/graphql";
 
 export default function Index() {
   const router = useRouter();
 
-  const [isConnected, setIsConnected] = useState<boolean>(false);
+  const { data: currentUser } = useGetUserProfileQuery({
+    errorPolicy: "ignore",
+  });
 
-  useEffect(() => {
-    const checkMail = () => {
-      const mail = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("email="));
-
-      setIsConnected(!!mail);
-    };
-
-    checkMail();
-  }, []);
+  const isConnected = !!currentUser?.getUserProfile;
 
   return (
     <Layout title="Home">
-      <div className="flex flex-col text-center gap-8 items-center text-white">
+      <div className="flex flex-col justify-center items-center text-center gap-8 text-white w-full h-full">
         <Home />
 
         <div className="flex justify-center text-black">
           <FormCheck
+            inputId="home_check"
             checkText="Start checking URL"
             className="flex-col"
             variant="white"
+            source="homepage"
           />
         </div>
-        {!isConnected && (
+        {isConnected === false && (
           <Button
             variant="outline"
             className="text-black"

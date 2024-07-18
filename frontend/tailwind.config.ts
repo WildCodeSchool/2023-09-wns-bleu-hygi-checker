@@ -17,7 +17,7 @@ const config = {
         sm: "640px",
         // => @media (min-width: 640px) { ... }
 
-        md: "768px",
+        md: "800px",
         // => @media (min-width: 768px) { ... }
 
         lg: "1024px",
@@ -26,8 +26,8 @@ const config = {
         xl: "1280px",
         // => @media (min-width: 1280px) { ... }
 
-        "2xl": "1536px",
-        // => @media (min-width: 1536px) { ... }
+        "2xl": "1468px",
+        // => @media (min-width: 1468px) { ... }
       },
     },
     extend: {

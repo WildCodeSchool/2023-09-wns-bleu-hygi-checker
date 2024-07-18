@@ -4,38 +4,37 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import Url from "./url.entity";
+import CampaignUrl from "./campaignUrl.entity";
 
 @ObjectType()
 @Entity()
 export default class Response extends BaseEntity {
   @Field()
   @PrimaryGeneratedColumn()
-  uuid: number;
+  id: number;
 
-  @Field()
-  @Column()
+  @Field({ nullable: true })
+  @Column({ nullable: true })
   responseTime: number;
 
-  @Field()
-  @Column()
-  statusCode: string;
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  statusCode: number;
+
+  @Field({ nullable: true })
+  @Column({ nullable: true })
+  statusText: string;
 
   @Field()
-  @CreateDateColumn()
-  creationDate: Date;
+  @CreateDateColumn({ type: "timestamp" })
+  createdAt: Date;
 
-  @Field()
-  @Column({ name: "url_id" })
-  urlId: number;
-
-  @ManyToOne(() => Url)
-  @JoinColumn({ name: "url_id" })
-  url: Url;
+  @Field(() => CampaignUrl)
+  @ManyToOne(() => CampaignUrl, { onDelete: "CASCADE" })
+  campaignUrl: CampaignUrl;
 }
 
 @InputType()
@@ -44,11 +43,23 @@ export class InputCreateResponse {
   responseTime: number;
 
   @Field()
-  statusCode: string;
+  statusCode: number;
 
   @Field()
-  creationDate: Date;
+  statusText: string;
 
   @Field()
-  urlId: number;
+  campaignUrlId: number;
+
+  @Field()
+  campaignId: number;
+
+  @Field()
+  createdAt: Date;
+}
+
+@ObjectType()
+export class CountResponses {
+  @Field()
+  count: number;
 }

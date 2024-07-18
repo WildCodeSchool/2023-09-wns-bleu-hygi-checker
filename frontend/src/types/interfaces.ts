@@ -1,6 +1,9 @@
-import { Campaign } from "./graphql";
+import { Campaign, UserProfile } from "./graphql";
+import { Dispatch, SetStateAction } from "react";
+import { DataItem } from "@/utils/chartFunction/countStatusCodes";
 
 export interface ConfirmationModalProps {
+  isLargeButton: boolean;
   forDelete: boolean;
   buttonText: string;
   buttonVariant:
@@ -19,8 +22,7 @@ export interface ConfirmationModalProps {
   yesText: string;
   action: () => void;
 }
-export interface CampaignFormProps {
-  isNewCampaign: boolean;
+export interface CGUModalProps {
   buttonText: string;
   buttonVariant:
     | "link"
@@ -30,12 +32,53 @@ export interface CampaignFormProps {
     | "secondary"
     | "white"
     | "ghost"
-    | "edit"
     | null
     | undefined;
   title: string;
+  noText: string;
+  yesText: string;
+  onConfirm: (isConfirmed: boolean) => void;
+}
+export interface EditCampaignFormProps {
+  campaignId: string;
+}
+
+export interface ChangeImageCampaignFormProps {
+  campaignId: number;
+  imageSrc: string;
 }
 
 export interface CampaignCardProps {
   data: Campaign;
+}
+
+export interface SettingsProps {
+  data: UserProfile;
+}
+
+export interface AddUrlToCampaignToastProps {
+  showAddUrlModal: boolean;
+  setShowAddUrlModal: Dispatch<SetStateAction<boolean>>;
+  urlToAdd: string | undefined;
+  setUrlPath: Dispatch<SetStateAction<string>> | null;
+}
+
+export interface AddUrlToCampaignProps {
+  campaignId: string;
+}
+
+export interface ChartSectionProps {
+  PieChartData: DataItem[] | undefined | null;
+}
+
+export interface InputData {
+  __typename?: "Response" | undefined;
+  id: number | null | undefined;
+  responseTime?: number | null | undefined;
+  statusCode?: number | null | undefined;
+  createdAt?: Date | null | undefined;
+  campaignUrl: {
+    __typename?: "CampaignUrl" | undefined;
+    id: number;
+  };
 }

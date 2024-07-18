@@ -1,14 +1,16 @@
+import { Max, Min } from "class-validator";
 import { Field, InputType, ObjectType } from "type-graphql";
 import {
   BaseEntity,
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
-  ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import Url from "./url.entity";
+import CampaignUrl from "./campaignUrl.entity";
 import User from "./user.entity";
 
 @ObjectType()
@@ -28,6 +30,8 @@ export default class Campaign extends BaseEntity {
 
   @Field({ nullable: true })
   @Column({ nullable: true, default: 60 })
+  @Min(0.5, { message: "Interval must be at least 0.5 minutes." })
+  @Max(1440, { message: "Interval must be at most 1440 minutes." })
   intervalTest?: number = 60; // Interval in minutes, default 60
 
   @Field({ nullable: true })
@@ -42,14 +46,18 @@ export default class Campaign extends BaseEntity {
   @Column({ name: "user_id" })
   userId: string;
 
-  // @Field(() => User)
-  @ManyToOne(() => User)
+  @Field()
+  @CreateDateColumn({ type: "timestamp" })
+  createdAt: Date;
+
+  @ManyToOne(() => User, (user) => user.campaigns, { onDelete: "CASCADE" }) // Here is the onDelete option
   @JoinColumn({ name: "user_id" })
   user: User;
 
-  @Field(() => [Url])
-  @ManyToMany(() => Url, (url) => url.campaigns)
-  urls: Url[];
+  @OneToMany(() => CampaignUrl, (campaignUrl) => campaignUrl.campaign, {
+    onDelete: "CASCADE",
+  })
+  campaignUrl: CampaignUrl[];
 }
 
 @InputType()
@@ -65,7 +73,37 @@ export class InputCreateCampaign {
 
   @Field({ nullable: true })
   isWorking?: boolean;
+}
+
+@InputType()
+export class InputEditCampaign {
+  @Field()
+  id: number;
 
   @Field()
-  userId: string;
+  name: string;
+
+  @Field({ nullable: true })
+  intervalTest?: number;
+
+  @Field({ nullable: true })
+  isMailAlert?: boolean;
+
+  @Field({ nullable: true })
+  isWorking?: boolean;
+}
+
+@InputType()
+export class InputEditCampaignImage {
+  @Field()
+  id: number;
+
+  @Field()
+  image: string;
+}
+
+@ObjectType()
+export class CampaignIds {
+  @Field()
+  id: number;
 }

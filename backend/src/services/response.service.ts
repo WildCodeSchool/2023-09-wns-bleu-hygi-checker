@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { MoreThan, Repository } from "typeorm";
 import Response, { InputCreateResponse } from "../entities/response.entity";
 import datasource from "../lib/datasource";
 
@@ -8,32 +8,103 @@ export default class ResponseService {
     this.db = datasource.getRepository(Response);
   }
 
-  async listResponses() {
-    return this.db.find();
+  async findResponseById(id: number) {
+    return await this.db.findOneBy({ id });
   }
 
-  async listResponsesByUrlId(urlId: number): Promise<Response[]> {
+  async listResponses() {
     return this.db.find({
-      where: { urlId },
+      relations: ["campaignUrl"],
     });
   }
 
-  async findResponseById(uuid: number) {
-    return await this.db.findOneBy({ uuid });
+  async listResponsesByCampaignUrlId(
+    campaignUrlId: number
+  ): Promise<Response[]> {
+    return this.db.find({
+      where: { campaignUrl: { id: campaignUrlId } },
+      relations: ["campaignUrl"],
+    });
+  }
+
+  async listLatestResponseByCampaignUrlId(
+    campaignUrlId: number
+  ): Promise<Response | null> {
+    return this.db.findOne({
+      where: { campaignUrl: { id: campaignUrlId } },
+      relations: ["campaignUrl"],
+      order: {
+        createdAt: "DESC",
+      },
+    });
+  }
+
+  async listLatestDayResponsesByCampaignUrlId(
+    campaignUrlId: number
+  ): Promise<Response[] | null> {
+    const twentyFourHoursAgo = new Date();
+    twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
+
+    return this.db.find({
+      where: {
+        campaignUrl: { id: campaignUrlId },
+        createdAt: MoreThan(twentyFourHoursAgo),
+      },
+      relations: ["campaignUrl"],
+      order: {
+        createdAt: "DESC",
+      },
+      take: 24,
+    });
+  }
+
+  async getResponsesByCampaignUrlIdByPage(
+    campaignUrlId: number,
+    page: number,
+    pageSize: number
+  ): Promise<Response[]> {
+    const offset = (page - 1) * pageSize;
+
+    return this.db.find({
+      where: { campaignUrl: { id: campaignUrlId } },
+      relations: ["campaignUrl"],
+      skip: offset,
+      take: pageSize,
+    });
+  }
+
+  async countResponsesByCampaignUrlId(campaignUrlId: number): Promise<number> {
+    return this.db.count({
+      where: { campaignUrl: { id: campaignUrlId } },
+      relations: ["campaignUrl"],
+    });
   }
 
   async createResponse({
     responseTime,
     statusCode,
-    creationDate,
-    urlId,
+    statusText,
+    campaignUrlId,
   }: InputCreateResponse) {
-    const newUrl = this.db.create({
+    const createdAt = new Date(); // Utilise la date UTC actuelle
+
+    const newResponse = this.db.create({
       responseTime,
       statusCode,
-      creationDate,
-      urlId,
+      statusText,
+      createdAt,
+      campaignUrl: { id: campaignUrlId },
     });
-    return await this.db.save(newUrl);
+
+    return await this.db.save(newResponse);
+  }
+
+  async getLatestResponseByCampaignUrlId(
+    campaignUrlId: number
+  ): Promise<Response | null> {
+    return this.db.findOne({
+      where: { campaignUrl: { id: campaignUrlId } },
+      order: { createdAt: "DESC" },
+    });
   }
 }

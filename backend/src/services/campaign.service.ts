@@ -1,5 +1,10 @@
 import { Repository } from "typeorm";
-import Campaign, { InputCreateCampaign } from "../entities/campaign.entity";
+import Campaign, {
+  InputCreateCampaign,
+  InputEditCampaign,
+  InputEditCampaignImage,
+} from "../entities/campaign.entity";
+import User from "../entities/user.entity";
 import datasource from "../lib/datasource";
 
 export default class CampaignService {
@@ -9,30 +14,49 @@ export default class CampaignService {
   }
 
   async listCampaigns(): Promise<Campaign[]> {
-    return this.db.find({ relations: ["urls"] });
+    return this.db.find();
   }
 
   async listActiveCampaigns(): Promise<Campaign[]> {
     return this.db.find({
       where: { isWorking: true },
-      relations: ["urls"],
     });
   }
 
   async listCampaignsByUserId(userId: string): Promise<Campaign[]> {
     return this.db.find({
       where: { userId },
-      relations: ["urls"],
     });
   }
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  async listCampaignsIdByUserId(userId: string): Promise<any> {
+    const campaigns = await this.db.find({
+      where: { userId },
+    });
 
-  async findCampaignById(id: number): Promise<Campaign | null> {
-    return this.db.findOne({ where: { id }, relations: ["urls"] });
+    // return IDs of campaign only
+    return campaigns.map((campaign: Campaign) => ({ id: campaign.id }));
   }
 
-  async createCampaign(input: InputCreateCampaign): Promise<Campaign> {
+  async findCampaignById(
+    campaignId: number,
+    userId?: string
+  ): Promise<Campaign | null> {
+    const campaign = await this.db.findOne({
+      where: { id: campaignId },
+    });
+    if (campaign && userId && campaign.userId !== userId) {
+      throw new Error("Acces denied.");
+    }
+    return campaign;
+  }
+
+  async createCampaign(
+    input: InputCreateCampaign,
+    user: User
+  ): Promise<Campaign> {
     const newPictureForProject = await fetch(
-      "https://source.unsplash.com/random?wallpapers&landscape",
+      "https://picsum.photos/1920/1080",
       {
         redirect: "follow",
       }
@@ -46,16 +70,50 @@ export default class CampaignService {
 
     const newCampaign = this.db.create(input);
     newCampaign.image = newPictureForProject;
+    newCampaign.userId = user.id;
     return this.db.save(newCampaign);
   }
 
-  async deleteCampaign(id: number): Promise<Campaign> {
-    const campaign = await this.findCampaignById(id);
+  async deleteCampaign(id: number) {
+    const campaign = await this.db.findOneOrFail({
+      where: {
+        id: id,
+      },
+    });
     if (!campaign) {
-      throw new Error(`Campaign with id ${id} not found`);
+      throw new Error(`Campaign not found`);
     }
-    await this.db.remove(campaign);
-    campaign.id = id;
-    return campaign;
+    return this.db.remove(campaign);
+  }
+
+  async updateCampaign(input: InputEditCampaign) {
+    const campaign = await this.db.findOneOrFail({
+      where: {
+        id: input.id,
+      },
+    });
+    if (!campaign) {
+      throw new Error(`Campaign not found`);
+    }
+    const editedCampaign = this.db.create({ ...campaign });
+    editedCampaign.name = input.name;
+    editedCampaign.intervalTest = input.intervalTest;
+    editedCampaign.isWorking = input.isWorking;
+    editedCampaign.isMailAlert = input.isMailAlert;
+    return await this.db.save(editedCampaign);
+  }
+
+  async updateImageCampaign(input: InputEditCampaignImage) {
+    const campaign = await this.db.findOneOrFail({
+      where: {
+        id: input.id,
+      },
+    });
+    if (!campaign) {
+      throw new Error(`Campaign not found`);
+    }
+    const editedCampaign = this.db.create({ ...campaign });
+    editedCampaign.image = input.image;
+    return await this.db.save(editedCampaign);
   }
 }

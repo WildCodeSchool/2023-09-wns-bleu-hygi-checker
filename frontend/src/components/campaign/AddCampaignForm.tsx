@@ -6,10 +6,11 @@ import { z } from "zod";
 
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/router";
-import { CampaignFormProps } from "@/types/interfaces";
 import { useState } from "react";
-import { useCreateCampaignMutation } from "@/types/graphql";
-import { useCampaignsQuery } from "@/types/graphql";
+import {
+  useCampaignsByUserIdQuery,
+  useCreateCampaignMutation,
+} from "@/types/graphql";
 
 // ************ IMPORT UI COMPONENTS  *****************
 import { Button } from "@/components/ui/button";
@@ -29,7 +30,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Loader2, Plus, Wrench } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 // ****************************************************
 
 // Define the form schema for validation
@@ -37,38 +38,29 @@ const formSchema = z.object({
   name: z.string().min(2, {
     message: "Name must be at least 2 characters.",
   }),
-  userId: z.string().min(2, {
-    message: "Id must be at least 2 characters.",
-  }),
 });
-export function CampaignForm({
-  isNewCampaign,
-  buttonText,
-  buttonVariant,
-  title,
-}: CampaignFormProps) {
+export function AddCampaignForm() {
   const { toast } = useToast();
   const router = useRouter();
 
   const [fakeLoading, setFakeLoading] = useState(false);
   const [openForm, setOpenForm] = useState(false);
 
-  const { refetch } = useCampaignsQuery();
+  const { refetch } = useCampaignsByUserIdQuery();
+
   const [createCampaign] = useCreateCampaignMutation({
     onCompleted: (data) => {
       const campaignId = data.createCampaign.id;
       setTimeout(() => {
         setFakeLoading(false);
         setOpenForm(false);
-        if (isNewCampaign === true) {
-          router.push(`/dashboard/campaign/details/${campaignId}`);
-        }
+        router.push(`/dashboard/campaign/details/${campaignId}`);
         toast({
-          title: `Campaign ${isNewCampaign ? "created" : "edited"} successfully`,
+          title: `Campaign created successfully`,
           variant: "success",
         });
         refetch();
-      }, 1500);
+      }, 1000);
     },
     onError: () => {
       toast({
@@ -83,7 +75,6 @@ export function CampaignForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      userId: "c83135a6-3bd7-46b1-b6d8-6b4117cfabf7",
     },
   });
 
@@ -101,7 +92,6 @@ export function CampaignForm({
         variables: {
           input: {
             name: values.name,
-            userId: values.userId,
           },
         },
       });
@@ -113,24 +103,17 @@ export function CampaignForm({
     }
   }
 
-  // the following variable is used for avoiding a ternary in a ternary
-  const EditOrCreate = isNewCampaign === true ? "Create" : "Confirm changes";
-
   return (
     <Dialog open={openForm} onOpenChange={handleCloseForm}>
       <DialogTrigger asChild>
-        <Button className="bg-blue-500 text-white mx-4" variant={buttonVariant}>
-          {isNewCampaign === true ? (
-            <Plus className="md:mr-2 h-4 w-4" />
-          ) : (
-            <Wrench className="md:mr-2 h-4 w-4" />
-          )}
-          <span className="hidden md:block">{buttonText}</span>
+        <Button className="bg-blue-500 text-white mx-4" variant={"edit"}>
+          <Plus className="md:mr-2 h-4 w-4" />
+          <span className="hidden md:block">Create new campaign</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
+          <DialogTitle>Create new campaign</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
@@ -147,13 +130,14 @@ export function CampaignForm({
                 </FormItem>
               )}
             />
-
-            <Button disabled={fakeLoading === true}>
-              {fakeLoading === true && (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              {fakeLoading === true ? "Please wait" : EditOrCreate}
-            </Button>
+            <div className="flex flex-row justify-end">
+              <Button disabled={fakeLoading === true}>
+                {fakeLoading === true && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                {fakeLoading === true ? "Please wait" : "Create"}
+              </Button>
+            </div>
           </form>
         </Form>
       </DialogContent>

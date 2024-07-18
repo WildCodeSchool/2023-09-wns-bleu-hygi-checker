@@ -25,25 +25,64 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Loader2, Plus } from "lucide-react";
+import {
+  useAddUrlToCampaignMutation,
+  useGetUrlFromCampaignQuery,
+} from "@/types/graphql";
+import { AddUrlToCampaignProps } from "@/types/interfaces";
+import { urlPattern } from "@/utils/global/getDomainFromUrl";
+
 // ****************************************************
 
 // Define the form schema for validation
 const formSchema = z.object({
-  URL: z.string().min(4, {
-    message: "URL must be at least 4 characters.", // TODO : Regex the URL Format
+  url: z.string().regex(urlPattern, {
+    message: "Invalid URL format",
+  }),
+  campaignId: z.string().min(1, {
+    message: "Please select your campagin",
   }),
 });
 
-export function UrlForm() {
+export function UrlForm({ campaignId }: AddUrlToCampaignProps) {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false); // to show the loader in the button
   const [openForm, setOpenForm] = useState(false); // to close the form after submit
+
+  const { refetch } = useGetUrlFromCampaignQuery({
+    variables: {
+      campaignId: typeof campaignId === "string" ? parseInt(campaignId) : 0,
+    },
+  });
+
+  const [addUrlToCampaignMutation] = useAddUrlToCampaignMutation({
+    onCompleted: (data) => {
+      setTimeout(() => {
+        setLoading(false);
+        handleCloseForm();
+        toast({
+          title: `${data.addUrlToCampaign.message}`,
+          variant: "success",
+        });
+        refetch();
+      }, 1000);
+    },
+    onError: (err) => {
+      setLoading(false);
+
+      toast({
+        title: `${err.message}`,
+        variant: "destructive",
+      });
+    },
+  });
 
   // Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      URL: "",
+      url: "",
+      campaignId: campaignId,
     },
   });
 
@@ -56,16 +95,11 @@ export function UrlForm() {
   // Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      toast({
-        title: "URL added successfully",
-        variant: "success",
-      });
-      handleCloseForm();
-    }, 1500);
-    // Do something with data below
-    console.warn(values);
+    addUrlToCampaignMutation({
+      variables: {
+        infos: values,
+      },
+    });
   }
 
   return (
@@ -85,23 +119,28 @@ export function UrlForm() {
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
             <FormField
               control={form.control}
-              name="URL"
+              name="url"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input placeholder="http://example.com" {...field} />
+                    <Input
+                      placeholder="http://example.com"
+                      id="URL"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-
-            <Button disabled={loading === true}>
-              {loading === true && (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              {loading === true ? "Please wait" : "Add"}
-            </Button>
+            <div className="flex flex-row justify-end">
+              <Button disabled={loading === true}>
+                {loading === true && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                {loading === true ? "Please wait" : "Add"}
+              </Button>
+            </div>
           </form>
         </Form>
       </DialogContent>
