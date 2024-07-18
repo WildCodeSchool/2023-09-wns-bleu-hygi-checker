@@ -1,7 +1,6 @@
-import { Repository, MoreThan } from "typeorm";
+import { MoreThan, Repository } from "typeorm";
 import Response, { InputCreateResponse } from "../entities/response.entity";
 import datasource from "../lib/datasource";
-import getDateInUTCPlus2 from "../utils/getTimeUTC2";
 
 export default class ResponseService {
   db: Repository<Response>;
@@ -43,7 +42,7 @@ export default class ResponseService {
   async listLatestDayResponsesByCampaignUrlId(
     campaignUrlId: number
   ): Promise<Response[] | null> {
-    const twentyFourHoursAgo = getDateInUTCPlus2();
+    const twentyFourHoursAgo = new Date();
     twentyFourHoursAgo.setHours(twentyFourHoursAgo.getHours() - 24);
 
     return this.db.find({
@@ -61,16 +60,28 @@ export default class ResponseService {
   async createResponse({
     responseTime,
     statusCode,
+    statusText,
     campaignUrlId,
   }: InputCreateResponse) {
-    const dateInUTCPlus2 = getDateInUTCPlus2();
+    const createdAt = new Date(); // Utilise la date UTC actuelle
 
-    const newReponse = this.db.create({
+    const newResponse = this.db.create({
       responseTime,
       statusCode,
-      createdAt: dateInUTCPlus2.toISOString(),
+      statusText,
+      createdAt,
       campaignUrl: { id: campaignUrlId },
     });
-    return await this.db.save(newReponse);
+
+    return await this.db.save(newResponse);
+  }
+
+  async getLatestResponseByCampaignUrlId(
+    campaignUrlId: number
+  ): Promise<Response | null> {
+    return this.db.findOne({
+      where: { campaignUrl: { id: campaignUrlId } },
+      order: { createdAt: "DESC" },
+    });
   }
 }
