@@ -55,6 +55,29 @@ export default class ResponseService {
       order: {
         createdAt: "DESC",
       },
+      take: 24,
+    });
+  }
+
+  async getResponsesByCampaignUrlIdByPage(
+    campaignUrlId: number,
+    page: number,
+    pageSize: number
+  ): Promise<Response[]> {
+    const offset = (page - 1) * pageSize;
+
+    return this.db.find({
+      where: { campaignUrl: { id: campaignUrlId } },
+      relations: ["campaignUrl"],
+      skip: offset,
+      take: pageSize,
+    });
+  }
+
+  async countResponsesByCampaignUrlId(campaignUrlId: number): Promise<number> {
+    return this.db.count({
+      where: { campaignUrl: { id: campaignUrlId } },
+      relations: ["campaignUrl"],
     });
   }
 

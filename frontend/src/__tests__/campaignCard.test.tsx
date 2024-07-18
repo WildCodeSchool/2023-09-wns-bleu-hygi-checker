@@ -2,7 +2,7 @@ import CampaignCard from "@/components/campaign/CampaignCard";
 import "@testing-library/jest-dom";
 import { render, screen } from "@testing-library/react";
 import { MockedProvider } from "@apollo/client/testing";
-import { COUNT_URL_FROM_CAMPAIGN } from "@/requests/queries/countUrlFromCampaign";
+import { COUNT_URL_FROM_CAMPAIGN } from "@/requests/queries/countUrlFromCampaign.queries";
 
 // Mock des données de la requête GraphQL
 const mocks = [

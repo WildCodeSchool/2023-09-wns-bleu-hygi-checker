@@ -46,7 +46,7 @@ interface PieChartProps {
 const PieChart = ({ chartData }: PieChartProps) => (
   <ResponsivePie
     data={chartData}
-    margin={{ top: 20, right: 80, bottom: 30, left: 80 }}
+    margin={{ top: 30, right: 80, bottom: 30, left: 80 }}
     innerRadius={0.5}
     padAngle={0.7}
     cornerRadius={3}

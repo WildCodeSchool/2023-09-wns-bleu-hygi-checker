@@ -54,3 +54,9 @@ export class InputCreateResponse {
   @Field()
   campaignId: number;
 }
+
+@ObjectType()
+export class CountResponses {
+  @Field()
+  count: number;
+}

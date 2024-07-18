@@ -78,7 +78,11 @@ export default function Dropdown({ data }: DropdownProps) {
             <ZoomIn className="mr-2 h-4 w-4" />
             Detail
           </DropdownMenuItem>
-          <QuickUrlTest urlPath={data.url.urlPath} onDropdown={true} />
+          <QuickUrlTest
+            urlPath={data.url.urlPath}
+            onDropdown={true}
+            iconOnly={false}
+          />
           <DropdownMenuItem
             className="cursor-pointer text-red-500"
             onClick={() => setOpenDeleteModal(true)}
