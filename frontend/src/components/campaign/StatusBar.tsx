@@ -34,8 +34,8 @@ const StatusBar = ({ data }: StatusBarProps) => {
   return (
     <div className="flex overflow-hidden">
       <TooltipProvider>
-        {completeData.map((response) => (
-          <Tooltip key={response.id}>
+        {completeData.map((response, index) => (
+          <Tooltip key={index}>
             <TooltipTrigger asChild>
               <div
                 className={`${getStatusColor(response.statusCode, true)} h-12 w-2 rounded-lg mx-1 my-2 transform transition-transform duration-200 hover:scale-110 lg:w-4`}

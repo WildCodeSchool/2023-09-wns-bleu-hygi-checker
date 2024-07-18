@@ -9,9 +9,14 @@ import { urlPattern } from "@/utils/global/getDomainFromUrl";
 interface QuickTestProps {
   urlPath: string;
   onDropdown: boolean;
+  iconOnly: boolean;
 }
 
-export default function QuickUrlTest({ urlPath, onDropdown }: QuickTestProps) {
+export default function QuickUrlTest({
+  urlPath,
+  onDropdown,
+  iconOnly,
+}: QuickTestProps) {
   const [checkURL] = useLazyQuery(CHECK_URL, {
     onCompleted: (data) => {
       const { status, responseTime, responseDate } = data.checkUrl;
@@ -72,12 +77,14 @@ export default function QuickUrlTest({ urlPath, onDropdown }: QuickTestProps) {
     return (
       <Button
         variant="default"
-        className="bg-violet-500"
+        className={`group ${iconOnly === true ? "bg-slate-200 border-2 border-violet-500 mr-2 hover:bg-violet-500 hover:border-primary" : "bg-violet-500 hover:bg-violet-600"} `}
         onClick={handleQuickTest}
         type="button"
       >
-        <Zap className="mr-2 h-4 w-4" />
-        Quick test
+        <Zap
+          className={`group-hover:text-white ${iconOnly === true ? "text-violet-500 " : "mr-2"} h-4 w-4 `}
+        />
+        {iconOnly === false ? "Quick test" : ""}
       </Button>
     );
   }

@@ -1,3 +1,5 @@
+"use client";
+
 import CampaignCard from "@/components/campaign/CampaignCard";
 import Layout from "@/components/dashboard/Layout";
 import { AddCampaignForm } from "@/components/campaign/AddCampaignForm";
@@ -17,7 +19,9 @@ export default function Campaign() {
     <Layout title="Campaign">
       <>
         {loading ? (
-          <Loading />
+          <div className="h-full flex justify-center items-center">
+            <Loading />
+          </div>
         ) : (
           <>
             <div className="flex flex-col min-h-full gap-8">

@@ -4,15 +4,15 @@ exports[`CampaignCard component renders correctly 1`] = `
 <body>
   <div>
     <div
-      class="rounded-lg bg-white text-card-foreground shadow-sm flex flex-col w-[350px]"
+      class="rounded-lg bg-white text-card-foreground shadow-sm flex flex-col w-[350px] h-[350px]"
     >
       <img
         alt="image"
         class="w-full rounded-t-lg"
         data-nimg="1"
         decoding="async"
-        height="0"
-        loading="lazy"
+        fetchpriority="high"
+        height="200"
         src="/_next/image?url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1564406836777-5964b5c6c3a5%3Fcrop%3Dentropy%26cs%3Dtinysrgb%26fit%3Dmax%26fm%3Djpg%26ixid%3DMnwxfDB8MXxyYW5kb218MHx8d2FsbHBhcGVyc3x8fHx8fDE3MTU4NzgwNDQ%26ixlib%3Drb-4.0.3%26q%3D80%26utm_campaign%3Dapi-credit%26utm_medium%3Dreferral%26utm_source%3Dunsplash_source%26w%3D1080&w=750&q=75"
         srcset="/_next/image?url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1564406836777-5964b5c6c3a5%3Fcrop%3Dentropy%26cs%3Dtinysrgb%26fit%3Dmax%26fm%3Djpg%26ixid%3DMnwxfDB8MXxyYW5kb218MHx8d2FsbHBhcGVyc3x8fHx8fDE3MTU4NzgwNDQ%26ixlib%3Drb-4.0.3%26q%3D80%26utm_campaign%3Dapi-credit%26utm_medium%3Dreferral%26utm_source%3Dunsplash_source%26w%3D1080&w=384&q=75 1x, /_next/image?url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1564406836777-5964b5c6c3a5%3Fcrop%3Dentropy%26cs%3Dtinysrgb%26fit%3Dmax%26fm%3Djpg%26ixid%3DMnwxfDB8MXxyYW5kb218MHx8d2FsbHBhcGVyc3x8fHx8fDE3MTU4NzgwNDQ%26ixlib%3Drb-4.0.3%26q%3D80%26utm_campaign%3Dapi-credit%26utm_medium%3Dreferral%26utm_source%3Dunsplash_source%26w%3D1080&w=750&q=75 2x"
         style="color: transparent;"

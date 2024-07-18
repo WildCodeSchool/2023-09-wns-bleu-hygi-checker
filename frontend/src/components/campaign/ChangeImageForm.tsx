@@ -50,7 +50,7 @@ export function ChangeImageForm({
           variant: "success",
         });
         refetch();
-      }, 1000);
+      }, 500);
     },
     onError: (err) => {
       setLoading(false);

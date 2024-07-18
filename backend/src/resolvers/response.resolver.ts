@@ -1,5 +1,8 @@
 import { Arg, Int, Ctx, Mutation, Query, Resolver } from "type-graphql";
-import Response, { InputCreateResponse } from "../entities/response.entity";
+import Response, {
+  InputCreateResponse,
+  CountResponses,
+} from "../entities/response.entity";
 import ResponseService from "../services/response.service";
 import CampaignUrlService from "../services/campaignUrl.service";
 import AccessCheckResolver from "./accessCheck.resolver";
@@ -141,6 +144,68 @@ export default class ResponseResolver {
       );
 
     return latestDayResponsesOfThisUrl;
+  }
+  // -------------------------------------------------------------------------
+  /**
+   * responsesByCampaignUrlIdByPage : get paginated responses on an URL belonging to a given campaign
+   * @param campaignUrlId the ID of the campaign you want to get the responses from
+   * @param page the page number you want to retrieve
+   * @param pageSize the number of responses per page
+   * @returns an array of Responses and the total count of responses related to this campaignUrlId
+   */
+  @Query(() => [Response])
+  async responsesByCampaignUrlIdByPage(
+    @Ctx() ctx: MyContext,
+    @Arg("campaignUrlId", () => Int) campaignUrlId: number,
+    @Arg("page", () => Int, { defaultValue: 1 }) page: number,
+    @Arg("pageSize", () => Int, { defaultValue: 10 }) pageSize: number
+  ): Promise<Response[]> {
+    // ------------------------ START VERIFICATION -----------------------
+    const validation = await this.accessChecker.verifyIfUrlBelongToUserCampaign(
+      ctx,
+      campaignUrlId
+    );
+
+    if (validation !== true) {
+      throw new Error("You can't perform this action");
+    }
+    // ------------------------ END VERIFICATION -----------------------
+
+    // Fetch the responses with pagination
+    return this.responseService.getResponsesByCampaignUrlIdByPage(
+      campaignUrlId,
+      page,
+      pageSize
+    );
+  }
+
+  // -------------------------------------------------------------------------
+  /**
+   * countResponsesByCampaignUrlId : count all responses on an URL belonging to a given campaign
+   * @param campaignUrlId the ID of the campaign you want to get the responses from
+   * @returns the count of responses related to this campaignUrlId
+   */
+  @Query(() => CountResponses)
+  async countResponsesByCampaignUrlId(
+    @Ctx() ctx: MyContext,
+    @Arg("campaignUrlId", () => Int) campaignUrlId: number
+  ): Promise<CountResponses | undefined> {
+    // ------------------------ START VERIFICATION -----------------------
+    const validation = await this.accessChecker.verifyIfUrlBelongToUserCampaign(
+      ctx,
+      campaignUrlId
+    );
+
+    if (validation !== true) {
+      throw new Error("You can't perform this action");
+    }
+    // ------------------------ END VERIFICATION -----------------------
+
+    // Fetch the responses with pagination
+    const count =
+      await this.responseService.countResponsesByCampaignUrlId(campaignUrlId);
+
+    return { count };
   }
 
   // -------------------------------------------------------------------------
