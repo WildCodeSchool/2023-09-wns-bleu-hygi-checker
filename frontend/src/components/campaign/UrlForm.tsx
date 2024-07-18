@@ -133,13 +133,14 @@ export function UrlForm({ campaignId }: AddUrlToCampaignProps) {
                 </FormItem>
               )}
             />
-
-            <Button disabled={loading === true}>
-              {loading === true && (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              {loading === true ? "Please wait" : "Add"}
-            </Button>
+            <div className="flex flex-row justify-end">
+              <Button disabled={loading === true}>
+                {loading === true && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                {loading === true ? "Please wait" : "Add"}
+              </Button>
+            </div>
           </form>
         </Form>
       </DialogContent>
