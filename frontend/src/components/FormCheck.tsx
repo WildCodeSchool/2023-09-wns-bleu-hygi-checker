@@ -8,6 +8,7 @@ import { useLazyQuery } from "@apollo/client";
 import { CHECK_URL } from "@/requests/queries/check-url.queries";
 import { AddUrlToCampaign } from "./check/AddUrlToCampaign";
 import { Plus } from "lucide-react";
+import { urlPattern } from "@/utils/global/getDomainFromUrl";
 
 interface FormCheckProps {
   inputId: string;
@@ -70,8 +71,6 @@ export default function FormCheck({
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
     e.preventDefault();
-    const urlPattern =
-      /^(https?:\/\/)?(www\.)?[\w-]+\.[\w-]+(?:\.[\w-]+)*(\/[\w-]*)*$/;
 
     const isValidUrlFormat = urlPattern.test(urlPath);
 
