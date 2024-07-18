@@ -22,6 +22,23 @@ export interface ConfirmationModalProps {
   yesText: string;
   action: () => void;
 }
+export interface CGUModalProps {
+  buttonText: string;
+  buttonVariant:
+    | "link"
+    | "default"
+    | "destructive"
+    | "outline"
+    | "secondary"
+    | "white"
+    | "ghost"
+    | null
+    | undefined;
+  title: string;
+  noText: string;
+  yesText: string;
+  onConfirm: (isConfirmed: boolean) => void;
+}
 export interface EditCampaignFormProps {
   campaignId: string;
 }

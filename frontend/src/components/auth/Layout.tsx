@@ -23,7 +23,6 @@ export default function LayoutLogin({ children, title }: LayoutProps) {
           <Link href="/">
             <div className="flex items-center justify-center bg-primary p-2 rounded-full text-white">
               <ArrowLeft className="h-6 w-6 text-white" />
-              RETURN
             </div>
           </Link>
         </div>
