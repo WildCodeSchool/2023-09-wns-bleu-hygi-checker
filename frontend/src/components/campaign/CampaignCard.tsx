@@ -13,24 +13,42 @@ import {
 import { Switch } from "../ui/switch";
 import Link from "next/link";
 import { CampaignCardProps } from "@/types/interfaces";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import { useCountUrlFromCampaignQuery } from "@/types/graphql";
+import {
+  useCountUrlFromCampaignQuery,
+  useSwitchWorkingCampaignMutation,
+  useCampaignsByUserIdQuery,
+} from "@/types/graphql";
 import { testPerDay } from "@/utils/chartFunction/testsPerDay";
 import { formatDate } from "@/utils/chartFunction/formatDate";
 
 export default function CampaignCard({ data }: CampaignCardProps) {
   const { toast } = useToast();
   const [isWorkingCampaign, setIsWorkingCampaign] = useState<boolean>(
-    data.isWorking ?? false
+    data?.isWorking ?? false
   );
+
+  const { refetch } = useCampaignsByUserIdQuery();
+
+  const [switchWorkingCampaignMutation] = useSwitchWorkingCampaignMutation({
+    onCompleted: (data) => {
+      toast({
+        title: data.switchWorkingCampaign.message,
+        variant: `${isWorkingCampaign === false ? "default" : "success"}`,
+      });
+      refetch();
+    },
+    onError: () => {
+      toast({
+        title: `Something went wrong. Please try again`,
+        variant: "destructive",
+      });
+    },
+  });
 
   const handleIsWorking = () => {
     setIsWorkingCampaign(!isWorkingCampaign);
-    toast({
-      title: `Campaign ${isWorkingCampaign === true ? "stopped" : "started"} successfully ${isWorkingCampaign === true ? "⏸️" : "▶️"}`,
-      variant: `${isWorkingCampaign === true ? "default" : "success"}`,
-    });
   };
 
   const { data: countUrl } = useCountUrlFromCampaignQuery({
@@ -41,6 +59,20 @@ export default function CampaignCard({ data }: CampaignCardProps) {
 
   const count = countUrl?.countUrlFromCampaign.count;
   const testEachDay = testPerDay(count as number, data?.intervalTest as number);
+
+  useEffect(() => {
+    if (isWorkingCampaign !== data?.isWorking) {
+      switchWorkingCampaignMutation({
+        variables: {
+          input: {
+            campaignId: data?.id,
+            isWorking: isWorkingCampaign,
+          },
+        },
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isWorkingCampaign]);
 
   return (
     <Card className="flex flex-col w-[350px] h-[350px]">
