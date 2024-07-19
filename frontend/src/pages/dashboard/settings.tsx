@@ -17,30 +17,36 @@ export default function Settings() {
       ) : !user ? (
         <p className="text-center text-white">User profile not found</p>
       ) : (
-        <div className="flex flex-col text-center gap-8 items-center text-white">
-          <Tabs defaultValue="account">
-            <TabsList>
-              <TabsTrigger value="account" className="md:mx-6">
-                Account
-              </TabsTrigger>
-              <TabsTrigger value="profile" className="md:mx-6">
-                Profile
-              </TabsTrigger>
-              <TabsTrigger value="appearance" className="md:mx-6">
-                Appearance
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="account">
+        <>
+          {/* ---DESKTOP--- */}
+          <div className="hidden xl:flex items-center justify-center h-full">
+            <div className="flex bg-white rounded-md">
               <Account data={user} />
-            </TabsContent>
-            <TabsContent value="profile">
               <Profile data={user} />
-            </TabsContent>
-            <TabsContent value="appearance">
               <Appearance data={user} />
-            </TabsContent>
-          </Tabs>
-        </div>
+            </div>
+          </div>
+
+          {/* ---MOBILE--- */}
+          <div className="flex justify-center xl:hidden">
+            <Tabs defaultValue="account">
+              <TabsList className="flex gap-2 justify-center">
+                <TabsTrigger value="account">Account</TabsTrigger>
+                <TabsTrigger value="profile">Profile</TabsTrigger>
+                <TabsTrigger value="appearance">Appearance</TabsTrigger>
+              </TabsList>
+              <TabsContent value="account">
+                <Account data={user} />
+              </TabsContent>
+              <TabsContent value="profile">
+                <Profile data={user} />
+              </TabsContent>
+              <TabsContent value="appearance">
+                <Appearance data={user} />
+              </TabsContent>
+            </Tabs>
+          </div>
+        </>
       )}
     </Layout>
   );
