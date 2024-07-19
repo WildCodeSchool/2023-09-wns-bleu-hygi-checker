@@ -3,6 +3,7 @@
     "target": "ESNext",
     "module": "commonjs",
     "moduleResolution": "Node",
+    "esModuleInterop": true,
     "sourceMap": true,
     "outDir": "./dist",
     "experimentalDecorators": true,

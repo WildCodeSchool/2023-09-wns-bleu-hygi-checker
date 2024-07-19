@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ["source.unsplash.com"],
+    domains: ["fastly.picsum.photos"],
   },
   reactStrictMode: true,
   webpackDevMiddleware: (config) => {
@@ -10,6 +10,14 @@ const nextConfig = {
       poll: 1000,
       aggregateTimeout: 300,
     };
+    return config;
+  },
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.mjs$/,
+      include: /node_modules/,
+      type: "javascript/auto",
+    });
     return config;
   },
 };

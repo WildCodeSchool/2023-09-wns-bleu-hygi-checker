@@ -7,7 +7,7 @@ interface Payload {
   role: string;
 }
 
-const SECRET_KEY = process.env.SECRET_KEY || "";
+const JWT_PRIVATE_KEY = process.env.JWT_PRIVATE_KEY || "";
 
 // fonction utilisé à chaque appel du middleware (qd on va sur une page)
 export default async function middleware(request: NextRequest) {
@@ -19,7 +19,7 @@ export default async function middleware(request: NextRequest) {
 export async function verify(token: string): Promise<Payload> {
   const { payload } = await jwtVerify<Payload>(
     token,
-    new TextEncoder().encode(SECRET_KEY)
+    new TextEncoder().encode(JWT_PRIVATE_KEY)
   );
   return payload;
 }
@@ -28,10 +28,7 @@ async function checkToken(token: string | undefined, request: NextRequest) {
   let response: NextResponse<unknown>;
   // si token undefined
   if (!token) {
-    if (
-      request.nextUrl.pathname.startsWith("/dashboard") ||
-      request.nextUrl.pathname.startsWith("/check")
-    ) {
+    if (request.nextUrl.pathname.startsWith("/dashboard")) {
       response = NextResponse.redirect(new URL("/auth/login", request.url));
     } else {
       response = NextResponse.next();
@@ -47,6 +44,10 @@ async function checkToken(token: string | undefined, request: NextRequest) {
 
     if (payload.email) {
       response = NextResponse.next();
+
+      if (request.nextUrl.pathname.startsWith("/auth")) {
+        response = NextResponse.redirect(new URL("/", request.url));
+      }
 
       if (request.nextUrl.pathname.startsWith("/admin")) {
         if (payload.role !== "ADMIN") {

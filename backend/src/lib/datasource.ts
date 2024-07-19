@@ -3,6 +3,11 @@ import { DataSource } from "typeorm";
 
 import User from "../entities/user.entity";
 import Test from "../entities/test.entity";
+import Url from "../entities/url.entity";
+import Response from "../entities/response.entity";
+import Campaign from "../entities/campaign.entity";
+import CampaignUrl from "../entities/campaignUrl.entity";
+import AccessCheckResolver from "../resolvers/accessCheck.resolver";
 
 dotenv.config();
 
@@ -13,7 +18,15 @@ const db = new DataSource({
   username: process.env.DB_USER || "postgres",
   password: process.env.DB_PASS || "postgres",
   database: process.env.DB_NAME || "postgres",
-  entities: [User, Test],
+  entities: [
+    User,
+    Test,
+    Url,
+    Response,
+    Campaign,
+    CampaignUrl,
+    AccessCheckResolver,
+  ],
   synchronize: true,
 });
 
