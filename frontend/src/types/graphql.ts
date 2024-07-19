@@ -33,7 +33,7 @@ export type Scalars = {
 
 export type Campaign = {
   __typename?: "Campaign";
-  createdAt: Scalars["DateTimeISO"]["output"];
+  createdAt: Date;
   id: Scalars["Float"]["output"];
   image?: Maybe<Scalars["String"]["output"]>;
   intervalTest?: Maybe<Scalars["Float"]["output"]>;
