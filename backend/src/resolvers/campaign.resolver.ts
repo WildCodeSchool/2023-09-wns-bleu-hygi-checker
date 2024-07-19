@@ -3,6 +3,7 @@ import Campaign, {
   InputCreateCampaign,
   InputEditCampaign,
   InputEditCampaignImage,
+  InputSwitchWorkingCampaign,
 } from "../entities/campaign.entity";
 import CampaignService from "../services/campaign.service";
 import { MyContext } from "..";
@@ -141,6 +142,31 @@ export default class CampaignResolver {
     await this.campaignService.updateImageCampaign(input);
     const m = new Message();
     m.message = "Image of this campaign updated successfully";
+    m.success = true;
+    return m;
+  }
+
+  @Mutation(() => Message)
+  async switchWorkingCampaign(
+    @Ctx() ctx: MyContext,
+    @Arg("input") input: InputSwitchWorkingCampaign
+  ) {
+    // ------------------------ START VERIFICATION -----------------------
+    const validation = await this.accessChecker.verifyIfCampaignBelongToUser(
+      ctx,
+      input.campaignId
+    );
+
+    if (validation !== true) {
+      throw new Error("You can't perform this action");
+    }
+    // ------------------------ END VERIFICATION -----------------------
+    await this.campaignService.switchWorking(input);
+    const m = new Message();
+    m.message =
+      input.isWorking === true
+        ? "Campaign is now working ▶️"
+        : "Campaign has been stopped succesfully ⏸️";
     m.success = true;
     return m;
   }

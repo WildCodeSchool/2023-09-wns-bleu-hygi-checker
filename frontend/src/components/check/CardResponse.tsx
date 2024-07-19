@@ -33,15 +33,15 @@ export default function CardResponse() {
     <Card className="flex flex-col justify-center">
       <CardContent className="grid gap-4">
         <Input id="check_response" className="mt-4" value={urlPath} disabled />
-        {loading && <p>Vérification en cours...</p>}
+        {loading && <p>Loading...</p>}
         {data && (
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[100px]">Type</TableHead>
-                <TableHead>Status</TableHead>
+                <TableHead className="w-[100px]">Date</TableHead>
                 <TableHead>Time</TableHead>
-                <TableHead className="text-right">Date</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead className="text-right">Response Time</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
