@@ -36,7 +36,7 @@ export default function Index() {
               router.push("auth/login");
             }}
           >
-            Create your free acount
+            Create your free account
           </Button>
         )}
       </div>

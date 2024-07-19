@@ -10,8 +10,13 @@ import {
 
 import { MoveUpRight } from "lucide-react";
 import { getDomainFromUrl } from "@/utils/global/getDomainFromUrl";
-import { Url, useDeleteUrlFromCampaignMutation } from "@/types/graphql";
-import { useLastDayResponsesOfOneUrlLazyQuery } from "@/types/graphql";
+import {
+  Url,
+  useDeleteUrlFromCampaignMutation,
+  useLastDayResponsesOfOneUrlLazyQuery,
+  useResponsesByCampaignUrlIdByPageQuery,
+  useCountResponsesByCampaignUrlIdQuery,
+} from "@/types/graphql";
 import QuickUrlTest from "@/components/check/QuickUrlTest";
 import { ConfirmationModal } from "@/components/ConfirmationModal";
 import PieChart from "@/components/analytics/PieChart";
@@ -90,9 +95,38 @@ export default function DesktopLayout({
     }
   };
 
-  const [getLastReponses, { data }] = useLastDayResponsesOfOneUrlLazyQuery();
+  const [getLastReponses, { data, refetch: refetchLastResponses }] =
+    useLastDayResponsesOfOneUrlLazyQuery();
 
   const lastResponses = data?.lastDayResponsesOfOneUrl;
+
+  const { refetch: refetchAllResponses } =
+    useResponsesByCampaignUrlIdByPageQuery({
+      variables: {
+        pageSize: 5,
+        page: 1,
+        campaignUrlId: selectedUrlId,
+      },
+    });
+
+  const { refetch: refetchCountResponses } =
+    useCountResponsesByCampaignUrlIdQuery({
+      variables: {
+        campaignUrlId: selectedUrlId,
+      },
+    });
+
+  useEffect(() => {
+    if (selectedUrlId !== 0) {
+      setInterval(() => {
+        refetchLastResponses();
+        refetchAllResponses();
+        refetchCountResponses();
+        console.warn("Data refreshed");
+      }, 3 * 1000);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedUrlId]);
 
   useEffect(() => {
     if (selectedUrlId !== 0) {

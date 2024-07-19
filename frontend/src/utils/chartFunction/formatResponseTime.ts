@@ -3,7 +3,7 @@ import { InputData } from "@/types/interfaces";
 export interface OutputData {
   id: string;
   color: string;
-  data: { x: string; y: number }[];
+  data: { x: number; y: number | null | undefined }[];
 }
 
 export const formatResponseTime = (inputData: InputData[]): OutputData[] => {
@@ -13,23 +13,17 @@ export const formatResponseTime = (inputData: InputData[]): OutputData[] => {
     data: [],
   };
 
-  inputData.forEach((response) => {
+  for (let i = 0; i < inputData.length; i++) {
     if (
-      response.createdAt &&
-      response.responseTime &&
-      response.responseTime !== null &&
-      response.responseTime !== undefined
+      inputData[i].createdAt &&
+      inputData[i].responseTime &&
+      inputData[i].responseTime !== null &&
+      inputData[i].responseTime !== undefined
     ) {
-      const date = new Date(response.createdAt);
-      const hours = date.getUTCHours().toString().padStart(2, "0");
-
-      const exists = outputData.data.some((entry) => entry.x === hours);
-
-      if (!exists) {
-        outputData.data.push({ x: hours, y: response.responseTime });
-      }
+      outputData.data.push({ x: i + 1, y: inputData[i].responseTime });
     }
-  });
+  }
+
   outputData.data.reverse();
   return [outputData];
 };
