@@ -40,6 +40,7 @@ export default class UserResolver {
     }
   }
 
+  @Authorized(["USER", "ADMIN"])
   @Query(() => User)
   async getAvatar(@Ctx() ctx: MyContext) {
     // TODO : remove this query as the getUserProfile is enough to get the avatar => make a query on front with getUserProfile but just select avatar
@@ -53,7 +54,7 @@ export default class UserResolver {
       throw new Error("You must be authenticated to perform this action");
     }
   }
-
+  @Authorized(["USER", "ADMIN"])
   @Mutation(() => NewUserAvatar)
   async changeAvatar(
     @Ctx() ctx: MyContext,
@@ -73,7 +74,7 @@ export default class UserResolver {
       throw new Error("You must be authenticated to perform this action");
     }
   }
-
+  @Authorized(["USER", "ADMIN"])
   @Mutation(() => UserProfile)
   async updateProfile(
     @Ctx() ctx: MyContext,
@@ -93,7 +94,7 @@ export default class UserResolver {
       throw new Error("You must be authenticated to perform this action");
     }
   }
-
+  @Authorized(["USER", "ADMIN"])
   @Mutation(() => UserProfile)
   async updateName(
     @Ctx() ctx: MyContext,
@@ -175,7 +176,6 @@ export default class UserResolver {
       throw new Error("You must be authenticated to perform this action");
     }
   }
-
   @Query(() => Message)
   async login(@Arg("infos") infos: InputLogin, @Ctx() ctx: MyContext) {
     const user = await new UserService().findUserByEmail(infos.email);
@@ -202,7 +202,7 @@ export default class UserResolver {
     }
     return m;
   }
-
+  @Authorized(["USER", "ADMIN"])
   @Query(() => Message)
   async logout(@Ctx() ctx: MyContext) {
     if (ctx.user) {
@@ -215,7 +215,6 @@ export default class UserResolver {
 
     return m;
   }
-
   @Mutation(() => UserWithoutPassword)
   async register(@Arg("infos") infos: InputRegister) {
     const user = await new UserService().findUserByEmail(infos.email);
