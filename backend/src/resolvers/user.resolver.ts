@@ -176,7 +176,6 @@ export default class UserResolver {
       throw new Error("You must be authenticated to perform this action");
     }
   }
-  @Authorized(["USER", "ADMIN"])
   @Query(() => Message)
   async login(@Arg("infos") infos: InputLogin, @Ctx() ctx: MyContext) {
     const user = await new UserService().findUserByEmail(infos.email);
