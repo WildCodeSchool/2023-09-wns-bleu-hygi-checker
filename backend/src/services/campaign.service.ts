@@ -3,6 +3,7 @@ import Campaign, {
   InputCreateCampaign,
   InputEditCampaign,
   InputEditCampaignImage,
+  InputSwitchWorkingCampaign,
 } from "../entities/campaign.entity";
 import User from "../entities/user.entity";
 import datasource from "../lib/datasource";
@@ -114,6 +115,20 @@ export default class CampaignService {
     }
     const editedCampaign = this.db.create({ ...campaign });
     editedCampaign.image = input.image;
+    return await this.db.save(editedCampaign);
+  }
+
+  async switchWorking(input: InputSwitchWorkingCampaign) {
+    const campaign = await this.db.findOneOrFail({
+      where: {
+        id: input.campaignId,
+      },
+    });
+    if (!campaign) {
+      throw new Error(`Campaign not found`);
+    }
+    const editedCampaign = this.db.create({ ...campaign });
+    editedCampaign.isWorking = input.isWorking;
     return await this.db.save(editedCampaign);
   }
 }

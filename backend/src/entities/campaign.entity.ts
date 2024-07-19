@@ -1,3 +1,4 @@
+import { Max, Min } from "class-validator";
 import { Field, InputType, ObjectType } from "type-graphql";
 import {
   BaseEntity,
@@ -9,8 +10,8 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from "typeorm";
-import User from "./user.entity";
 import CampaignUrl from "./campaignUrl.entity";
+import User from "./user.entity";
 
 @ObjectType()
 @Entity()
@@ -29,6 +30,8 @@ export default class Campaign extends BaseEntity {
 
   @Field({ nullable: true })
   @Column({ nullable: true, default: 60 })
+  @Min(0.5, { message: "Interval must be at least 0.5 minutes." })
+  @Max(1440, { message: "Interval must be at most 1440 minutes." })
   intervalTest?: number = 60; // Interval in minutes, default 60
 
   @Field({ nullable: true })
@@ -103,4 +106,13 @@ export class InputEditCampaignImage {
 export class CampaignIds {
   @Field()
   id: number;
+}
+
+@InputType()
+export class InputSwitchWorkingCampaign {
+  @Field()
+  campaignId: number;
+
+  @Field()
+  isWorking?: boolean;
 }
