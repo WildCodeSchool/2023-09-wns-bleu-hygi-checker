@@ -1,5 +1,5 @@
 import * as argon2 from "argon2";
-import Cookies from "cookies";
+import * as Cookies from "cookies";
 import { SignJWT } from "jose";
 import { Arg, Authorized, Ctx, Mutation, Query, Resolver } from "type-graphql";
 import { MyContext } from "..";

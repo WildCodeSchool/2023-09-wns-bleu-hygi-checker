@@ -1,11 +1,11 @@
-import http from "http";
+import * as http from "http";
 
 import { ApolloServer } from "@apollo/server";
 import { expressMiddleware } from "@apollo/server/express4";
 import { ApolloServerPluginDrainHttpServer } from "@apollo/server/plugin/drainHttpServer";
-import Cookies from "cookies";
-import cors from "cors";
-import express from "express";
+import * as Cookies from "cookies";
+import * as cors from "cors";
+import * as express from "express";
 import { jwtVerify } from "jose";
 
 import "reflect-metadata";
