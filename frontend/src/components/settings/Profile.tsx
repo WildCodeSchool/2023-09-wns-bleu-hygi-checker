@@ -4,7 +4,6 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-
 import { cn } from "@/lib/utils";
 import { useState, useEffect, useMemo } from "react";
 
@@ -142,14 +141,14 @@ export default function Profile({ data }: SettingsProps) {
   }, [form, initialValues]);
 
   return (
-    <Card>
+    <Card className="xl:border-x xl:rounded-none w-[350px] sm:w-[385px] text-center">
       <CardHeader>
         <CardTitle>Profile</CardTitle>
         <CardDescription>Modify your profile information</CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col justify-center items-center space-y-2">
+      <CardContent className="flex flex-col justify-center items-center space-y-4">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-12">
             <FormField
               control={form.control}
               name="gender"
@@ -160,7 +159,7 @@ export default function Profile({ data }: SettingsProps) {
                     <RadioGroup
                       onValueChange={field.onChange}
                       defaultValue={field.value}
-                      className="flex justify-center items-center gap-6"
+                      className="flex flex-col justify-center items-center gap-6"
                     >
                       <FormItem className="flex items-center space-x-1 space-y-0">
                         <FormControl>
@@ -198,14 +197,14 @@ export default function Profile({ data }: SettingsProps) {
               control={form.control}
               name="birth_date"
               render={({ field }) => (
-                <FormItem className="flex flex-col items-center justify-center text-center">
+                <FormItem className="flex flex-col items-center justify-center">
                   <FormLabel>Date of birth</FormLabel>
                   <FormControl>
                     <Input
                       type="date"
                       min="1900-01-01"
                       max={todayDate}
-                      className="w-1/2 flex items-center justify-center text-center"
+                      className="flex items-center justify-center"
                       {...field}
                     />
                   </FormControl>
@@ -217,19 +216,12 @@ export default function Profile({ data }: SettingsProps) {
               control={form.control}
               name="country"
               render={({ field }) => (
-                <FormItem className="flex flex-col items-center justify-center text-center">
+                <FormItem className="flex flex-col items-center justify-center">
                   <FormLabel>Country</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
-                        <Button
-                          variant="default"
-                          role="combobox"
-                          className={cn(
-                            "w-1/2",
-                            !field.value && "text-neutral-400"
-                          )}
-                        >
+                        <Button variant="setting" role="combobox">
                           {field.value
                             ? countries.find(
                                 (language) => language.code === field.value
@@ -239,7 +231,7 @@ export default function Profile({ data }: SettingsProps) {
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
-                    <PopoverContent className="w-1/2 p-0">
+                    <PopoverContent className="p-0">
                       <Command>
                         <CommandInput placeholder="Search country..." />
                         <CommandEmpty>No country found.</CommandEmpty>
@@ -275,17 +267,14 @@ export default function Profile({ data }: SettingsProps) {
             />
             {/* ******************************* */}
             {isChanged && (
-              <Button
-                disabled={!isChanged}
-                type="submit"
-                variant="outline"
-                className="w-1/2 mt-4"
-              >
-                {fakeLoading === true && (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                )}
-                {fakeLoading === true ? "Please wait" : "Update Profile"}
-              </Button>
+              <div className="flex justify-center">
+                <Button type="submit" className="mt-8">
+                  {fakeLoading === true && (
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  )}
+                  {fakeLoading === true ? "Please wait" : "Update Profile"}
+                </Button>
+              </div>
             )}
             {/* ***************************** */}
           </form>

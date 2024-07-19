@@ -67,7 +67,7 @@ export default function Appearance({ data }: SettingsProps) {
   };
 
   return (
-    <Card className="">
+    <Card className="w-[350px] sm:w-[385px] text-center">
       <CardHeader>
         <CardTitle>Appearance</CardTitle>
         <CardDescription>Modify your appearance information</CardDescription>
