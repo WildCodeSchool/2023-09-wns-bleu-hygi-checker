@@ -92,6 +92,7 @@ export type InputCreateCampaign = {
 export type InputCreateResponse = {
   campaignId: Scalars["Float"]["input"];
   campaignUrlId: Scalars["Float"]["input"];
+  createdAt: Scalars["DateTimeISO"]["input"];
   responseTime: Scalars["Float"]["input"];
   statusCode: Scalars["Float"]["input"];
   statusText: Scalars["String"]["input"];
@@ -126,6 +127,11 @@ export type InputRegister = {
   username: Scalars["String"]["input"];
 };
 
+export type InputSwitchWorkingCampaign = {
+  campaignId: Scalars["Float"]["input"];
+  isWorking: Scalars["Boolean"]["input"];
+};
+
 export type Message = {
   __typename?: "Message";
   message: Scalars["String"]["output"];
@@ -147,6 +153,7 @@ export type Mutation = {
   modifyCampaign: Message;
   modifyImageOfCampaign: Message;
   register: UserWithoutPassword;
+  switchWorkingCampaign: Message;
   updateName: UserProfile;
   updateProfile: UserProfile;
   upgradeRole: Array<User>;
@@ -198,6 +205,10 @@ export type MutationModifyImageOfCampaignArgs = {
 
 export type MutationRegisterArgs = {
   infos: InputRegister;
+};
+
+export type MutationSwitchWorkingCampaignArgs = {
+  input: InputSwitchWorkingCampaign;
 };
 
 export type MutationUpdateNameArgs = {
@@ -470,6 +481,19 @@ export type ModifyCampaignMutationVariables = Exact<{
 export type ModifyCampaignMutation = {
   __typename?: "Mutation";
   modifyCampaign: { __typename?: "Message"; success: boolean; message: string };
+};
+
+export type SwitchWorkingCampaignMutationVariables = Exact<{
+  input: InputSwitchWorkingCampaign;
+}>;
+
+export type SwitchWorkingCampaignMutation = {
+  __typename?: "Mutation";
+  switchWorkingCampaign: {
+    __typename?: "Message";
+    message: string;
+    success: boolean;
+  };
 };
 
 export type AddTestMutationVariables = Exact<{
@@ -1190,6 +1214,57 @@ export type ModifyCampaignMutationResult =
 export type ModifyCampaignMutationOptions = Apollo.BaseMutationOptions<
   ModifyCampaignMutation,
   ModifyCampaignMutationVariables
+>;
+export const SwitchWorkingCampaignDocument = gql`
+  mutation SwitchWorkingCampaign($input: InputSwitchWorkingCampaign!) {
+    switchWorkingCampaign(input: $input) {
+      message
+      success
+    }
+  }
+`;
+export type SwitchWorkingCampaignMutationFn = Apollo.MutationFunction<
+  SwitchWorkingCampaignMutation,
+  SwitchWorkingCampaignMutationVariables
+>;
+
+/**
+ * __useSwitchWorkingCampaignMutation__
+ *
+ * To run a mutation, you first call `useSwitchWorkingCampaignMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSwitchWorkingCampaignMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [switchWorkingCampaignMutation, { data, loading, error }] = useSwitchWorkingCampaignMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSwitchWorkingCampaignMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SwitchWorkingCampaignMutation,
+    SwitchWorkingCampaignMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    SwitchWorkingCampaignMutation,
+    SwitchWorkingCampaignMutationVariables
+  >(SwitchWorkingCampaignDocument, options);
+}
+export type SwitchWorkingCampaignMutationHookResult = ReturnType<
+  typeof useSwitchWorkingCampaignMutation
+>;
+export type SwitchWorkingCampaignMutationResult =
+  Apollo.MutationResult<SwitchWorkingCampaignMutation>;
+export type SwitchWorkingCampaignMutationOptions = Apollo.BaseMutationOptions<
+  SwitchWorkingCampaignMutation,
+  SwitchWorkingCampaignMutationVariables
 >;
 export const AddTestDocument = gql`
   mutation AddTest($text: String!) {
