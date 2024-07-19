@@ -77,7 +77,7 @@ export default function Account({ data }: SettingsProps) {
   };
 
   return (
-    <Card className="md:w-full">
+    <Card className="w-[350px] sm:w-[385px] text-center">
       <CardHeader>
         <CardTitle>Account</CardTitle>
         <CardDescription>Modify your account information</CardDescription>
@@ -110,10 +110,13 @@ export default function Account({ data }: SettingsProps) {
               onChange={(e) => setUsername(e.target.value)}
             />
           </div>
-          {username !== initialUsername && (
+          {/* {username !== initialUsername && ( */}
+          <div className="flex justify-center">
             <Button
               disabled={
-                username.trim().length <= 3 || username.trim().length >= 20
+                username.trim().length <= 3 ||
+                username.trim().length >= 20 ||
+                username === initialUsername
               }
               className="mt-6"
             >
@@ -122,25 +125,28 @@ export default function Account({ data }: SettingsProps) {
               )}
               {fakeLoading === true ? "Please wait" : "Change username"}
             </Button>
-          )}
+          </div>
+          {/* )} */}
         </form>
-        <p className="mt-12 font-bold mb-2">Password</p>
-        <ChangePassword />
+        <div className="flex flex-col items-center">
+          <p className="mt-12 font-semibold mb-2">Password</p>
+          <ChangePassword />
 
-        <p className=" font-bold mb-2">Delete account</p>
-        <ConfirmationModal
-          isLargeButton={true}
-          forDelete={true}
-          buttonText={"Delete my account"}
-          buttonVariant={"destructive"}
-          title={"Delete my account"}
-          message={
-            "WARNING : This action will delete your account, your campaign(s) and every URLs related to them. Are you sure you want to delete your account ?"
-          }
-          noText={"No, I want to keep my account for now"}
-          yesText={"Yes, I want to delete my account forever"}
-          action={deleteAccountMutation}
-        />
+          <p className="mb-2 font-semibold">Delete account</p>
+          <ConfirmationModal
+            isLargeButton={true}
+            forDelete={true}
+            buttonText={"Delete my account"}
+            buttonVariant={"destructive"}
+            title={"Delete my account"}
+            message={
+              "WARNING : This action will delete your account, your campaign(s) and every URLs related to them. Are you sure you want to delete your account ?"
+            }
+            noText={"Back"}
+            yesText={"Confirm"}
+            action={deleteAccountMutation}
+          />
+        </div>
       </CardContent>
     </Card>
   );
