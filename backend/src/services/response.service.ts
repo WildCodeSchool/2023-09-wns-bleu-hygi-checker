@@ -70,6 +70,9 @@ export default class ResponseService {
       relations: ["campaignUrl"],
       skip: offset,
       take: pageSize,
+      order: {
+        createdAt: "DESC",
+      },
     });
   }
 
