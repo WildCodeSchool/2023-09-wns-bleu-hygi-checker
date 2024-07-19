@@ -1,5 +1,5 @@
 import User from "./entities/user.entity";
-import express from "express";
+import * as express from "express";
 
 // test pour savoir si user est connecté
 export interface ContextType {
