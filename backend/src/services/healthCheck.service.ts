@@ -46,7 +46,6 @@ export default class HealthCheckService {
             responseTime: checkResult.responseTime,
             statusCode: checkResult.status,
             statusText: checkResult.statusText,
-            createdAt: new Date(),
             campaignUrlId: campaignUrl.id,
             campaignId: campaignUrl.campaign.id,
           });
