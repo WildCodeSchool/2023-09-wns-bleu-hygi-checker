@@ -138,7 +138,7 @@ export function AddUrlToCampaign({
               name="campaignId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Campaign</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}
@@ -149,7 +149,7 @@ export function AddUrlToCampaign({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {campaigns &&
+                      {campaigns && campaigns.length > 0 ? (
                         campaigns.map((campaign) => (
                           <SelectItem
                             key={campaign.id}
@@ -157,7 +157,10 @@ export function AddUrlToCampaign({
                           >
                             {campaign.name}
                           </SelectItem>
-                        ))}
+                        ))
+                      ) : (
+                        <p>No campaign available</p>
+                      )}
                     </SelectContent>
                   </Select>
 

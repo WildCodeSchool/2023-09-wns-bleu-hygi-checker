@@ -230,6 +230,7 @@ export type NewUserAvatar = {
 export type Query = {
   __typename?: "Query";
   activeCampaigns: Array<Campaign>;
+  allResponsesOfOneUrl: Array<Response>;
   campaignById?: Maybe<Campaign>;
   campaigns: Array<Campaign>;
   campaignsByUserId: Array<Campaign>;
@@ -251,6 +252,10 @@ export type Query = {
   url?: Maybe<Url>;
   urls: Array<Url>;
   users: Array<User>;
+};
+
+export type QueryAllResponsesOfOneUrlArgs = {
+  campaignUrlId: Scalars["Int"]["input"];
 };
 
 export type QueryCampaignByIdArgs = {
@@ -527,6 +532,18 @@ export type UpdateProfileMutation = {
   };
 };
 
+export type AllResponsesOfOneUrlQueryVariables = Exact<{
+  campaignUrlId: Scalars["Int"]["input"];
+}>;
+
+export type AllResponsesOfOneUrlQuery = {
+  __typename?: "Query";
+  allResponsesOfOneUrl: Array<{
+    __typename?: "Response";
+    statusCode?: number | null;
+  }>;
+};
+
 export type LoginQueryVariables = Exact<{
   infos: InputLogin;
 }>;
@@ -694,7 +711,7 @@ export type LatestResponsesByCampaignUrlIdQuery = {
   __typename?: "Query";
   latestResponsesByCampaignUrlId: Array<{
     __typename?: "Response";
-    createdAt: string;
+    createdAt: Date;
   }>;
 };
 
@@ -1426,6 +1443,79 @@ export type UpdateProfileMutationResult =
 export type UpdateProfileMutationOptions = Apollo.BaseMutationOptions<
   UpdateProfileMutation,
   UpdateProfileMutationVariables
+>;
+export const AllResponsesOfOneUrlDocument = gql`
+  query AllResponsesOfOneUrl($campaignUrlId: Int!) {
+    allResponsesOfOneUrl(campaignUrlId: $campaignUrlId) {
+      statusCode
+    }
+  }
+`;
+
+/**
+ * __useAllResponsesOfOneUrlQuery__
+ *
+ * To run a query within a React component, call `useAllResponsesOfOneUrlQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllResponsesOfOneUrlQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAllResponsesOfOneUrlQuery({
+ *   variables: {
+ *      campaignUrlId: // value for 'campaignUrlId'
+ *   },
+ * });
+ */
+export function useAllResponsesOfOneUrlQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    AllResponsesOfOneUrlQuery,
+    AllResponsesOfOneUrlQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    AllResponsesOfOneUrlQuery,
+    AllResponsesOfOneUrlQueryVariables
+  >(AllResponsesOfOneUrlDocument, options);
+}
+export function useAllResponsesOfOneUrlLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    AllResponsesOfOneUrlQuery,
+    AllResponsesOfOneUrlQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    AllResponsesOfOneUrlQuery,
+    AllResponsesOfOneUrlQueryVariables
+  >(AllResponsesOfOneUrlDocument, options);
+}
+export function useAllResponsesOfOneUrlSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    AllResponsesOfOneUrlQuery,
+    AllResponsesOfOneUrlQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    AllResponsesOfOneUrlQuery,
+    AllResponsesOfOneUrlQueryVariables
+  >(AllResponsesOfOneUrlDocument, options);
+}
+export type AllResponsesOfOneUrlQueryHookResult = ReturnType<
+  typeof useAllResponsesOfOneUrlQuery
+>;
+export type AllResponsesOfOneUrlLazyQueryHookResult = ReturnType<
+  typeof useAllResponsesOfOneUrlLazyQuery
+>;
+export type AllResponsesOfOneUrlSuspenseQueryHookResult = ReturnType<
+  typeof useAllResponsesOfOneUrlSuspenseQuery
+>;
+export type AllResponsesOfOneUrlQueryResult = Apollo.QueryResult<
+  AllResponsesOfOneUrlQuery,
+  AllResponsesOfOneUrlQueryVariables
 >;
 export const LoginDocument = gql`
   query Login($infos: InputLogin!) {

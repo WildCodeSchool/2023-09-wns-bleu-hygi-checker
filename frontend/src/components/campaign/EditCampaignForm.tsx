@@ -33,6 +33,13 @@ import {
   FormMessage,
   FormDescription,
 } from "@/components/ui/form";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Loader2, Wrench } from "lucide-react";
 // ****************************************************
 
@@ -44,22 +51,9 @@ const formSchema = z.object({
   name: z.string().min(2, {
     message: "Name must be at least 2 characters",
   }),
-  intervalTest: z
-    .number({
-      required_error: "interval test is required",
-    })
-    .positive({
-      message: "Interval of test must be a positive number.",
-    })
-    .int({
-      message: "Interval of test must be a number",
-    })
-    .lte(1440, {
-      message: "Interval can't be over 24 hours",
-    })
-    .gte(1, {
-      message: "Interval of test must be at least 1 minute",
-    }),
+  intervalTest: z.string({
+    required_error: "interval test is required",
+  }),
   isWorking: z.boolean({
     required_error: "Working is required",
     invalid_type_error: "Working must be a boolean",
@@ -74,6 +68,7 @@ export function EditCampaignForm({ campaignId }: EditCampaignFormProps) {
 
   const [fakeLoading, setFakeLoading] = useState(false);
   const [openForm, setOpenForm] = useState(false);
+  const [selectedInterval, setSelectedInterval] = useState<string>("");
 
   const { data, refetch: refreshData } = useCampaignByIdQuery({
     variables: {
@@ -97,10 +92,13 @@ export function EditCampaignForm({ campaignId }: EditCampaignFormProps) {
       }, 1000);
     },
     onError: () => {
-      toast({
-        title: `Something went wrong. Please try again`,
-        variant: "destructive",
-      });
+      setTimeout(() => {
+        setFakeLoading(false);
+        toast({
+          title: `Something went wrong. Please try again`,
+          variant: "destructive",
+        });
+      }, 1000);
     },
   });
 
@@ -110,7 +108,13 @@ export function EditCampaignForm({ campaignId }: EditCampaignFormProps) {
     defaultValues: {
       id: campaignData ? (campaignData.id as number) : 0,
       name: campaignData ? (campaignData.name as string) : "",
-      intervalTest: campaignData ? (campaignData.intervalTest as number) : 60,
+      intervalTest:
+        campaignData !== null &&
+        campaignData !== undefined &&
+        campaignData.intervalTest !== null &&
+        campaignData.intervalTest !== undefined
+          ? campaignData.intervalTest.toString()
+          : "60",
       isWorking: campaignData ? (campaignData.isWorking as boolean) : false,
       isMailAlert: campaignData ? (campaignData.isMailAlert as boolean) : false,
     },
@@ -119,16 +123,21 @@ export function EditCampaignForm({ campaignId }: EditCampaignFormProps) {
   const { reset } = form;
 
   useEffect(() => {
-    if (campaignData) {
-      reset({
+    if (campaignData && campaignData !== null && campaignData !== undefined) {
+      ({
         id: campaignData.id,
         name: campaignData.name,
-        intervalTest: campaignData ? (campaignData.intervalTest as number) : 60,
+        intervalTest:
+          campaignData.intervalTest !== null &&
+          campaignData.intervalTest !== undefined
+            ? campaignData.intervalTest.toString()
+            : "60",
         isWorking: campaignData ? (campaignData.isWorking as boolean) : false,
         isMailAlert: campaignData
           ? (campaignData.isMailAlert as boolean)
           : false,
       });
+      setSelectedInterval(campaignData.intervalTest?.toString() || "60");
     }
   }, [campaignData, reset]);
 
@@ -141,9 +150,15 @@ export function EditCampaignForm({ campaignId }: EditCampaignFormProps) {
   // Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     setFakeLoading(true);
+
+    const transformedValues = {
+      ...values,
+      intervalTest: parseFloat(values.intervalTest),
+    };
+
     modifyCampaign({
       variables: {
-        input: values,
+        input: transformedValues,
       },
     });
   }
@@ -191,25 +206,39 @@ export function EditCampaignForm({ campaignId }: EditCampaignFormProps) {
                   name="intervalTest"
                   render={({ field }) => (
                     <FormItem>
-                      <div className="flex flex-row items-center justify-between rounded-lg border p-4">
+                      <div className="flex flex-col items-left justify-between rounded-lg border p-4">
                         <div className="space-y-0.5">
                           <FormLabel className="text-base">
-                            Interval time
+                            Name of the campaign
                           </FormLabel>
                           <FormDescription>
-                            Choose the interval time, in minutes, between each
-                            test on URLs of your campaign
+                            Choose the frequency of testing
                           </FormDescription>
                         </div>
                         <FormControl>
-                          <Input
-                            type="number"
-                            className="w-20 text-right"
-                            {...field}
-                            onChange={(event) =>
-                              field.onChange(+event.target.value)
-                            }
-                          />
+                          <Select
+                            onValueChange={(value) => {
+                              field.onChange(value);
+                              setSelectedInterval(value);
+                            }}
+                            value={selectedInterval}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Frequency" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="0.5">30 seconds</SelectItem>
+                              <SelectItem value="1">1 minute</SelectItem>
+                              <SelectItem value="5">5 minutes</SelectItem>
+                              <SelectItem value="10">10 minutes</SelectItem>
+                              <SelectItem value="30">30 minutes</SelectItem>
+                              <SelectItem value="60">1 hour</SelectItem>
+                              <SelectItem value="180">3 hours</SelectItem>
+                              <SelectItem value="360">6 hours</SelectItem>
+                              <SelectItem value="720">12 hours</SelectItem>
+                              <SelectItem value="1440">24 hours</SelectItem>
+                            </SelectContent>
+                          </Select>
                         </FormControl>
                       </div>
                       <FormMessage />

@@ -16,6 +16,7 @@ import {
   useLastDayResponsesOfOneUrlLazyQuery,
   useResponsesByCampaignUrlIdByPageQuery,
   useCountResponsesByCampaignUrlIdQuery,
+  useAllResponsesOfOneUrlLazyQuery,
 } from "@/types/graphql";
 import QuickUrlTest from "@/components/check/QuickUrlTest";
 import { ConfirmationModal } from "@/components/ConfirmationModal";
@@ -95,10 +96,15 @@ export default function DesktopLayout({
     }
   };
 
-  const [getLastReponses, { data, refetch: refetchLastResponses }] =
+  const [getLastResponses, { data, refetch: refetchLastResponses }] =
     useLastDayResponsesOfOneUrlLazyQuery();
 
   const lastResponses = data?.lastDayResponsesOfOneUrl;
+
+  const [getAllStatus, { data: allStatus, refetch: refetchAllStatus }] =
+    useAllResponsesOfOneUrlLazyQuery();
+
+  const ResponseStatusOfThisUrl = allStatus?.allResponsesOfOneUrl;
 
   const { refetch: refetchAllResponses } =
     useResponsesByCampaignUrlIdByPageQuery({
@@ -116,28 +122,44 @@ export default function DesktopLayout({
       },
     });
 
-  useEffect(() => {
-    if (selectedUrlId !== 0) {
-      setInterval(() => {
-        refetchLastResponses();
-        refetchAllResponses();
-        refetchCountResponses();
-        console.warn("Data refreshed");
-      }, 3 * 1000);
+  const refreshDataFunction = () => {
+    if (selectedUrlId !== 0 && campaignData.isWorking === true) {
+      refetchLastResponses();
+      refetchAllStatus();
+      refetchAllResponses();
+      refetchCountResponses();
+      console.warn("Data refreshed");
     }
+  };
+
+  useEffect(() => {
+    const runAutoRefresh = setInterval(refreshDataFunction, 3 * 1000);
+    return () => {
+      clearInterval(runAutoRefresh);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedUrlId]);
+  }, [selectedUrlId, campaignData.isWorking]);
 
   useEffect(() => {
     if (selectedUrlId !== 0) {
-      getLastReponses({
+      getLastResponses({
         variables: {
           campaignUrlId: selectedUrlId,
         },
       });
-      if (lastResponses && lastResponses.length > 0) {
+      getAllStatus({
+        variables: {
+          campaignUrlId: selectedUrlId,
+        },
+      });
+      if (
+        lastResponses &&
+        lastResponses.length > 0 &&
+        ResponseStatusOfThisUrl &&
+        ResponseStatusOfThisUrl.length > 0
+      ) {
         // Set PieData
-        const chartData = countStatusCodes(lastResponses);
+        const chartData = countStatusCodes(ResponseStatusOfThisUrl);
         setPieData(chartData);
         // Set LineData
         const outputData = formatResponseTime(lastResponses);
@@ -161,11 +183,13 @@ export default function DesktopLayout({
     }
   }, [
     campaignData,
-    getLastReponses,
+    getLastResponses,
     lastResponses,
+    ResponseStatusOfThisUrl,
     selectedUrl,
     selectedUrlId,
     urls,
+    getAllStatus,
   ]);
 
   const deleteURL = () => {
