@@ -47,25 +47,25 @@ export const countStatusCodes = (responses: ResponseData[]): DataItem[] => {
 
   const data: DataItem[] = [
     {
-      id: `Status 200 (${(statusCounts["200"] / responses.length) * 100} %)`,
+      id: `Status 200 (${Math.ceil((statusCounts["200"] / responses.length) * 100)} %)`,
       label: "200",
       value: statusCounts["200"] || 0,
       color: getStatusColor(200),
     },
     {
-      id: `Status 404 (${(statusCounts["404"] / responses.length) * 100} %)`,
+      id: `Status 404 (${Math.ceil((statusCounts["404"] / responses.length) * 100)} %)`,
       label: "404",
       value: statusCounts["404"] || 0,
       color: getStatusColor(404),
     },
     {
-      id: `Status 500 (${(statusCounts["500"] / responses.length) * 100} %)`,
+      id: `Status 500 (${Math.ceil((statusCounts["500"] / responses.length) * 100)} %)`,
       label: "500",
       value: statusCounts["500"] || 0,
       color: getStatusColor(500),
     },
     {
-      id: `Other status (${(statusCounts["other"] / responses.length) * 100} %)`,
+      id: `Other status (${Math.ceil((statusCounts["other"] / responses.length) * 100)} %)`,
       label: "other",
       value: statusCounts["other"] || 0,
       color: getStatusColor(-1), // Color for "other" status

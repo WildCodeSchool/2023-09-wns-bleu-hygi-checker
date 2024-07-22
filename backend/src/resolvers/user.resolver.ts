@@ -224,15 +224,4 @@ export default class UserResolver {
     const newUser = await new UserService().createUser(infos);
     return newUser;
   }
-
-  @Authorized(["USER"]) // TODO : remove this function for final production (except if we work on admin rights)
-  @Mutation(() => [User])
-  async upgradeRole(@Arg("id") id: string) {
-    const user = await new UserService().findUserById(id);
-    if (!user) {
-      throw new Error("Error, please try again");
-    }
-    const newRole = await new UserService().upgradeRoleToAdmin(user);
-    return newRole;
-  }
 }
