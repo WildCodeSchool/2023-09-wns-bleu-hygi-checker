@@ -138,7 +138,7 @@ export default function DesktopLayout({
       clearInterval(runAutoRefresh);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedUrlId]);
+  }, [selectedUrlId, campaignData.isWorking]);
 
   useEffect(() => {
     if (selectedUrlId !== 0) {
