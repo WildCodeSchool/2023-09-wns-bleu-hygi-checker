@@ -36,6 +36,7 @@ import { Loader2 } from "lucide-react";
 import {
   useCampaignsByUserIdQuery,
   useAddUrlToCampaignMutation,
+  useGetUrlFromCampaignQuery,
 } from "@/types/graphql";
 import { AddUrlToCampaignToastProps } from "@/types/interfaces";
 import { urlPattern } from "@/utils/global/getDomainFromUrl";
@@ -63,11 +64,23 @@ export function AddUrlToCampaign({
   const { data } = useCampaignsByUserIdQuery();
   const campaigns = data?.campaignsByUserId;
 
+  const [campaginIdSelected, setCampaignIdSelected] = useState("");
+
+  const { refetch } = useGetUrlFromCampaignQuery({
+    variables: {
+      campaignId:
+        typeof campaginIdSelected === "string"
+          ? parseInt(campaginIdSelected)
+          : 0,
+    },
+  });
+
   const [addUrlToCampaignMutation] = useAddUrlToCampaignMutation({
     onCompleted: (data) => {
       setTimeout(() => {
         setLoading(false);
         handleCloseForm();
+        refetch();
         toast({
           title: `${data.addUrlToCampaign.message}`,
           variant: "success",
@@ -140,7 +153,10 @@ export function AddUrlToCampaign({
                 <FormItem>
                   <FormLabel>Campaign</FormLabel>
                   <Select
-                    onValueChange={field.onChange}
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                      setCampaignIdSelected(value);
+                    }}
                     defaultValue={field.value}
                   >
                     <FormControl>
