@@ -67,9 +67,10 @@ export function AddCampaignForm({ callToAction }: AddCampaignFormProps) {
         refetch();
       }, 1000);
     },
-    onError: () => {
+    onError: (err) => {
       toast({
-        title: `Something went wrong. Please try again`,
+        title: err.name,
+        description: err.message,
         variant: "destructive",
       });
     },

@@ -36,37 +36,33 @@ export default function FormCheck({
 
   const [checkURL] = useLazyQuery(CHECK_URL, {
     onCompleted: (data) => {
-      if (source === "navbar") {
-        const { status, responseTime, responseDate } = data.checkUrl;
-        const { dismiss } = toast({
-          title: `✅ URL verified :`,
-          description: (
-            <pre className="flex-col gap-4 mt-5">
-              <div>URL: {urlPath}</div>
-              <div>Status: {status}</div>
-              <div>Time: {responseTime}ms</div>
-              <div>Date: {new Date(responseDate).toLocaleString()}</div>
-              <Button
-                className="mt-5"
-                variant="outline"
-                onClick={() => handleOpenForm(dismiss)}
-              >
-                <Plus className="md:mr-2 h-4 w-4" />
-                <span className="hidden md:block">Add URL to campaign</span>
-              </Button>
-            </pre>
-          ),
-          variant: "default",
-        });
-      }
+      const { status, responseTime, responseDate } = data.checkUrl;
+      const { dismiss } = toast({
+        title: `✅ URL verified :`,
+        description: (
+          <pre className="flex-col gap-4 mt-5">
+            <div>URL: {urlPath}</div>
+            <div>Status: {status}</div>
+            <div>Time: {responseTime}ms</div>
+            <div>Date: {new Date(responseDate).toLocaleString()}</div>
+            <Button
+              className="mt-5"
+              variant="outline"
+              onClick={() => handleOpenForm(dismiss)}
+            >
+              <Plus className="md:mr-2 h-4 w-4" />
+              <span className="hidden md:block">Add URL to campaign</span>
+            </Button>
+          </pre>
+        ),
+        variant: "default",
+      });
     },
     onError: (error) => {
-      if (source === "navbar") {
-        toast({
-          title: `❌ Erreur lors de la vérification: ${error.message}`,
-          variant: "destructive",
-        });
-      }
+      toast({
+        title: `❌ Erreur lors de la vérification: ${error.message}`,
+        variant: "destructive",
+      });
     },
   });
 

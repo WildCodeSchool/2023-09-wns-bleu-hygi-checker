@@ -161,6 +161,7 @@ export function EditCampaignForm({ campaignId }: EditCampaignFormProps) {
     { times: 5, value: 5, unite: "minutes" },
     { times: 10, value: 10, unite: "minutes" },
     { times: 30, value: 30, unite: "minutes" },
+    { times: 1, value: 60, unite: "hour" },
     { times: 3, value: 180, unite: "hours" },
     { times: 6, value: 360, unite: "hours" },
     { times: 12, value: 720, unite: "hours" },
