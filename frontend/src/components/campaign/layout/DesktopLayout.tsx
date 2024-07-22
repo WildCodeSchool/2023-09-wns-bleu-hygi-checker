@@ -193,7 +193,6 @@ export default function DesktopLayout({
   ]);
 
   const deleteURL = () => {
-    // TODO : make the API call to delete this CampaignURL from this campaign
     deleteUrlMutation({
       variables: {
         infos: {

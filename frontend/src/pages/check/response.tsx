@@ -5,30 +5,24 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useGetUserProfileQuery } from "@/types/graphql";
 
 export default function Response() {
   const router = useRouter();
   const urlPath = router.query.url;
 
-  const [isConnected, setIsConnected] = useState<boolean>(false);
   const [showAddUrlModal, setShowAddUrlModal] = useState<boolean>(false);
 
   const handleOpenForm = () => {
     setShowAddUrlModal(true);
   };
 
-  useEffect(() => {
-    const checkMail = () => {
-      const mail = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("email="));
+  const { data: currentUser } = useGetUserProfileQuery({
+    errorPolicy: "ignore",
+  });
 
-      setIsConnected(!!mail);
-    };
-
-    checkMail();
-  }, []);
+  const isConnected = !!currentUser?.getUserProfile;
 
   return (
     <Layout title="Read">
@@ -46,7 +40,7 @@ export default function Response() {
         {isConnected === true && (
           <p className="text-center">
             You have just checked your url, you can check again or add this url
-            to a campaign:
+            to a campaign :
           </p>
         )}
       </div>
