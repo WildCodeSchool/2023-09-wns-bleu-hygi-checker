@@ -37,9 +37,11 @@ import {
   useCampaignsByUserIdQuery,
   useAddUrlToCampaignMutation,
   useGetUrlFromCampaignQuery,
+  useCountUrlFromCampaignQuery,
 } from "@/types/graphql";
 import { AddUrlToCampaignToastProps } from "@/types/interfaces";
 import { urlPattern } from "@/utils/global/getDomainFromUrl";
+import { useRouter } from "next/router";
 // ****************************************************
 
 // Define the form schema for validation
@@ -64,9 +66,25 @@ export function AddUrlToCampaign({
   const { data } = useCampaignsByUserIdQuery();
   const campaigns = data?.campaignsByUserId;
 
+  const router = useRouter();
+
   const [campaginIdSelected, setCampaignIdSelected] = useState("");
 
   const { refetch } = useGetUrlFromCampaignQuery({
+    variables: {
+      campaignId:
+        typeof campaginIdSelected === "string"
+          ? parseInt(campaginIdSelected)
+          : 0,
+    },
+  });
+
+  const handleClickButtonSeeCampaign = (dismiss: () => void) => {
+    dismiss();
+    router.push(`/dashboard/campaign/details/${campaginIdSelected}`);
+  };
+
+  const { refetch: refetchNbUrlOfCampaign } = useCountUrlFromCampaignQuery({
     variables: {
       campaignId:
         typeof campaginIdSelected === "string"
@@ -81,8 +99,18 @@ export function AddUrlToCampaign({
         setLoading(false);
         handleCloseForm();
         refetch();
-        toast({
+        refetchNbUrlOfCampaign();
+        const { dismiss } = toast({
           title: `${data.addUrlToCampaign.message}`,
+          action: (
+            <Button
+              variant="outline"
+              className="text-black"
+              onClick={() => handleClickButtonSeeCampaign(dismiss)}
+            >
+              Voir
+            </Button>
+          ),
           variant: "success",
         });
       }, 1000);

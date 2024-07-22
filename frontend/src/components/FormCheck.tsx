@@ -29,7 +29,8 @@ export default function FormCheck({
   const [urlPath, setUrlPath] = useState("");
   const [showAddUrlModal, setShowAddUrlModal] = useState(false);
 
-  const handleOpenForm = () => {
+  const handleOpenForm = (dismiss: () => void) => {
+    dismiss();
     setShowAddUrlModal(true);
   };
 
@@ -37,7 +38,7 @@ export default function FormCheck({
     onCompleted: (data) => {
       if (source === "navbar") {
         const { status, responseTime, responseDate } = data.checkUrl;
-        toast({
+        const { dismiss } = toast({
           title: `✅ URL verified :`,
           description: (
             <pre className="flex-col gap-4 mt-5">
@@ -48,7 +49,7 @@ export default function FormCheck({
               <Button
                 className="mt-5"
                 variant="outline"
-                onClick={handleOpenForm}
+                onClick={() => handleOpenForm(dismiss)}
               >
                 <Plus className="md:mr-2 h-4 w-4" />
                 <span className="hidden md:block">Add URL to campaign</span>
@@ -114,17 +115,16 @@ export default function FormCheck({
             <Search className="mr-2 h-4 w-4" />
             {checkText}
           </Button>
-
-          {showAddUrlModal === true && (
-            <AddUrlToCampaign
-              showAddUrlModal={showAddUrlModal}
-              setShowAddUrlModal={setShowAddUrlModal}
-              urlToAdd={urlPath}
-              setUrlPath={setUrlPath}
-            />
-          )}
         </div>
       </form>
+      {showAddUrlModal === true && (
+        <AddUrlToCampaign
+          showAddUrlModal={showAddUrlModal}
+          setShowAddUrlModal={setShowAddUrlModal}
+          urlToAdd={urlPath}
+          setUrlPath={setUrlPath}
+        />
+      )}
     </div>
   );
 }
