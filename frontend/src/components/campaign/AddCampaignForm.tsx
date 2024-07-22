@@ -113,11 +113,11 @@ export function AddCampaignForm({ callToAction }: AddCampaignFormProps) {
       <DialogTrigger asChild>
         {callToAction === true ? (
           <Button
-            className="bg-blue-500 text-white mx-4 px-12 py-12"
+            className="bg-blue-500 text-white mx-4 mt-12 px-8 py-8 md:px-12 md:py-12"
             variant={"edit"}
           >
-            <Plus className="md:mr-4 h-12 w-12" />
-            <span className="hidden md:block text-2xl">
+            <Plus className="mr-4 h-8 w-8 md:mr-4 md:h-12 md:w-12" />
+            <span className="text-lg md:block md:text-2xl">
               Create your first campaign
             </span>
           </Button>
