@@ -40,11 +40,11 @@ export default function Campaign() {
                 </div>
               ) : (
                 <div className="flex flex-col justify-center items-center">
-                  <p className="text-2xl text-center text-white mt-12 mb-4 md:text-5xl">
+                  <p className="text-2xl text-center text-white mt-4 mb-2 md:text-5xl md:mt-12 md:mb-8">
                     No campaign yet
                   </p>
                   <Image
-                    src="/../../../../no-campaign.png"
+                    src="/../../../../no-campaign.svg"
                     width={350}
                     height={0}
                     alt="people searching for something"
