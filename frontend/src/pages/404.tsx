@@ -17,7 +17,7 @@ export default function Page404() {
           </p>
         </div>
         <Button variant="outline" onClick={() => router.push("/")}>
-          Home
+          Back home
         </Button>
       </div>
     </Layout>

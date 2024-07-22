@@ -41,20 +41,6 @@ export default class UserResolver {
   }
 
   @Authorized(["USER", "ADMIN"])
-  @Query(() => User)
-  async getAvatar(@Ctx() ctx: MyContext) {
-    // TODO : remove this query as the getUserProfile is enough to get the avatar => make a query on front with getUserProfile but just select avatar
-    if (ctx.user) {
-      const avatar = await new UserService().findUserByEmail(ctx.user.email);
-      if (!avatar) {
-        throw new Error("avatar not found");
-      }
-      return avatar;
-    } else {
-      throw new Error("You must be authenticated to perform this action");
-    }
-  }
-  @Authorized(["USER", "ADMIN"])
   @Mutation(() => NewUserAvatar)
   async changeAvatar(
     @Ctx() ctx: MyContext,
