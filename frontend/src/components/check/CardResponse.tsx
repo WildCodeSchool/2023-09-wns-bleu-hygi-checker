@@ -17,6 +17,8 @@ import {
   getStatusColor,
 } from "@/utils/chartFunction/getColor";
 import { toUpOne } from "@/utils/global/getFirstMaj";
+import { formatDate } from "@/utils/chartFunction/formatDate";
+import { FormatHoursAndMinutes } from "@/utils/chartFunction/FormatHoursAndMinutes";
 
 export default function CardResponse() {
   const router = useRouter();
@@ -30,16 +32,10 @@ export default function CardResponse() {
     }
   }, [checkURL, urlPath]);
 
-  // Fonction pour formater la date au bon format
-  const formatDate = (dateString: string | number | Date) => {
-    const date = new Date(dateString);
-    return date.toLocaleString();
-  };
-
-  const tableHeadValue = ["status", "time", "date"];
+  const tableHeadValue = ["date", "time", "response status", "response time"];
 
   return (
-    <Card className="flex flex-col justify-center p-4 shadow-md rounded-lg">
+    <Card className="flex flex-col justify-center shadow-md w-[350px] sm:w-[550px]">
       <CardHeader>
         <CardTitle className="text-lg font-semibold text-center">
           URL Response Status
@@ -54,7 +50,7 @@ export default function CardResponse() {
         />
         {loading && <p className="text-center font-semibold">Loading...</p>}
         {data && (
-          <Table className="mt-4 text-center">
+          <Table className="mt-4 text-center text-xs sm:text-base">
             <TableHeader>
               <TableRow>
                 {tableHeadValue.map((value, index) => (
@@ -66,6 +62,10 @@ export default function CardResponse() {
             </TableHeader>
             <TableBody>
               <TableRow key={data.checkUrl.type} className="font-semibold">
+                <TableCell>{formatDate(data.checkUrl.responseDate)}</TableCell>
+                <TableCell>
+                  {FormatHoursAndMinutes(data.checkUrl.responseDate)}
+                </TableCell>
                 <TableCell
                   className={getStatusColor(data.checkUrl.status, false)}
                 >
@@ -76,7 +76,6 @@ export default function CardResponse() {
                 >
                   {data.checkUrl.responseTime}ms
                 </TableCell>
-                <TableCell>{formatDate(data.checkUrl.responseDate)}</TableCell>
               </TableRow>
             </TableBody>
           </Table>

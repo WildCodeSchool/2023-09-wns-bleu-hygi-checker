@@ -26,7 +26,6 @@ export default function Response() {
 
   return (
     <Layout title="Read">
-      <div className="text-white"></div>
       <div className="flex justify-center gap-4 mt-5">
         <CardResponse />
       </div>
