@@ -53,7 +53,7 @@ export default class Campaign extends BaseEntity {
   image: string;
 
   @Field({ nullable: true })
-  @Column({ nullable: true, default: 60 })
+  @Column({ nullable: true, default: 60, type: "float" })
   @IsAllowedInterval({
     message:
       "Interval must be one of the following: 0.5, 1, 5, 10, 30, 60, 180, 360, 720, 1440 minutes.",
