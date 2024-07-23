@@ -43,7 +43,7 @@ export default function Index() {
       </div>
       <div
         id="pricing"
-        className="w-full flex flex-col justify-center items-center min-h-screen border-2 border-white rounded-md"
+        className="w-full flex flex-col justify-center items-center min-h-screen"
       >
         <h3 className="font-bold uppercase text-3xl tracking-wider text-white">
           Pricing
