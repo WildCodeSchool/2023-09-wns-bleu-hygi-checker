@@ -27,6 +27,7 @@ import {
 import { Loader2, Plus } from "lucide-react";
 import {
   useAddUrlToCampaignMutation,
+  useCountUrlFromCampaignQuery,
   useGetUrlFromCampaignQuery,
 } from "@/types/graphql";
 import { AddUrlToCampaignProps } from "@/types/interfaces";
@@ -55,6 +56,12 @@ export function UrlForm({ campaignId }: AddUrlToCampaignProps) {
     },
   });
 
+  const { refetch: refetchNbUrlOfCampaign } = useCountUrlFromCampaignQuery({
+    variables: {
+      campaignId: typeof campaignId === "string" ? parseInt(campaignId) : 0,
+    },
+  });
+
   const [addUrlToCampaignMutation] = useAddUrlToCampaignMutation({
     onCompleted: (data) => {
       setTimeout(() => {
@@ -65,6 +72,7 @@ export function UrlForm({ campaignId }: AddUrlToCampaignProps) {
           variant: "success",
         });
         refetch();
+        refetchNbUrlOfCampaign();
       }, 1000);
     },
     onError: (err) => {

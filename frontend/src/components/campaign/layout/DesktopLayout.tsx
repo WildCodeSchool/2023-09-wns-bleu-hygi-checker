@@ -17,6 +17,7 @@ import {
   useResponsesByCampaignUrlIdByPageQuery,
   useCountResponsesByCampaignUrlIdQuery,
   useAllResponsesOfOneUrlLazyQuery,
+  useCountUrlFromCampaignQuery,
 } from "@/types/graphql";
 import QuickUrlTest from "@/components/check/QuickUrlTest";
 import { ConfirmationModal } from "@/components/ConfirmationModal";
@@ -192,8 +193,13 @@ export default function DesktopLayout({
     getAllStatus,
   ]);
 
+  const { refetch: refetchNbUrlOfCampaign } = useCountUrlFromCampaignQuery({
+    variables: {
+      campaignId: campaignData.id,
+    },
+  });
+
   const deleteURL = () => {
-    // TODO : make the API call to delete this CampaignURL from this campaign
     deleteUrlMutation({
       variables: {
         infos: {
@@ -210,6 +216,7 @@ export default function DesktopLayout({
         variant: "success",
       });
       refetch();
+      refetchNbUrlOfCampaign();
       setSelectedUrl("");
     },
     onError: (err) => {

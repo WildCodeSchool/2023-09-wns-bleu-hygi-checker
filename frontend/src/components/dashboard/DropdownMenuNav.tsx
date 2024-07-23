@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useRouter } from "next/router";
-import { useGetAvatarQuery } from "@/types/graphql";
+import { useGetUserProfileQuery } from "@/types/graphql";
 import { useLogout } from "../auth/Logout";
 
 interface DropdownMenuProps {
@@ -18,7 +18,8 @@ interface DropdownMenuProps {
 export default function DropdownMenuNav({ isConnected }: DropdownMenuProps) {
   const router = useRouter();
 
-  const { data } = useGetAvatarQuery();
+  const { data } = useGetUserProfileQuery();
+  const avatar = data?.getUserProfile.avatar;
 
   const handleLogout = useLogout();
 
@@ -29,7 +30,7 @@ export default function DropdownMenuNav({ isConnected }: DropdownMenuProps) {
           <AvatarImage
             src={
               isConnected
-                ? `../../../avatars/${data?.getAvatar.avatar}.jpg`
+                ? `/avatars/${avatar}.jpg`
                 : "https://i.stack.imgur.com/vaDPM.png?s=256&g=1"
             }
           />

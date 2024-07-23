@@ -22,6 +22,7 @@ import {
 } from "@/types/graphql";
 import { testPerDay } from "@/utils/chartFunction/testsPerDay";
 import { formatDate } from "@/utils/chartFunction/formatDate";
+import { toUpOne } from "@/utils/global/getFirstMaj";
 
 export default function CampaignCard({ data }: CampaignCardProps) {
   const { toast } = useToast();
@@ -87,7 +88,7 @@ export default function CampaignCard({ data }: CampaignCardProps) {
 
       <CardContent className="flex justify-between p-6 items-center">
         <div className="flex flex-col">
-          <CardTitle className="text-2xl">{data.name}</CardTitle>
+          <CardTitle className="text-2xl">{toUpOne(data.name)}</CardTitle>
           <CardDescription>
             {formatDate(new Date(data?.createdAt))}
           </CardDescription>
