@@ -8,7 +8,7 @@ export default function Page404() {
 
   return (
     <Layout title="Erreur 404">
-      <div className="flex flex-col items-center justify-center gap-6">
+      <div className="flex flex-col items-center justify-center gap-6 w-full">
         <Image src="/404.svg" width={500} height={0} alt="erreur 404" />
         <div className="text-center text-white">
           <h2 className="text-2xl">Unknown Page</h2>

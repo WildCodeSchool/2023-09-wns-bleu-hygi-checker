@@ -26,10 +26,10 @@ export default function Response() {
 
   return (
     <Layout title="Read">
-      <div className="flex justify-center gap-4 mt-5">
+      <div className="flex justify-center gap-4 mt-12 w-full">
         <CardResponse />
       </div>
-      <div className="flex justify-center mt-5 text-white">
+      <div className="flex justify-center mt-5 text-white w-full">
         {isConnected === false && (
           <p className="text-center">
             You have just checked your url, you can check again or sign up for
@@ -43,7 +43,7 @@ export default function Response() {
           </p>
         )}
       </div>
-      <div className="flex justify-center gap-4 mt-5">
+      <div className="flex justify-center gap-4 mt-5 w-full">
         <Button
           variant={"white"}
           onClick={() => {
@@ -54,6 +54,7 @@ export default function Response() {
         </Button>
         {isConnected === false && (
           <Button
+            className="ml-4"
             variant="outline"
             onClick={() => {
               router.push("/auth/login");

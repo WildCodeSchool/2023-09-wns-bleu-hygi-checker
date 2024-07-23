@@ -3,7 +3,6 @@
 import Layout from "@/components/dashboard/Layout";
 import { useState } from "react";
 import Image from "next/image";
-import "react-flagpack/dist/style.css";
 import { useGetUserProfileQuery } from "@/types/graphql";
 import Loading from "@/components/Loading";
 import { countries } from "@/utils/countries";
