@@ -25,8 +25,8 @@ export default function Layout({ children, title }: LayoutProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className="flex flex-col min-h-screen">
-        <header className="bg-primary p-4 flex justify-between items-center mb-4 text-align sm:mb-24">
+      <div className="flex flex-col">
+        <header className="bg-primary p-4 flex justify-between items-center text-align mb-12 sm:mb-0">
           <div>
             <Image
               className="block sm:hidden"
@@ -44,11 +44,11 @@ export default function Layout({ children, title }: LayoutProps) {
             />
           </div>
 
-          <div className="mr-4 sm:fixed top-8 right-8">
+          <div className="mr-4 ">
             <DropdownMenuTest isConnected={isConnected} />
           </div>
         </header>
-        <main className="flex-grow flex flex-col justify-center items-center p-4 bg-primary overflow-y-auto">
+        <main className="flex-grow flex flex-col justify-center items-start p-4 bg-primary overflow-y-auto">
           {children}
         </main>
         <Toaster />

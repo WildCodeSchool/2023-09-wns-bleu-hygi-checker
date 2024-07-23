@@ -73,7 +73,7 @@
 
 body {
   background-color: #303e33;
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 .prevent-select {
