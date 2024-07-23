@@ -1,6 +1,5 @@
 import Head from "next/head";
 import { ReactNode, useEffect } from "react";
-import { useRouter } from "next/router";
 import Image from "next/image";
 import { useState } from "react";
 import DropdownMenuTest from "../dashboard/DropdownMenuNav";
@@ -12,7 +11,6 @@ interface LayoutProps {
 }
 
 export default function Layout({ children, title }: LayoutProps) {
-  const router = useRouter();
   const [isConnected, setIsConnected] = useState<boolean>(false);
 
   useEffect(() => {
@@ -26,7 +24,7 @@ export default function Layout({ children, title }: LayoutProps) {
 
     checkMail();
   }, []);
-
+  // fixed top-5 left-1/2 transform -translate-x-1/2
   return (
     <>
       <Head>
@@ -35,36 +33,30 @@ export default function Layout({ children, title }: LayoutProps) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="favicon.ico" />
       </Head>
-      <div className="flex flex-col min-h-screen">
-        <header className="bg-primary p-4 flex justify-between items-center mb-4 text-align sm:mb-24">
+      <div className="flex flex-col">
+        <header className="bg-primary p-4 flex justify-between items-center text-align mb-12 sm:mb-0">
           <div>
             <Image
               className="block sm:hidden"
-              src={
-                router.pathname === "/" ? "./favicon.svg" : "../../favicon.svg"
-              }
+              src={"/favicon.svg"}
               width={60}
               height={0}
               alt="logo"
             />
             <Image
-              className="hidden sm:block fixed top-5 left-1/2 transform -translate-x-1/2"
-              src={
-                router.pathname === "/"
-                  ? "./logo_medium.svg"
-                  : "../../logo_medium.svg"
-              }
-              width={350}
+              className="hidden sm:block"
+              src={"/logo_medium.svg"}
+              width={300}
               height={0}
               alt="logo"
             />
           </div>
 
-          <div className="mr-4 sm:fixed top-8 right-8">
+          <div className="mr-4 ">
             <DropdownMenuTest isConnected={isConnected} />
           </div>
         </header>
-        <main className="flex-grow flex flex-col justify-center items-center p-4 bg-primary overflow-y-auto">
+        <main className="flex-grow flex flex-col justify-center items-start p-4 bg-primary overflow-y-auto">
           {children}
         </main>
         <Toaster />
