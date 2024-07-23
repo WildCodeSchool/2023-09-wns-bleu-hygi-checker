@@ -120,26 +120,18 @@ export function EditCampaignForm({ campaignId }: EditCampaignFormProps) {
     },
   });
 
-  const { reset } = form;
-
   useEffect(() => {
-    if (campaignData && campaignData !== null && campaignData !== undefined) {
-      ({
+    if (campaignData) {
+      form.reset({
         id: campaignData.id,
         name: campaignData.name,
-        intervalTest:
-          campaignData.intervalTest !== null &&
-          campaignData.intervalTest !== undefined
-            ? campaignData.intervalTest.toString()
-            : "60",
-        isWorking: campaignData ? (campaignData.isWorking as boolean) : false,
-        isMailAlert: campaignData
-          ? (campaignData.isMailAlert as boolean)
-          : false,
+        intervalTest: campaignData.intervalTest?.toString() || "60",
+        isWorking: campaignData.isWorking ?? false,
+        isMailAlert: campaignData.isMailAlert ?? false,
       });
       setSelectedInterval(campaignData.intervalTest?.toString() || "60");
     }
-  }, [campaignData, reset]);
+  }, [campaignData, form]);
 
   // to reset form inputs when closing the dialog
   const handleCloseForm = () => {
@@ -162,6 +154,19 @@ export function EditCampaignForm({ campaignId }: EditCampaignFormProps) {
       },
     });
   }
+
+  const selectItemTimes = [
+    { times: 30, value: 0.5, unite: "seconds" },
+    { times: 1, value: 1, unite: "minutes" },
+    { times: 5, value: 5, unite: "minutes" },
+    { times: 10, value: 10, unite: "minutes" },
+    { times: 30, value: 30, unite: "minutes" },
+    { times: 1, value: 60, unite: "hour" },
+    { times: 3, value: 180, unite: "hours" },
+    { times: 6, value: 360, unite: "hours" },
+    { times: 12, value: 720, unite: "hours" },
+    { times: 24, value: 1440, unite: "hours" },
+  ];
 
   return (
     <>
@@ -209,11 +214,8 @@ export function EditCampaignForm({ campaignId }: EditCampaignFormProps) {
                       <div className="flex flex-col items-left justify-between rounded-lg border p-4">
                         <div className="space-y-0.5">
                           <FormLabel className="text-base">
-                            Name of the campaign
-                          </FormLabel>
-                          <FormDescription>
                             Choose the frequency of testing
-                          </FormDescription>
+                          </FormLabel>
                         </div>
                         <FormControl>
                           <Select
@@ -227,16 +229,14 @@ export function EditCampaignForm({ campaignId }: EditCampaignFormProps) {
                               <SelectValue placeholder="Frequency" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="0.5">30 seconds</SelectItem>
-                              <SelectItem value="1">1 minute</SelectItem>
-                              <SelectItem value="5">5 minutes</SelectItem>
-                              <SelectItem value="10">10 minutes</SelectItem>
-                              <SelectItem value="30">30 minutes</SelectItem>
-                              <SelectItem value="60">1 hour</SelectItem>
-                              <SelectItem value="180">3 hours</SelectItem>
-                              <SelectItem value="360">6 hours</SelectItem>
-                              <SelectItem value="720">12 hours</SelectItem>
-                              <SelectItem value="1440">24 hours</SelectItem>
+                              {selectItemTimes.map((item, index) => (
+                                <SelectItem
+                                  key={index}
+                                  value={item.value.toString()}
+                                >
+                                  {item.times} {item.unite}
+                                </SelectItem>
+                              ))}
                             </SelectContent>
                           </Select>
                         </FormControl>

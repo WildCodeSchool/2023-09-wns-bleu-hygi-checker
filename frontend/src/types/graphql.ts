@@ -33,7 +33,7 @@ export type Scalars = {
 
 export type Campaign = {
   __typename?: "Campaign";
-  createdAt: Date;
+  createdAt: Scalars["DateTimeISO"]["output"];
   id: Scalars["Float"]["output"];
   image?: Maybe<Scalars["String"]["output"]>;
   intervalTest?: Maybe<Scalars["Float"]["output"]>;
@@ -237,7 +237,6 @@ export type Query = {
   checkUrl: CheckUrl;
   countResponsesByCampaignUrlId: CountResponses;
   countUrlFromCampaign: CountResult;
-  getAvatar: User;
   getUrlFromCampaign: Array<CampaignUrl>;
   getUserProfile: UserProfile;
   lastDayResponsesOfOneUrl: Array<Response>;
@@ -594,13 +593,6 @@ export type CountUrlFromCampaignQueryVariables = Exact<{
 export type CountUrlFromCampaignQuery = {
   __typename?: "Query";
   countUrlFromCampaign: { __typename?: "CountResult"; count: number };
-};
-
-export type GetAvatarQueryVariables = Exact<{ [key: string]: never }>;
-
-export type GetAvatarQuery = {
-  __typename?: "Query";
-  getAvatar: { __typename?: "User"; avatar: string };
 };
 
 export type CampaignByIdQueryVariables = Exact<{
@@ -1857,73 +1849,6 @@ export type CountUrlFromCampaignSuspenseQueryHookResult = ReturnType<
 export type CountUrlFromCampaignQueryResult = Apollo.QueryResult<
   CountUrlFromCampaignQuery,
   CountUrlFromCampaignQueryVariables
->;
-export const GetAvatarDocument = gql`
-  query GetAvatar {
-    getAvatar {
-      avatar
-    }
-  }
-`;
-
-/**
- * __useGetAvatarQuery__
- *
- * To run a query within a React component, call `useGetAvatarQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAvatarQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetAvatarQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetAvatarQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetAvatarQuery, GetAvatarQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetAvatarQuery, GetAvatarQueryVariables>(
-    GetAvatarDocument,
-    options
-  );
-}
-export function useGetAvatarLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetAvatarQuery,
-    GetAvatarQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetAvatarQuery, GetAvatarQueryVariables>(
-    GetAvatarDocument,
-    options
-  );
-}
-export function useGetAvatarSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    GetAvatarQuery,
-    GetAvatarQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<GetAvatarQuery, GetAvatarQueryVariables>(
-    GetAvatarDocument,
-    options
-  );
-}
-export type GetAvatarQueryHookResult = ReturnType<typeof useGetAvatarQuery>;
-export type GetAvatarLazyQueryHookResult = ReturnType<
-  typeof useGetAvatarLazyQuery
->;
-export type GetAvatarSuspenseQueryHookResult = ReturnType<
-  typeof useGetAvatarSuspenseQuery
->;
-export type GetAvatarQueryResult = Apollo.QueryResult<
-  GetAvatarQuery,
-  GetAvatarQueryVariables
 >;
 export const CampaignByIdDocument = gql`
   query CampaignById($campaignId: Int!) {

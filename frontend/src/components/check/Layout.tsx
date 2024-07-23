@@ -1,10 +1,9 @@
 import Head from "next/head";
-import { ReactNode, useEffect } from "react";
-import { useRouter } from "next/router";
+import { ReactNode } from "react";
 import Image from "next/image";
-import { useState } from "react";
 import DropdownMenuTest from "../dashboard/DropdownMenuNav";
 import { Toaster } from "../ui/toaster";
+import { useGetUserProfileQuery } from "@/types/graphql";
 
 interface LayoutProps {
   children: ReactNode;
@@ -12,20 +11,11 @@ interface LayoutProps {
 }
 
 export default function Layout({ children, title }: LayoutProps) {
-  const router = useRouter();
-  const [isConnected, setIsConnected] = useState<boolean>(false);
+  const { data: currentUser } = useGetUserProfileQuery({
+    errorPolicy: "ignore",
+  });
 
-  useEffect(() => {
-    const checkMail = () => {
-      const mail = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("email="));
-
-      setIsConnected(!!mail);
-    };
-
-    checkMail();
-  }, []);
+  const isConnected = !!currentUser?.getUserProfile;
 
   return (
     <>
@@ -33,27 +23,21 @@ export default function Layout({ children, title }: LayoutProps) {
         <title>{title}</title>
         <meta name="description" content="health-check" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="favicon.ico" />
+        <link rel="icon" href="/favicon.ico" />
       </Head>
       <div className="flex flex-col min-h-screen">
         <header className="bg-primary p-4 flex justify-between items-center mb-4 text-align sm:mb-24">
           <div>
             <Image
               className="block sm:hidden"
-              src={
-                router.pathname === "/" ? "./favicon.svg" : "../../favicon.svg"
-              }
+              src="/favicon.svg"
               width={60}
               height={0}
               alt="logo"
             />
             <Image
               className="hidden sm:block fixed top-5 left-1/2 transform -translate-x-1/2"
-              src={
-                router.pathname === "/"
-                  ? "./logo_medium.svg"
-                  : "../../logo_medium.svg"
-              }
+              src="/logo_medium.svg"
               width={350}
               height={0}
               alt="logo"

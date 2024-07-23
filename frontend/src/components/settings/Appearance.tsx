@@ -14,7 +14,6 @@ import { avatars } from "../../utils/avatars";
 import { SettingsProps } from "@/types/interfaces";
 import {
   useChangeAvatarMutation,
-  useGetAvatarQuery,
   useGetUserProfileQuery,
 } from "@/types/graphql";
 
@@ -26,7 +25,7 @@ interface Avatar {
 export default function Appearance({ data }: SettingsProps) {
   const [fakeLoading, setFakeLoading] = useState(false);
   const { toast } = useToast();
-  const { refetch: refreshAvatar } = useGetAvatarQuery();
+
   const { refetch: refreshProfile } = useGetUserProfileQuery();
   const [changeAvatarMutation] = useChangeAvatarMutation({
     onCompleted: (data) => {
@@ -37,7 +36,6 @@ export default function Appearance({ data }: SettingsProps) {
           title: "Avatar changed successfully",
           variant: "success",
         });
-        refreshAvatar();
         refreshProfile();
       }, 1000);
     },
@@ -79,7 +77,7 @@ export default function Appearance({ data }: SettingsProps) {
               <Avatar
                 className={`m-4 w-[80px] h-[80px] cursor-pointer ${selectedAvatar === avatar.fileName ? "border-4 border-zinc-900" : ""}`}
               >
-                <AvatarImage src={`../../../avatars/${avatar.fileName}.jpg`} />
+                <AvatarImage src={`/avatars/${avatar.fileName}.jpg`} />
                 <AvatarFallback>HC</AvatarFallback>
               </Avatar>
             </button>

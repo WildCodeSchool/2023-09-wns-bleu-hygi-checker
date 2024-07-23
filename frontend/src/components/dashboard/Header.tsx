@@ -5,14 +5,16 @@ import Link from "next/link";
 import { AlignJustify, X } from "lucide-react";
 import DropdownMenuNav from "./DropdownMenuNav";
 import { useEffect, useState } from "react";
-import { useGetAvatarQuery, useGetUserProfileQuery } from "@/types/graphql";
+import { useGetUserProfileQuery } from "@/types/graphql";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import { useLogout } from "../auth/Logout";
 
 export default function Nav() {
   const router = useRouter();
-  const { data } = useGetAvatarQuery();
+
+  const { data } = useGetUserProfileQuery();
+  const avatar = data?.getUserProfile.avatar;
 
   const { data: currentUser } = useGetUserProfileQuery({
     errorPolicy: "ignore",
@@ -144,7 +146,7 @@ export default function Nav() {
                 <AvatarImage
                   src={
                     isConnected
-                      ? `../../../avatars/${data?.getAvatar.avatar}.jpg`
+                      ? `/avatars/${avatar}.jpg`
                       : "https://i.stack.imgur.com/vaDPM.png?s=256&g=1"
                   }
                 />
