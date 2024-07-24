@@ -131,6 +131,9 @@ export class UserProfile {
   @Field()
   email: string;
 
+  @Field()
+  isPremium: boolean;
+
   @Field({ nullable: true })
   gender: GENDER;
 

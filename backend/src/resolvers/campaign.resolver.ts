@@ -74,6 +74,16 @@ export default class CampaignResolver {
       if (!user) {
         throw new Error("Error, please try again");
       }
+      if (user.isPremium === false) {
+        const validation =
+          await this.accessChecker.premiumCheckCreateCampaign(user);
+
+        if (validation !== true) {
+          throw new Error(
+            "You have reached the limit of campaigns created. Unlock Premium to create new campaigns"
+          );
+        }
+      }
       return await this.campaignService.createCampaign(input, user);
     } else {
       throw new Error("You must be authenticated to perform this action");
@@ -107,6 +117,7 @@ export default class CampaignResolver {
     @Ctx() ctx: MyContext,
     @Arg("input") input: InputEditCampaign
   ) {
+    const m = new Message();
     // ------------------------ START VERIFICATION -----------------------
     const validation = await this.accessChecker.verifyIfCampaignBelongToUser(
       ctx,
@@ -117,10 +128,20 @@ export default class CampaignResolver {
       throw new Error("You can't perform this action");
     }
     // ------------------------ END VERIFICATION -----------------------
-    await this.campaignService.updateCampaign(input);
-    const m = new Message();
-    m.message = "Campaign updated successfully";
-    m.success = true;
+    if (
+      ctx.user &&
+      ctx.user.isPremium === false &&
+      input.intervalTest &&
+      input.intervalTest < 60
+    ) {
+      m.message =
+        "You cannot put this interval on this campaign. Unlock Premium to have access to all intervals";
+      m.success = false;
+    } else {
+      await this.campaignService.updateCampaign(input);
+      m.message = "Campaign updated successfully";
+      m.success = true;
+    }
     return m;
   }
 

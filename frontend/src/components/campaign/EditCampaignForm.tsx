@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import {
   useCampaignByIdQuery,
   useModifyCampaignMutation,
+  useGetUserProfileQuery,
 } from "@/types/graphql";
 import { EditCampaignFormProps } from "@/types/interfaces";
 import { ChangeImageForm } from "./ChangeImageForm";
@@ -40,7 +41,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2, Wrench } from "lucide-react";
+import { Loader2, Wrench, Crown } from "lucide-react";
 // ****************************************************
 
 // Define the form schema for validation
@@ -76,16 +77,20 @@ export function EditCampaignForm({ campaignId }: EditCampaignFormProps) {
     },
   });
 
+  const { data: userData } = useGetUserProfileQuery();
+  const userIsPremium = userData?.getUserProfile.isPremium;
+
   const campaignData = data?.campaignById;
 
   const [modifyCampaign] = useModifyCampaignMutation({
-    onCompleted: () => {
+    onCompleted: (data) => {
       setTimeout(() => {
         setFakeLoading(false);
         setOpenForm(false);
         toast({
-          title: "Campaign edited successfully",
-          variant: "success",
+          title: data.modifyCampaign.message,
+          variant:
+            data.modifyCampaign.success === true ? "success" : "destructive",
         });
         refreshData();
         //  TODO : currently, the data in the form does not update after the modification when you reopen the form. For now, I'm using a router.reload but I need to find another solution
@@ -156,16 +161,16 @@ export function EditCampaignForm({ campaignId }: EditCampaignFormProps) {
   }
 
   const selectItemTimes = [
-    { times: 30, value: 0.5, unite: "seconds" },
-    { times: 1, value: 1, unite: "minutes" },
-    { times: 5, value: 5, unite: "minutes" },
-    { times: 10, value: 10, unite: "minutes" },
-    { times: 30, value: 30, unite: "minutes" },
-    { times: 1, value: 60, unite: "hour" },
-    { times: 3, value: 180, unite: "hours" },
-    { times: 6, value: 360, unite: "hours" },
-    { times: 12, value: 720, unite: "hours" },
-    { times: 24, value: 1440, unite: "hours" },
+    { times: 30, value: 0.5, unite: "seconds", forPremium: true },
+    { times: 1, value: 1, unite: "minutes", forPremium: true },
+    { times: 5, value: 5, unite: "minutes", forPremium: true },
+    { times: 10, value: 10, unite: "minutes", forPremium: true },
+    { times: 30, value: 30, unite: "minutes", forPremium: true },
+    { times: 1, value: 60, unite: "hour", forPremium: false },
+    { times: 3, value: 180, unite: "hours", forPremium: false },
+    { times: 6, value: 360, unite: "hours", forPremium: false },
+    { times: 12, value: 720, unite: "hours", forPremium: false },
+    { times: 24, value: 1440, unite: "hours", forPremium: false },
   ];
 
   return (
@@ -233,8 +238,23 @@ export function EditCampaignForm({ campaignId }: EditCampaignFormProps) {
                                 <SelectItem
                                   key={index}
                                   value={item.value.toString()}
+                                  disabled={
+                                    !userIsPremium && item.forPremium === true
+                                  }
                                 >
-                                  {item.times} {item.unite}
+                                  <div className="flex flex-row justify-around items-center">
+                                    <span>
+                                      {item.times} {item.unite}{" "}
+                                    </span>
+                                    {!userIsPremium &&
+                                    item.forPremium === true ? (
+                                      <span>
+                                        <Crown className="ml-2 h-4 w-4 text-yellow-400" />
+                                      </span>
+                                    ) : (
+                                      ""
+                                    )}
+                                  </div>
                                 </SelectItem>
                               ))}
                             </SelectContent>

@@ -68,11 +68,13 @@ export function AddCampaignForm({ callToAction }: AddCampaignFormProps) {
       }, 1000);
     },
     onError: (err) => {
-      toast({
-        title: err.name,
-        description: err.message,
-        variant: "destructive",
-      });
+      setTimeout(() => {
+        setFakeLoading(false);
+        toast({
+          description: err.message,
+          variant: "destructive",
+        });
+      }, 500);
     },
   });
 

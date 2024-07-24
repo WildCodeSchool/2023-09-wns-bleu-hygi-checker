@@ -62,4 +62,30 @@ export default class PremiumResolver {
       throw new Error("You must be authenticated to perform this action");
     }
   }
+
+  @Mutation(() => Message)
+  async RemovePremiumToUser(@Ctx() ctx: MyContext) {
+    const m = new Message();
+    if (ctx.user) {
+      const user = await new UserService().findUserByEmail(ctx.user.email);
+      if (!user) {
+        throw new Error("Error, please try again");
+      }
+
+      if (user.isPremium === true) {
+        await this.userService.removePremium(user);
+        m.message = "You have successfully unsubscribed from Premium ✅";
+        m.success = true;
+      } else if (user.isPremium === false) {
+        m.message = "You are not currently subscribed to Premium";
+        m.success = false;
+      } else {
+        m.message = "Something went wrong";
+        m.success = false;
+      }
+      return m;
+    } else {
+      throw new Error("You must be authenticated to perform this action");
+    }
+  }
 }

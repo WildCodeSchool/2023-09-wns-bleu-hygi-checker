@@ -4,6 +4,7 @@ import CampaignService from "../services/campaign.service";
 import { MyContext } from "..";
 import { CampaignIds } from "../entities/campaign.entity";
 import CampaignUrlService from "../services/campaignUrl.service";
+import User from "../entities/user.entity";
 
 // ===============================> AccessCheckResolver <==================================
 // ==> This resolver contains verification processes that are often used in other resolvers.
@@ -99,5 +100,20 @@ export default class AccessCheckResolver {
     } else {
       throw new Error("You must be authenticated to perform this action");
     }
+  }
+
+  /** ------------------------------------------------------------------------------------------------------------------
+   * premiumCheckCreateCampaign : Check if the connected user is Premium and if he can create a new campaign
+   * @param user user infos
+   * @returns a boolean to true if the user can create the campaign
+   */
+  async premiumCheckCreateCampaign(@Arg("user") user: User): Promise<boolean> {
+    const allUserCampaignsId =
+      await this.campaignService.listCampaignsIdByUserId(user.id);
+
+    if (allUserCampaignsId.length < 3) {
+      return true;
+    }
+    return false;
   }
 }

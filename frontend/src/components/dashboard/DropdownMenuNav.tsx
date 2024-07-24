@@ -20,13 +20,16 @@ export default function DropdownMenuNav({ isConnected }: DropdownMenuProps) {
 
   const { data } = useGetUserProfileQuery();
   const avatar = data?.getUserProfile.avatar;
+  const userIsPremium = data?.getUserProfile.isPremium;
 
   const handleLogout = useLogout();
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <Avatar>
+        <Avatar
+          className={`${userIsPremium === true ? "border-2 border-yellow-400" : ""}`}
+        >
           <AvatarImage
             src={
               isConnected
