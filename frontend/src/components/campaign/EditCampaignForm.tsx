@@ -161,7 +161,7 @@ export function EditCampaignForm({ campaignId }: EditCampaignFormProps) {
   }
 
   const selectItemTimes = [
-    { times: 30, value: 0.5, unite: "seconds", forPremium: true },
+    // { times: 30, value: 0.5, unite: "seconds", forPremium: true },
     { times: 1, value: 1, unite: "minutes", forPremium: true },
     { times: 5, value: 5, unite: "minutes", forPremium: true },
     { times: 10, value: 10, unite: "minutes", forPremium: true },
