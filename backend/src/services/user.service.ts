@@ -77,4 +77,10 @@ export default class UserService {
     editedUserPremium.isPremium = true;
     return await this.db.save(editedUserPremium);
   }
+
+  async removePremium(user: User) {
+    const editedUserPremium = this.db.create({ ...user });
+    editedUserPremium.isPremium = false;
+    return await this.db.save(editedUserPremium);
+  }
 }

@@ -139,6 +139,9 @@ export type Message = {
 
 export type Mutation = {
   __typename?: "Mutation";
+  RemovePremiumToUser: Message;
+  addCode: Premium;
+  addPremiumToUser: Message;
   addTest: Test;
   addUrlToCampaign: Message;
   changeAvatar: NewUserAvatar;
@@ -156,7 +159,10 @@ export type Mutation = {
   switchWorkingCampaign: Message;
   updateName: UserProfile;
   updateProfile: UserProfile;
-  upgradeRole: Array<User>;
+};
+
+export type MutationAddPremiumToUserArgs = {
+  inputCode: Scalars["String"]["input"];
 };
 
 export type MutationAddTestArgs = {
@@ -225,13 +231,17 @@ export type MutationUpdateProfileArgs = {
   updateData: InputUpdateProfile;
 };
 
-export type MutationUpgradeRoleArgs = {
-  id: Scalars["String"]["input"];
-};
-
 export type NewUserAvatar = {
   __typename?: "NewUserAvatar";
   avatar: Scalars["String"]["output"];
+};
+
+export type Premium = {
+  __typename?: "Premium";
+  code: Scalars["String"]["output"];
+  createdAt: Scalars["DateTimeISO"]["output"];
+  id: Scalars["String"]["output"];
+  isUsed: Scalars["Boolean"]["output"];
 };
 
 export type Query = {
@@ -346,6 +356,7 @@ export type User = {
   email: Scalars["String"]["output"];
   gender: Gender;
   id: Scalars["String"]["output"];
+  isPremium: Scalars["Boolean"]["output"];
   password: Scalars["String"]["output"];
   role: Scalars["String"]["output"];
   username: Scalars["String"]["output"];
@@ -358,6 +369,7 @@ export type UserProfile = {
   country?: Maybe<Scalars["String"]["output"]>;
   email: Scalars["String"]["output"];
   gender?: Maybe<Scalars["String"]["output"]>;
+  isPremium: Scalars["Boolean"]["output"];
   username: Scalars["String"]["output"];
 };
 
@@ -383,6 +395,32 @@ export type InputUpdateProfile = {
   birth_date: Scalars["String"]["input"];
   country: Scalars["String"]["input"];
   gender: Scalars["String"]["input"];
+};
+
+export type AddCodeMutationVariables = Exact<{ [key: string]: never }>;
+
+export type AddCodeMutation = {
+  __typename?: "Mutation";
+  addCode: {
+    __typename?: "Premium";
+    id: string;
+    code: string;
+    isUsed: boolean;
+    createdAt: Date;
+  };
+};
+
+export type AddPremiumToUserMutationVariables = Exact<{
+  inputCode: Scalars["String"]["input"];
+}>;
+
+export type AddPremiumToUserMutation = {
+  __typename?: "Mutation";
+  addPremiumToUser: {
+    __typename?: "Message";
+    message: string;
+    success: boolean;
+  };
 };
 
 export type AddUrlToCampaignMutationVariables = Exact<{
@@ -491,6 +529,19 @@ export type ModifyCampaignMutationVariables = Exact<{
 export type ModifyCampaignMutation = {
   __typename?: "Mutation";
   modifyCampaign: { __typename?: "Message"; success: boolean; message: string };
+};
+
+export type RemovePremiumToUserMutationVariables = Exact<{
+  [key: string]: never;
+}>;
+
+export type RemovePremiumToUserMutation = {
+  __typename?: "Mutation";
+  RemovePremiumToUser: {
+    __typename?: "Message";
+    message: string;
+    success: boolean;
+  };
 };
 
 export type SwitchWorkingCampaignMutationVariables = Exact<{
@@ -699,6 +750,7 @@ export type GetUserProfileQuery = {
     birth_date?: string | null;
     country?: string | null;
     avatar: string;
+    isPremium: boolean;
   };
 };
 
@@ -733,6 +785,106 @@ export type TestsQuery = {
   tests: Array<{ __typename?: "Test"; text: string; id: string }>;
 };
 
+export const AddCodeDocument = gql`
+  mutation AddCode {
+    addCode {
+      id
+      code
+      isUsed
+      createdAt
+    }
+  }
+`;
+export type AddCodeMutationFn = Apollo.MutationFunction<
+  AddCodeMutation,
+  AddCodeMutationVariables
+>;
+
+/**
+ * __useAddCodeMutation__
+ *
+ * To run a mutation, you first call `useAddCodeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddCodeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addCodeMutation, { data, loading, error }] = useAddCodeMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAddCodeMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AddCodeMutation,
+    AddCodeMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<AddCodeMutation, AddCodeMutationVariables>(
+    AddCodeDocument,
+    options
+  );
+}
+export type AddCodeMutationHookResult = ReturnType<typeof useAddCodeMutation>;
+export type AddCodeMutationResult = Apollo.MutationResult<AddCodeMutation>;
+export type AddCodeMutationOptions = Apollo.BaseMutationOptions<
+  AddCodeMutation,
+  AddCodeMutationVariables
+>;
+export const AddPremiumToUserDocument = gql`
+  mutation AddPremiumToUser($inputCode: String!) {
+    addPremiumToUser(inputCode: $inputCode) {
+      message
+      success
+    }
+  }
+`;
+export type AddPremiumToUserMutationFn = Apollo.MutationFunction<
+  AddPremiumToUserMutation,
+  AddPremiumToUserMutationVariables
+>;
+
+/**
+ * __useAddPremiumToUserMutation__
+ *
+ * To run a mutation, you first call `useAddPremiumToUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddPremiumToUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [addPremiumToUserMutation, { data, loading, error }] = useAddPremiumToUserMutation({
+ *   variables: {
+ *      inputCode: // value for 'inputCode'
+ *   },
+ * });
+ */
+export function useAddPremiumToUserMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    AddPremiumToUserMutation,
+    AddPremiumToUserMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    AddPremiumToUserMutation,
+    AddPremiumToUserMutationVariables
+  >(AddPremiumToUserDocument, options);
+}
+export type AddPremiumToUserMutationHookResult = ReturnType<
+  typeof useAddPremiumToUserMutation
+>;
+export type AddPremiumToUserMutationResult =
+  Apollo.MutationResult<AddPremiumToUserMutation>;
+export type AddPremiumToUserMutationOptions = Apollo.BaseMutationOptions<
+  AddPremiumToUserMutation,
+  AddPremiumToUserMutationVariables
+>;
 export const AddUrlToCampaignDocument = gql`
   mutation AddUrlToCampaign($infos: InputAddUrlToCampaign!) {
     addUrlToCampaign(infos: $infos) {
@@ -1241,6 +1393,56 @@ export type ModifyCampaignMutationResult =
 export type ModifyCampaignMutationOptions = Apollo.BaseMutationOptions<
   ModifyCampaignMutation,
   ModifyCampaignMutationVariables
+>;
+export const RemovePremiumToUserDocument = gql`
+  mutation RemovePremiumToUser {
+    RemovePremiumToUser {
+      message
+      success
+    }
+  }
+`;
+export type RemovePremiumToUserMutationFn = Apollo.MutationFunction<
+  RemovePremiumToUserMutation,
+  RemovePremiumToUserMutationVariables
+>;
+
+/**
+ * __useRemovePremiumToUserMutation__
+ *
+ * To run a mutation, you first call `useRemovePremiumToUserMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemovePremiumToUserMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removePremiumToUserMutation, { data, loading, error }] = useRemovePremiumToUserMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useRemovePremiumToUserMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RemovePremiumToUserMutation,
+    RemovePremiumToUserMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    RemovePremiumToUserMutation,
+    RemovePremiumToUserMutationVariables
+  >(RemovePremiumToUserDocument, options);
+}
+export type RemovePremiumToUserMutationHookResult = ReturnType<
+  typeof useRemovePremiumToUserMutation
+>;
+export type RemovePremiumToUserMutationResult =
+  Apollo.MutationResult<RemovePremiumToUserMutation>;
+export type RemovePremiumToUserMutationOptions = Apollo.BaseMutationOptions<
+  RemovePremiumToUserMutation,
+  RemovePremiumToUserMutationVariables
 >;
 export const SwitchWorkingCampaignDocument = gql`
   mutation SwitchWorkingCampaign($input: InputSwitchWorkingCampaign!) {
@@ -2273,6 +2475,7 @@ export const GetUserProfileDocument = gql`
       birth_date
       country
       avatar
+      isPremium
     }
   }
 `;

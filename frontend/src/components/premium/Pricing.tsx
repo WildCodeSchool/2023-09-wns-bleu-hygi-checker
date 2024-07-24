@@ -11,9 +11,7 @@ function Pricing() {
               <span className="sr-only">Plan</span>
             </h2>
 
-            <p className="mt-2 text-gray-700">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            </p>
+            <p className="mt-2 text-gray-700">Discover our app for free.</p>
 
             <p className="mt-2 sm:mt-4">
               <strong className="text-3xl font-bold text-gray-900 sm:text-4xl">
@@ -51,7 +49,7 @@ function Pricing() {
                   />
                 </svg>
 
-                <span className="text-gray-700">Up to 5 campaigns </span>
+                <span className="text-gray-700">Up to 3 campaigns </span>
               </li>
 
               <li className="flex items-center gap-1">
@@ -70,7 +68,7 @@ function Pricing() {
                   />
                 </svg>
 
-                <span className="text-gray-700">Up to 10 URL per campaign</span>
+                <span className="text-gray-700">Up to 5 URL per campaign</span>
               </li>
 
               <li className="flex items-center gap-1">
@@ -155,18 +153,18 @@ function Pricing() {
         <div className="divide-y divide-gray-200 rounded-2xl border border-gray-200 shadow-sm bg-white">
           <div className="p-6 sm:px-8">
             <h2 className="text-lg font-medium text-gray-900">
-              Pro
+              Pro (monthly)
               <span className="sr-only">Plan</span>
             </h2>
 
             <p className="mt-2 text-gray-700">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Enjoy limitless features monthly.
             </p>
 
             <p className="mt-2 sm:mt-4">
               <strong className="text-3xl font-bold text-gray-900 sm:text-4xl">
                 {" "}
-                9.99${" "}
+                9.99€{" "}
               </strong>
 
               <span className="text-sm font-medium text-gray-700">/month</span>
@@ -310,18 +308,16 @@ function Pricing() {
               <span className="sr-only">Plan</span>
             </h2>
 
-            <p className="mt-2 text-gray-700">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit.
-            </p>
+            <p className="mt-2 text-gray-700">Optimized for regular users.</p>
 
             <p className="mt-2 sm:mt-4">
               <strong className="text-3xl font-bold text-gray-900 sm:text-4xl">
                 {" "}
-                99.99$
+                99.99€
               </strong>
 
               <span className="text-sm font-medium text-gray-700">/year</span>
-              <span className="bg-green-200 text-green-800 ml-4 text-sm font-medium me-2 px-4 py-2 rounded dark:bg-green-900 dark:text-green-300">
+              <span className="hidden lg:inline-block bg-green-200 text-green-800 ml-4 text-sm font-medium me-2 px-4 py-2 rounded dark:bg-green-900 dark:text-green-300">
                 -20%
               </span>
             </p>
