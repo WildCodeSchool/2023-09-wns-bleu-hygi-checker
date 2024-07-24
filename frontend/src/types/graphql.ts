@@ -155,6 +155,7 @@ export type Mutation = {
   modifyCampaign: Message;
   modifyImageOfCampaign: Message;
   register: UserWithoutPassword;
+  sendEmail: Message;
   switchWorkingCampaign: Message;
   updateName: UserProfile;
   updateProfile: UserProfile;
@@ -210,6 +211,12 @@ export type MutationModifyImageOfCampaignArgs = {
 
 export type MutationRegisterArgs = {
   infos: InputRegister;
+};
+
+export type MutationSendEmailArgs = {
+  content: Scalars["String"]["input"];
+  subject: Scalars["String"]["input"];
+  to: Scalars["String"]["input"];
 };
 
 export type MutationSwitchWorkingCampaignArgs = {
