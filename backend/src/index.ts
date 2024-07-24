@@ -10,7 +10,7 @@ import "reflect-metadata";
 import User from "./entities/user.entity";
 import datasource from "./lib/datasource";
 import schemaPromise from "./schema";
-import { CampaignManagerService } from "./services/campaignManager.service";
+import { CampaignManagerService } from "./services/campaingManager.service";
 import UserService from "./services/user.service";
 
 export interface MyContext {

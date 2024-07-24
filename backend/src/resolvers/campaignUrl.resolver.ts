@@ -76,11 +76,12 @@ export default class CampaignUrlResolver {
    *
    * This mutation handles the process of adding a new URL to a campaign, including:
    * 1. Validating user permissions
-   * 2. Checking and sanitizing the URL format
-   * 3. Verifying if the URL already exists in the database
-   * 4. Adding the URL to the specified campaign
-   * 5. Performing an immediate health check on the URL
-   * 6. Recording the health check results in the database
+   * 2. Check that the user is premium
+   * 3. Checking and sanitizing the URL format
+   * 4. Verifying if the URL already exists in the database
+   * 5. Adding the URL to the specified campaign
+   * 6. Performing an immediate health check on the URL
+   * 7. Recording the health check results in the database
    *
    * @param {MyContext} ctx - The context object containing user information for authorization
    * @param {InputAddUrlToCampaign} infos - An object containing:
@@ -111,10 +112,12 @@ export default class CampaignUrlResolver {
       ctx,
       campaignId
     );
+
     if (validation !== true) {
       throw new Error("You can't perform this action");
     }
-    // ------------------------ END VERIFICATION -----------------------
+
+    // Premium verification
     if (ctx.user && ctx.user.isPremium === false) {
       const count =
         await this.campaignUrlService.countUrlByCampaignId(campaignId);
@@ -125,7 +128,8 @@ export default class CampaignUrlResolver {
         );
       }
     }
-    // on enleve "/" a la fin de l'url si present
+
+    // Clean URL
     const newUrl = infos.url.replace(/\/$/, "");
 
     // URL validation
