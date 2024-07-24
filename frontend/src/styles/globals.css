@@ -69,11 +69,11 @@
 * {
   margin: 0;
   padding: 0;
+  scroll-behavior: smooth;
 }
 
 body {
   background-color: #303e33;
-  overflow: hidden;
 }
 
 .prevent-select {

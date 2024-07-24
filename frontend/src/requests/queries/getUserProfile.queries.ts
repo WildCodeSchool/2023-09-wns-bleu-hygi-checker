@@ -9,6 +9,7 @@ export const GET_USER_PROFILE = gql`
       birth_date
       country
       avatar
+      isPremium
     }
   }
 `;

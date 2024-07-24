@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { useLazyQuery } from "@apollo/client";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -12,6 +12,13 @@ import {
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
 import { CHECK_URL } from "@/requests/queries/check-url.queries";
+import {
+  getResponseColor,
+  getStatusColor,
+} from "@/utils/chartFunction/getColor";
+import { toUpOne } from "@/utils/global/getFirstMaj";
+import { formatDate } from "@/utils/chartFunction/formatDate";
+import { FormatHoursAndMinutes } from "@/utils/chartFunction/FormatHoursAndMinutes";
 
 export default function CardResponse() {
   const router = useRouter();
@@ -24,39 +31,60 @@ export default function CardResponse() {
       checkURL({ variables: { urlPath } });
     }
   }, [checkURL, urlPath]);
-  // Fonction pour formater la date au bon format
-  const formatDate = (dateString: string | number | Date) => {
-    const date = new Date(dateString);
-    return date.toLocaleString();
-  };
+
+  const tableHeadValue = ["date", "time", "response status", "response time"];
+
   return (
-    <Card className="flex flex-col justify-center">
+    <Card className="flex flex-col justify-center shadow-md w-[350px] sm:w-[550px]">
+      <CardHeader>
+        <CardTitle className="text-lg font-semibold text-center">
+          URL Response Status
+        </CardTitle>
+      </CardHeader>
       <CardContent className="grid gap-4">
-        <Input id="check_response" className="mt-4" value={urlPath} disabled />
-        {loading && <p>Loading...</p>}
+        <Input
+          id="check_response"
+          className="mt-4 p-2 rounded-md border"
+          value={urlPath}
+          disabled
+        />
+        {loading && <p className="text-center font-semibold">Loading...</p>}
         {data && (
-          <Table>
+          <Table className="mt-4 text-center text-xs sm:text-base">
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[100px]">Date</TableHead>
-                <TableHead>Time</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Response Time</TableHead>
+                {tableHeadValue.map((value, index) => (
+                  <TableHead key={index} className="font-bold text-center">
+                    {toUpOne(value)}
+                  </TableHead>
+                ))}
               </TableRow>
             </TableHeader>
             <TableBody>
-              <TableRow key={data.checkUrl.type}>
-                <TableCell className="font-medium">Url</TableCell>
-                <TableCell>{data.checkUrl.status}</TableCell>
-                <TableCell>{data.checkUrl.responseTime}ms</TableCell>
-                <TableCell className="text-right">
-                  {formatDate(data.checkUrl.responseDate)}{" "}
+              <TableRow key={data.checkUrl.type} className="font-semibold">
+                <TableCell>{formatDate(data.checkUrl.responseDate)}</TableCell>
+                <TableCell>
+                  {FormatHoursAndMinutes(data.checkUrl.responseDate)}
+                </TableCell>
+                <TableCell
+                  className={getStatusColor(data.checkUrl.status, false)}
+                >
+                  {data.checkUrl.status}
+                </TableCell>
+                <TableCell
+                  className={getResponseColor(data.checkUrl.responseTime)}
+                >
+                  {data.checkUrl.responseTime}ms
                 </TableCell>
               </TableRow>
             </TableBody>
           </Table>
         )}
-        {error && <p>Erreur lors de la vérification: {error.message}</p>}
+        {error && (
+          <p className="text-center text-red-600 font-bold">
+            Erreur lors de la vérification: {error.message}
+          </p>
+        )}
       </CardContent>
     </Card>
   );

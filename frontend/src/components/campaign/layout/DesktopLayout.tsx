@@ -10,8 +10,15 @@ import {
 
 import { MoveUpRight } from "lucide-react";
 import { getDomainFromUrl } from "@/utils/global/getDomainFromUrl";
-import { Url, useDeleteUrlFromCampaignMutation } from "@/types/graphql";
-import { useLastDayResponsesOfOneUrlLazyQuery } from "@/types/graphql";
+import {
+  Url,
+  useDeleteUrlFromCampaignMutation,
+  useLastDayResponsesOfOneUrlLazyQuery,
+  useResponsesByCampaignUrlIdByPageQuery,
+  useCountResponsesByCampaignUrlIdQuery,
+  useAllResponsesOfOneUrlLazyQuery,
+  useCountUrlFromCampaignQuery,
+} from "@/types/graphql";
 import QuickUrlTest from "@/components/check/QuickUrlTest";
 import { ConfirmationModal } from "@/components/ConfirmationModal";
 import PieChart from "@/components/analytics/PieChart";
@@ -90,20 +97,70 @@ export default function DesktopLayout({
     }
   };
 
-  const [getLastReponses, { data }] = useLastDayResponsesOfOneUrlLazyQuery();
+  const [getLastResponses, { data, refetch: refetchLastResponses }] =
+    useLastDayResponsesOfOneUrlLazyQuery();
 
   const lastResponses = data?.lastDayResponsesOfOneUrl;
 
+  const [getAllStatus, { data: allStatus, refetch: refetchAllStatus }] =
+    useAllResponsesOfOneUrlLazyQuery();
+
+  const ResponseStatusOfThisUrl = allStatus?.allResponsesOfOneUrl;
+
+  const { refetch: refetchAllResponses } =
+    useResponsesByCampaignUrlIdByPageQuery({
+      variables: {
+        pageSize: 5,
+        page: 1,
+        campaignUrlId: selectedUrlId,
+      },
+    });
+
+  const { refetch: refetchCountResponses } =
+    useCountResponsesByCampaignUrlIdQuery({
+      variables: {
+        campaignUrlId: selectedUrlId,
+      },
+    });
+
+  const refreshDataFunction = () => {
+    if (selectedUrlId !== 0 && campaignData.isWorking === true) {
+      refetchLastResponses();
+      refetchAllStatus();
+      refetchAllResponses();
+      refetchCountResponses();
+      console.warn("Data refreshed");
+    }
+  };
+
+  useEffect(() => {
+    const runAutoRefresh = setInterval(refreshDataFunction, 3 * 1000);
+    return () => {
+      clearInterval(runAutoRefresh);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedUrlId, campaignData.isWorking]);
+
   useEffect(() => {
     if (selectedUrlId !== 0) {
-      getLastReponses({
+      getLastResponses({
         variables: {
           campaignUrlId: selectedUrlId,
         },
       });
-      if (lastResponses && lastResponses.length > 0) {
+      getAllStatus({
+        variables: {
+          campaignUrlId: selectedUrlId,
+        },
+      });
+      if (
+        lastResponses &&
+        lastResponses.length > 0 &&
+        ResponseStatusOfThisUrl &&
+        ResponseStatusOfThisUrl.length > 0
+      ) {
         // Set PieData
-        const chartData = countStatusCodes(lastResponses);
+        const chartData = countStatusCodes(ResponseStatusOfThisUrl);
         setPieData(chartData);
         // Set LineData
         const outputData = formatResponseTime(lastResponses);
@@ -127,15 +184,22 @@ export default function DesktopLayout({
     }
   }, [
     campaignData,
-    getLastReponses,
+    getLastResponses,
     lastResponses,
+    ResponseStatusOfThisUrl,
     selectedUrl,
     selectedUrlId,
     urls,
+    getAllStatus,
   ]);
 
+  const { refetch: refetchNbUrlOfCampaign } = useCountUrlFromCampaignQuery({
+    variables: {
+      campaignId: campaignData.id,
+    },
+  });
+
   const deleteURL = () => {
-    // TODO : make the API call to delete this CampaignURL from this campaign
     deleteUrlMutation({
       variables: {
         infos: {
@@ -152,6 +216,7 @@ export default function DesktopLayout({
         variant: "success",
       });
       refetch();
+      refetchNbUrlOfCampaign();
       setSelectedUrl("");
     },
     onError: (err) => {

@@ -8,6 +8,7 @@ import Response from "../entities/response.entity";
 import Campaign from "../entities/campaign.entity";
 import CampaignUrl from "../entities/campaignUrl.entity";
 import AccessCheckResolver from "../resolvers/accessCheck.resolver";
+import Premium from "../entities/premium.entity";
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ const db = new DataSource({
     Campaign,
     CampaignUrl,
     AccessCheckResolver,
+    Premium,
   ],
   synchronize: true,
 });

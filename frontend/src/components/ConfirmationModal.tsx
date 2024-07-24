@@ -67,15 +67,9 @@ export function ConfirmationModal({
             <Button variant="default" type="submit">
               {noText}
             </Button>
-            <Button
-              variant="destructive"
-              disabled={loading === true}
-              onClick={onSubmit}
-            >
-              {loading === true && (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              {loading === true ? "Please wait" : yesText}
+            <Button variant="destructive" disabled={loading} onClick={onSubmit}>
+              {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              {loading ? "Please wait" : yesText}
             </Button>
           </DialogFooter>
         </div>

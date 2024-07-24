@@ -39,6 +39,14 @@ export interface CGUModalProps {
   yesText: string;
   onConfirm: (isConfirmed: boolean) => void;
 }
+
+export interface EmailModalProps {
+  buttonText: string;
+  title: string;
+  message: string;
+  confirmButton: string;
+}
+
 export interface EditCampaignFormProps {
   campaignId: string;
 }
@@ -81,4 +89,10 @@ export interface InputData {
     __typename?: "CampaignUrl" | undefined;
     id: number;
   };
+}
+
+export interface ActivatePremiumModalProps {
+  premiumCode: string;
+  openForm: boolean;
+  setOpenForm: Dispatch<SetStateAction<boolean>>;
 }

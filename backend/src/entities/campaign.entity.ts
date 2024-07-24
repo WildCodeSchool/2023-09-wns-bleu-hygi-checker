@@ -1,4 +1,8 @@
-import { Max, Min } from "class-validator";
+import {
+  ValidationArguments,
+  ValidationOptions,
+  registerDecorator,
+} from "class-validator";
 import { Field, InputType, ObjectType } from "type-graphql";
 import {
   BaseEntity,
@@ -12,6 +16,26 @@ import {
 } from "typeorm";
 import CampaignUrl from "./campaignUrl.entity";
 import User from "./user.entity";
+
+function IsAllowedInterval(validationOptions?: ValidationOptions) {
+  return function (object: object, propertyName: string) {
+    registerDecorator({
+      name: "isAllowedInterval",
+      target: object.constructor,
+      propertyName: propertyName,
+      options: validationOptions,
+      validator: {
+        validate(value: number, _args: ValidationArguments) {
+          const allowedIntervals = [0.5, 1, 5, 10, 30, 60, 180, 360, 720, 1440];
+          return allowedIntervals.includes(value);
+        },
+        defaultMessage(_args: ValidationArguments) {
+          return "Interval must be one of the following: 0.5, 1, 5, 10, 30, 60, 180, 360, 720, 1440 minutes.";
+        },
+      },
+    });
+  };
+}
 
 @ObjectType()
 @Entity()
@@ -30,8 +54,10 @@ export default class Campaign extends BaseEntity {
 
   @Field({ nullable: true })
   @Column({ nullable: true, default: 60 })
-  @Min(0.5, { message: "Interval must be at least 0.5 minutes." })
-  @Max(1440, { message: "Interval must be at most 1440 minutes." })
+  @IsAllowedInterval({
+    message:
+      "Interval must be one of the following: 0.5, 1, 5, 10, 30, 60, 180, 360, 720, 1440 minutes.",
+  })
   intervalTest?: number = 60; // Interval in minutes, default 60
 
   @Field({ nullable: true })
@@ -66,6 +92,10 @@ export class InputCreateCampaign {
   name: string;
 
   @Field({ nullable: true })
+  @IsAllowedInterval({
+    message:
+      "Interval must be one of the following: 0.5, 1, 5, 10, 30, 60, 180, 360, 720, 1440 minutes.",
+  })
   intervalTest?: number;
 
   @Field({ nullable: true })
@@ -84,6 +114,10 @@ export class InputEditCampaign {
   name: string;
 
   @Field({ nullable: true })
+  @IsAllowedInterval({
+    message:
+      "Interval must be one of the following: 0.5, 1, 5, 10, 30, 60, 180, 360, 720, 1440 minutes.",
+  })
   intervalTest?: number;
 
   @Field({ nullable: true })
