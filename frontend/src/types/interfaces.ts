@@ -39,6 +39,14 @@ export interface CGUModalProps {
   yesText: string;
   onConfirm: (isConfirmed: boolean) => void;
 }
+
+export interface EmailModalProps {
+  buttonText: string;
+  title: string;
+  message: string;
+  confirmButton: string;
+}
+
 export interface EditCampaignFormProps {
   campaignId: string;
 }
