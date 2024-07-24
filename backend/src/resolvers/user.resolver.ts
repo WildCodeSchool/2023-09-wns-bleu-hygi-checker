@@ -233,7 +233,7 @@ export default class UserResolver {
     const m = new Message();
     try {
       const transporter = nodemailer.createTransport({
-        host: "",
+        host: process.env.NODEMAILER,
         port: 1025,
       });
 
@@ -241,7 +241,7 @@ export default class UserResolver {
         from: "hygichecker@gmail.com",
         to,
         subject,
-        text: content,
+        html: content,
       };
       await transporter.sendMail(options);
       m.message = "Succes";
