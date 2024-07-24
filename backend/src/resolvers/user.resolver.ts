@@ -17,6 +17,8 @@ import User, {
 import UserService from "../services/user.service";
 import { AVATAR } from "../types";
 
+import nodemailer from "nodemailer";
+
 @Resolver()
 export default class UserResolver {
   @Query(() => [User])
@@ -40,20 +42,6 @@ export default class UserResolver {
     }
   }
 
-  @Authorized(["USER", "ADMIN"])
-  @Query(() => User)
-  async getAvatar(@Ctx() ctx: MyContext) {
-    // TODO : remove this query as the getUserProfile is enough to get the avatar => make a query on front with getUserProfile but just select avatar
-    if (ctx.user) {
-      const avatar = await new UserService().findUserByEmail(ctx.user.email);
-      if (!avatar) {
-        throw new Error("avatar not found");
-      }
-      return avatar;
-    } else {
-      throw new Error("You must be authenticated to perform this action");
-    }
-  }
   @Authorized(["USER", "ADMIN"])
   @Mutation(() => NewUserAvatar)
   async changeAvatar(
@@ -225,14 +213,44 @@ export default class UserResolver {
     return newUser;
   }
 
-  @Authorized(["USER"]) // TODO : remove this function for final production (except if we work on admin rights)
-  @Mutation(() => [User])
-  async upgradeRole(@Arg("id") id: string) {
-    const user = await new UserService().findUserById(id);
-    if (!user) {
-      throw new Error("Error, please try again");
+  // @Authorized(["USER"]) // TODO : remove this function for final production (except if we work on admin rights)
+  // @Mutation(() => [User])
+  // async upgradeRole(@Arg("id") id: string) {
+  //   const user = await new UserService().findUserById(id);
+  //   if (!user) {
+  //     throw new Error("Error, please try again");
+  //   }
+  //   const newRole = await new UserService().upgradeRoleToAdmin(user);
+  //   return newRole;
+  // }
+
+  @Mutation(() => Message)
+  async sendEmail(
+    @Arg("to") to: string,
+    @Arg("subject") subject: string,
+    @Arg("content") content: string
+  ): Promise<Message> {
+    const m = new Message();
+    try {
+      const transporter = nodemailer.createTransport({
+        host: "",
+        port: 1025,
+      });
+
+      const options = {
+        from: "hygichecker@gmail.com",
+        to,
+        subject,
+        text: content,
+      };
+      await transporter.sendMail(options);
+      m.message = "Succes";
+      m.success = true;
+    } catch (err) {
+      console.error("Failed to send email:", err);
+      m.message = "Erreur";
+      m.success = false;
     }
-    const newRole = await new UserService().upgradeRoleToAdmin(user);
-    return newRole;
+    return m;
   }
 }

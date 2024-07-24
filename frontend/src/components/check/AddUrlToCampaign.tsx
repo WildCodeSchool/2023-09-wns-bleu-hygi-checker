@@ -36,9 +36,12 @@ import { Loader2 } from "lucide-react";
 import {
   useCampaignsByUserIdQuery,
   useAddUrlToCampaignMutation,
+  useGetUrlFromCampaignQuery,
+  useCountUrlFromCampaignQuery,
 } from "@/types/graphql";
 import { AddUrlToCampaignToastProps } from "@/types/interfaces";
 import { urlPattern } from "@/utils/global/getDomainFromUrl";
+import { useRouter } from "next/router";
 // ****************************************************
 
 // Define the form schema for validation
@@ -63,13 +66,51 @@ export function AddUrlToCampaign({
   const { data } = useCampaignsByUserIdQuery();
   const campaigns = data?.campaignsByUserId;
 
+  const router = useRouter();
+
+  const [campaginIdSelected, setCampaignIdSelected] = useState("");
+
+  const { refetch } = useGetUrlFromCampaignQuery({
+    variables: {
+      campaignId:
+        typeof campaginIdSelected === "string"
+          ? parseInt(campaginIdSelected)
+          : 0,
+    },
+  });
+
+  const handleClickButtonSeeCampaign = (dismiss: () => void) => {
+    dismiss();
+    router.push(`/dashboard/campaign/details/${campaginIdSelected}`);
+  };
+
+  const { refetch: refetchNbUrlOfCampaign } = useCountUrlFromCampaignQuery({
+    variables: {
+      campaignId:
+        typeof campaginIdSelected === "string"
+          ? parseInt(campaginIdSelected)
+          : 0,
+    },
+  });
+
   const [addUrlToCampaignMutation] = useAddUrlToCampaignMutation({
     onCompleted: (data) => {
       setTimeout(() => {
         setLoading(false);
         handleCloseForm();
-        toast({
+        refetch();
+        refetchNbUrlOfCampaign();
+        const { dismiss } = toast({
           title: `${data.addUrlToCampaign.message}`,
+          action: (
+            <Button
+              variant="outline"
+              className="text-black"
+              onClick={() => handleClickButtonSeeCampaign(dismiss)}
+            >
+              Voir
+            </Button>
+          ),
           variant: "success",
         });
       }, 1000);
@@ -138,9 +179,12 @@ export function AddUrlToCampaign({
               name="campaignId"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Campaign</FormLabel>
                   <Select
-                    onValueChange={field.onChange}
+                    onValueChange={(value) => {
+                      field.onChange(value);
+                      setCampaignIdSelected(value);
+                    }}
                     defaultValue={field.value}
                   >
                     <FormControl>
@@ -149,7 +193,7 @@ export function AddUrlToCampaign({
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      {campaigns &&
+                      {campaigns && campaigns.length > 0 ? (
                         campaigns.map((campaign) => (
                           <SelectItem
                             key={campaign.id}
@@ -157,7 +201,10 @@ export function AddUrlToCampaign({
                           >
                             {campaign.name}
                           </SelectItem>
-                        ))}
+                        ))
+                      ) : (
+                        <p>No campaign available</p>
+                      )}
                     </SelectContent>
                   </Select>
 

@@ -53,6 +53,10 @@ export default class User extends BaseEntity {
   @Column()
   password: string;
 
+  @Field()
+  @Column({ default: false })
+  isPremium: boolean;
+
   @Field(() => GENDER)
   @Column({
     type: "text",

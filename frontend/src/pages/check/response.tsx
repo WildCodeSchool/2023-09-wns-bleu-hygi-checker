@@ -5,38 +5,31 @@ import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useGetUserProfileQuery } from "@/types/graphql";
 
 export default function Response() {
   const router = useRouter();
   const urlPath = router.query.url;
 
-  const [isConnected, setIsConnected] = useState<boolean>(false);
   const [showAddUrlModal, setShowAddUrlModal] = useState<boolean>(false);
 
   const handleOpenForm = () => {
     setShowAddUrlModal(true);
   };
 
-  useEffect(() => {
-    const checkMail = () => {
-      const mail = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("email="));
+  const { data: currentUser } = useGetUserProfileQuery({
+    errorPolicy: "ignore",
+  });
 
-      setIsConnected(!!mail);
-    };
-
-    checkMail();
-  }, []);
+  const isConnected = !!currentUser?.getUserProfile;
 
   return (
     <Layout title="Read">
-      <div className="text-white"></div>
-      <div className="flex justify-center gap-4 mt-5">
+      <div className="flex justify-center gap-4 mt-12 w-full">
         <CardResponse />
       </div>
-      <div className="flex justify-center mt-5 text-white">
+      <div className="flex justify-center mt-5 text-white w-full">
         {isConnected === false && (
           <p className="text-center">
             You have just checked your url, you can check again or sign up for
@@ -46,11 +39,11 @@ export default function Response() {
         {isConnected === true && (
           <p className="text-center">
             You have just checked your url, you can check again or add this url
-            to a campaign:
+            to a campaign :
           </p>
         )}
       </div>
-      <div className="flex justify-center gap-4 mt-5">
+      <div className="flex justify-center gap-4 mt-5 w-full">
         <Button
           variant={"white"}
           onClick={() => {
@@ -61,6 +54,7 @@ export default function Response() {
         </Button>
         {isConnected === false && (
           <Button
+            className="ml-4"
             variant="outline"
             onClick={() => {
               router.push("/auth/login");

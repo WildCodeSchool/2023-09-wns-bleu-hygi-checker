@@ -73,6 +73,34 @@ export default class ResponseResolver {
 
   // -------------------------------------------------------------------------
   /**
+   * lastDayResponsesOfOneUrl : get the response of the latest 24 hours on one URLs belonging to a given campaign
+   * @param campaignUrlId the ID of the campaignUrl row you want to get the responses from (=> the URL of your campaign)
+   * @returns an array of Responses of an URL for this last 24 hours
+   */
+  @Query(() => [Response])
+  async allResponsesOfOneUrl(
+    @Ctx() ctx: MyContext,
+    @Arg("campaignUrlId", () => Int) campaignUrlId: number
+  ) {
+    // ------------------------ START VERIFICATION -----------------------
+    const validation = await this.accessChecker.verifyIfUrlBelongToUserCampaign(
+      ctx,
+      campaignUrlId
+    );
+
+    if (validation !== true) {
+      throw new Error("You can't perform this action");
+    }
+    // ------------------------ END VERIFICATION -----------------------
+
+    const allResponsesOfThisUrl =
+      await this.responseService.listResponsesByCampaignUrlId(campaignUrlId);
+
+    return allResponsesOfThisUrl;
+  }
+
+  // -------------------------------------------------------------------------
+  /**
    * latestResponsesByCampaignUrlId : get the latest response on all URLs belonging to a given campaign
    * @param campaignId the ID of the campaign you want to get the responses from
    * @returns an array of Responses

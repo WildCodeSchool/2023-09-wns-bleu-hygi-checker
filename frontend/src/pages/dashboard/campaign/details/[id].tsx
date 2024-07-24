@@ -17,6 +17,7 @@ import {
 } from "@/types/graphql";
 import { Button } from "@/components/ui/button";
 import Loading from "@/components/Loading";
+import { toUpOne } from "@/utils/global/getFirstMaj";
 
 export default function CampaignDetail() {
   const router = useRouter();
@@ -86,7 +87,9 @@ export default function CampaignDetail() {
         <div className="w-full h-[80vh]">
           <div className="flex flex-col items-center  md:flex-row justify-between gap-4 mt-5">
             <div className="flex flex-col text-white md:flex-row justify-center items-center">
-              <p className="font-bold text-xl md:text-2xl">{campaign?.name}</p>
+              <p className="font-bold text-xl md:text-2xl">
+                {toUpOne(campaign?.name)}
+              </p>
 
               <Badge
                 variant={
