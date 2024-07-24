@@ -94,7 +94,16 @@ export default class CampaignUrlResolver {
       throw new Error("You can't perform this action");
     }
     // ------------------------ END VERIFICATION -----------------------
+    if (ctx.user && ctx.user.isPremium === false) {
+      const count =
+        await this.campaignUrlService.countUrlByCampaignId(campaignId);
 
+      if (count >= 5) {
+        throw new Error(
+          "You have reached the URL limit on this campaign. Unlock Premium to add as many URLs as you want"
+        );
+      }
+    }
     // on enleve "/" a la fin de l'url si present
     const newUrl = infos.url.replace(/\/$/, "");
 

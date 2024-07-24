@@ -1,5 +1,6 @@
 import { FormEvent } from "react";
 import { ChangePassword } from "./ChangePassword";
+import { PremiumModal } from "../premium/PremiumModal";
 import { ConfirmationModal } from "../ConfirmationModal";
 import { useToast } from "@/components/ui/use-toast";
 import { useRouter } from "next/router";
@@ -96,9 +97,9 @@ export default function Account({ data }: SettingsProps) {
             disabled
           />
         </div>
-        <Separator decorative={true} className="my-8" />
+        <Separator decorative={true} className="my-4" />
         <form onSubmit={handleSubmit} className="grid gap-2">
-          <div className="space-y-1">
+          <div className="">
             <Label htmlFor="email">Username</Label>
             <Input
               id="username"
@@ -117,7 +118,7 @@ export default function Account({ data }: SettingsProps) {
                 username.trim().length >= 20 ||
                 username === initialUsername
               }
-              className="mt-6"
+              className="mt-2 mb-4"
             >
               {fakeLoading === true && (
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -127,10 +128,13 @@ export default function Account({ data }: SettingsProps) {
           </div>
         </form>
         <div className="flex flex-col items-center">
-          <p className="mt-12 font-semibold mb-2">Password</p>
+          <p className="mt-6 font-semibold mb-2">Premium</p>
+          <PremiumModal currentPremium={data.isPremium} />
+
+          <p className=" font-semibold mb-2">Password</p>
           <ChangePassword />
 
-          <p className="mb-2 font-semibold">Delete account</p>
+          <p className="mb-2 mt-0 font-semibold">Delete account</p>
           <ConfirmationModal
             isLargeButton={true}
             forDelete={true}

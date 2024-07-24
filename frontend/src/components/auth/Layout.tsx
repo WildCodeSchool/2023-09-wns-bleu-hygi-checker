@@ -26,12 +26,9 @@ export default function LayoutLogin({ children, title }: LayoutProps) {
             </div>
           </Link>
         </div>
-        <Link
-          href="/"
-          className="md:flex hidden justify-center items-center bg-primary"
-        >
+        <div className="md:flex hidden justify-center items-center bg-primary">
           <Image src="/logo_large.svg" width={350} height={0} alt="logo" />
-        </Link>
+        </div>
         {children}
       </div>
       <Toaster />

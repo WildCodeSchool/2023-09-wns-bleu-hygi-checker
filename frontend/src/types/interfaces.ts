@@ -90,3 +90,9 @@ export interface InputData {
     id: number;
   };
 }
+
+export interface ActivatePremiumModalProps {
+  premiumCode: string;
+  openForm: boolean;
+  setOpenForm: Dispatch<SetStateAction<boolean>>;
+}

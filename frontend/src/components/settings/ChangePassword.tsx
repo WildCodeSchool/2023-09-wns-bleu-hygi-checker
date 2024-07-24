@@ -111,7 +111,7 @@ export function ChangePassword() {
   return (
     <Dialog open={openForm} onOpenChange={handleCloseForm}>
       <DialogTrigger asChild>
-        <Button className="w-1/2 mb-12">
+        <Button className="w-1/2 mb-4">
           <KeyRound className="mr-2 h-4 w-4" />
           Change password
         </Button>

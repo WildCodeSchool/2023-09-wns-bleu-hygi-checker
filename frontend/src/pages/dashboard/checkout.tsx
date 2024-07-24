@@ -3,31 +3,47 @@
 import Layout from "@/components/dashboard/Layout";
 import { useState } from "react";
 import Image from "next/image";
-import { useGetUserProfileQuery } from "@/types/graphql";
+import { useGetUserProfileQuery, useAddCodeMutation } from "@/types/graphql";
 import Loading from "@/components/Loading";
 import { countries } from "@/utils/countries";
 import { Loader2 } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
+import { ActivatePremiumModal } from "@/components/premium/ActivatePremiumModal";
 
 export default function Checkout() {
+  const { toast } = useToast();
   const [isMonthly, setIsMonthly] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
-  const { toast } = useToast();
+  const [openActivatePremium, setOpenActivatePremium] =
+    useState<boolean>(false);
+  const [preniumCodeReceived, setPreniumCodeReceived] = useState<string>("");
 
   const { data, loading } = useGetUserProfileQuery();
   const user = data?.getUserProfile;
 
+  const [addCodeMutation] = useAddCodeMutation({
+    onCompleted: (data) => {
+      setTimeout(() => {
+        setPreniumCodeReceived(data.addCode.code);
+        setIsLoading(false);
+        setOpenActivatePremium(true);
+        toast({
+          title: `Purchase Premium completed successfully`,
+          variant: "success",
+        });
+      }, 3000);
+    },
+    onError: () => {
+      toast({
+        title: `Something went wrong. Please try again`,
+        variant: "destructive",
+      });
+    },
+  });
+
   const orderPremium = () => {
     setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-
-      // router.push(`/dashboard/...`);
-      toast({
-        title: `Purchase Premium completed successfully`,
-        variant: "success",
-      });
-    }, 3000);
+    addCodeMutation();
   };
 
   return (
@@ -39,9 +55,16 @@ export default function Checkout() {
           User profile not found. Please login to continue
         </p>
       ) : (
-        <div className="flex justify-center items-center w-full h-full">
-          <div className="grid sm:px-10 lg:grid-cols-2 lg:px-20 xl:px-32">
-            <div className="px-4 pt-8 border-2 border-white rounded-md mr-4">
+        <div className="">
+          {openActivatePremium === true && preniumCodeReceived !== "" && (
+            <ActivatePremiumModal
+              premiumCode={preniumCodeReceived}
+              openForm={openActivatePremium}
+              setOpenForm={setOpenActivatePremium}
+            />
+          )}
+          <div className="grid lg:grid-cols-2 lg:px-20 xl:px-32 mt-4">
+            <div className="px-4 pt-8 pb-8 sm:pb-0 border-2 border-white rounded-md mr-4">
               <p className="text-xl font-medium text-white">Order Summary</p>
               <div className="mt-8 space-y-3 rounded-lg border bg-white px-2 py-4 sm:px-6">
                 <div className="flex flex-col rounded-lg bg-white sm:flex-row">
@@ -60,7 +83,7 @@ export default function Checkout() {
                       {isMonthly === true ? "Monthly" : "Annual"} billing
                     </span>
                     <p className="text-lg font-bold">
-                      ${isMonthly === true ? "9.99" : "99.99"}
+                      {isMonthly === true ? "9.99" : "99.99"}€
                     </p>
                   </div>
                 </div>
@@ -285,7 +308,7 @@ export default function Checkout() {
                       Subtotal
                     </p>
                     <p className="font-semibold text-gray-900">
-                      ${isMonthly === true ? "9.99" : "119.99"}
+                      {isMonthly === true ? "9.99" : "119.99"}€
                     </p>
                   </div>
                   <div className="flex items-center justify-between">
@@ -298,7 +321,7 @@ export default function Checkout() {
                 <div className="mt-6 flex items-center justify-between">
                   <p className="text-sm font-medium text-gray-900">Total</p>
                   <p className="text-2xl font-semibold text-gray-900">
-                    {isMonthly === true ? "9.99" : "99.99"}
+                    {isMonthly === true ? "9.99" : "99.99"}€
                   </p>
                 </div>
               </div>
