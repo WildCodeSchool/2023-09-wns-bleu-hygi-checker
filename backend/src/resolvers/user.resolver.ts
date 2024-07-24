@@ -17,6 +17,8 @@ import User, {
 import UserService from "../services/user.service";
 import { AVATAR } from "../types";
 
+import nodemailer from "nodemailer";
+
 @Resolver()
 export default class UserResolver {
   @Query(() => [User])
@@ -234,5 +236,35 @@ export default class UserResolver {
     }
     const newRole = await new UserService().upgradeRoleToAdmin(user);
     return newRole;
+  }
+
+  @Mutation(() => Message)
+  async sendEmail(
+    @Arg("to") to: string,
+    @Arg("subject") subject: string,
+    @Arg("content") content: string
+  ): Promise<Message> {
+    const m = new Message();
+    try {
+      const transporter = nodemailer.createTransport({
+        host: "",
+        port: 1025,
+      });
+
+      const options = {
+        from: "hygichecker@gmail.com",
+        to,
+        subject,
+        text: content,
+      };
+      await transporter.sendMail(options);
+      m.message = "Succes";
+      m.success = true;
+    } catch (err) {
+      console.error("Failed to send email:", err);
+      m.message = "Erreur";
+      m.success = false;
+    }
+    return m;
   }
 }
