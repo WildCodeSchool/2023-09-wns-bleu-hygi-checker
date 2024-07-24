@@ -110,7 +110,6 @@ export default function Account({ data }: SettingsProps) {
               onChange={(e) => setUsername(e.target.value)}
             />
           </div>
-          {/* {username !== initialUsername && ( */}
           <div className="flex justify-center">
             <Button
               disabled={
@@ -126,7 +125,6 @@ export default function Account({ data }: SettingsProps) {
               {fakeLoading === true ? "Please wait" : "Change username"}
             </Button>
           </div>
-          {/* )} */}
         </form>
         <div className="flex flex-col items-center">
           <p className="mt-12 font-semibold mb-2">Password</p>

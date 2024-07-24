@@ -72,9 +72,9 @@ export default class UserService {
     return await this.db.delete(user.id);
   }
 
-  async upgradeRoleToAdmin(user: User) {
-    const editedUser = this.db.create({ ...user });
-    editedUser.role = "ADMIN";
-    return await this.db.save(editedUser);
+  async upgradeToPremium(user: User) {
+    const editedUserPremium = this.db.create({ ...user });
+    editedUserPremium.isPremium = true;
+    return await this.db.save(editedUserPremium);
   }
 }

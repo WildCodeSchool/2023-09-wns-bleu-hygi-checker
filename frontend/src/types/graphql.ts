@@ -237,13 +237,13 @@ export type NewUserAvatar = {
 export type Query = {
   __typename?: "Query";
   activeCampaigns: Array<Campaign>;
+  allResponsesOfOneUrl: Array<Response>;
   campaignById?: Maybe<Campaign>;
   campaigns: Array<Campaign>;
   campaignsByUserId: Array<Campaign>;
   checkUrl: CheckUrl;
   countResponsesByCampaignUrlId: CountResponses;
   countUrlFromCampaign: CountResult;
-  getAvatar: User;
   getUrlFromCampaign: Array<CampaignUrl>;
   getUserProfile: UserProfile;
   lastDayResponsesOfOneUrl: Array<Response>;
@@ -258,6 +258,10 @@ export type Query = {
   url?: Maybe<Url>;
   urls: Array<Url>;
   users: Array<User>;
+};
+
+export type QueryAllResponsesOfOneUrlArgs = {
+  campaignUrlId: Scalars["Int"]["input"];
 };
 
 export type QueryCampaignByIdArgs = {
@@ -534,6 +538,18 @@ export type UpdateProfileMutation = {
   };
 };
 
+export type AllResponsesOfOneUrlQueryVariables = Exact<{
+  campaignUrlId: Scalars["Int"]["input"];
+}>;
+
+export type AllResponsesOfOneUrlQuery = {
+  __typename?: "Query";
+  allResponsesOfOneUrl: Array<{
+    __typename?: "Response";
+    statusCode?: number | null;
+  }>;
+};
+
 export type LoginQueryVariables = Exact<{
   infos: InputLogin;
 }>;
@@ -584,13 +600,6 @@ export type CountUrlFromCampaignQueryVariables = Exact<{
 export type CountUrlFromCampaignQuery = {
   __typename?: "Query";
   countUrlFromCampaign: { __typename?: "CountResult"; count: number };
-};
-
-export type GetAvatarQueryVariables = Exact<{ [key: string]: never }>;
-
-export type GetAvatarQuery = {
-  __typename?: "Query";
-  getAvatar: { __typename?: "User"; avatar: string };
 };
 
 export type CampaignByIdQueryVariables = Exact<{
@@ -1434,6 +1443,79 @@ export type UpdateProfileMutationOptions = Apollo.BaseMutationOptions<
   UpdateProfileMutation,
   UpdateProfileMutationVariables
 >;
+export const AllResponsesOfOneUrlDocument = gql`
+  query AllResponsesOfOneUrl($campaignUrlId: Int!) {
+    allResponsesOfOneUrl(campaignUrlId: $campaignUrlId) {
+      statusCode
+    }
+  }
+`;
+
+/**
+ * __useAllResponsesOfOneUrlQuery__
+ *
+ * To run a query within a React component, call `useAllResponsesOfOneUrlQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAllResponsesOfOneUrlQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAllResponsesOfOneUrlQuery({
+ *   variables: {
+ *      campaignUrlId: // value for 'campaignUrlId'
+ *   },
+ * });
+ */
+export function useAllResponsesOfOneUrlQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    AllResponsesOfOneUrlQuery,
+    AllResponsesOfOneUrlQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    AllResponsesOfOneUrlQuery,
+    AllResponsesOfOneUrlQueryVariables
+  >(AllResponsesOfOneUrlDocument, options);
+}
+export function useAllResponsesOfOneUrlLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    AllResponsesOfOneUrlQuery,
+    AllResponsesOfOneUrlQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    AllResponsesOfOneUrlQuery,
+    AllResponsesOfOneUrlQueryVariables
+  >(AllResponsesOfOneUrlDocument, options);
+}
+export function useAllResponsesOfOneUrlSuspenseQuery(
+  baseOptions?: Apollo.SuspenseQueryHookOptions<
+    AllResponsesOfOneUrlQuery,
+    AllResponsesOfOneUrlQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSuspenseQuery<
+    AllResponsesOfOneUrlQuery,
+    AllResponsesOfOneUrlQueryVariables
+  >(AllResponsesOfOneUrlDocument, options);
+}
+export type AllResponsesOfOneUrlQueryHookResult = ReturnType<
+  typeof useAllResponsesOfOneUrlQuery
+>;
+export type AllResponsesOfOneUrlLazyQueryHookResult = ReturnType<
+  typeof useAllResponsesOfOneUrlLazyQuery
+>;
+export type AllResponsesOfOneUrlSuspenseQueryHookResult = ReturnType<
+  typeof useAllResponsesOfOneUrlSuspenseQuery
+>;
+export type AllResponsesOfOneUrlQueryResult = Apollo.QueryResult<
+  AllResponsesOfOneUrlQuery,
+  AllResponsesOfOneUrlQueryVariables
+>;
 export const LoginDocument = gql`
   query Login($infos: InputLogin!) {
     login(infos: $infos) {
@@ -1774,73 +1856,6 @@ export type CountUrlFromCampaignSuspenseQueryHookResult = ReturnType<
 export type CountUrlFromCampaignQueryResult = Apollo.QueryResult<
   CountUrlFromCampaignQuery,
   CountUrlFromCampaignQueryVariables
->;
-export const GetAvatarDocument = gql`
-  query GetAvatar {
-    getAvatar {
-      avatar
-    }
-  }
-`;
-
-/**
- * __useGetAvatarQuery__
- *
- * To run a query within a React component, call `useGetAvatarQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetAvatarQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetAvatarQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetAvatarQuery(
-  baseOptions?: Apollo.QueryHookOptions<GetAvatarQuery, GetAvatarQueryVariables>
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useQuery<GetAvatarQuery, GetAvatarQueryVariables>(
-    GetAvatarDocument,
-    options
-  );
-}
-export function useGetAvatarLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    GetAvatarQuery,
-    GetAvatarQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useLazyQuery<GetAvatarQuery, GetAvatarQueryVariables>(
-    GetAvatarDocument,
-    options
-  );
-}
-export function useGetAvatarSuspenseQuery(
-  baseOptions?: Apollo.SuspenseQueryHookOptions<
-    GetAvatarQuery,
-    GetAvatarQueryVariables
-  >
-) {
-  const options = { ...defaultOptions, ...baseOptions };
-  return Apollo.useSuspenseQuery<GetAvatarQuery, GetAvatarQueryVariables>(
-    GetAvatarDocument,
-    options
-  );
-}
-export type GetAvatarQueryHookResult = ReturnType<typeof useGetAvatarQuery>;
-export type GetAvatarLazyQueryHookResult = ReturnType<
-  typeof useGetAvatarLazyQuery
->;
-export type GetAvatarSuspenseQueryHookResult = ReturnType<
-  typeof useGetAvatarSuspenseQuery
->;
-export type GetAvatarQueryResult = Apollo.QueryResult<
-  GetAvatarQuery,
-  GetAvatarQueryVariables
 >;
 export const CampaignByIdDocument = gql`
   query CampaignById($campaignId: Int!) {

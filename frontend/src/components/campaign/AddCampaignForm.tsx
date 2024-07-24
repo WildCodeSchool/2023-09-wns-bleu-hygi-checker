@@ -39,7 +39,12 @@ const formSchema = z.object({
     message: "Name must be at least 2 characters.",
   }),
 });
-export function AddCampaignForm() {
+
+interface AddCampaignFormProps {
+  callToAction: boolean;
+}
+
+export function AddCampaignForm({ callToAction }: AddCampaignFormProps) {
   const { toast } = useToast();
   const router = useRouter();
 
@@ -62,9 +67,10 @@ export function AddCampaignForm() {
         refetch();
       }, 1000);
     },
-    onError: () => {
+    onError: (err) => {
       toast({
-        title: `Something went wrong. Please try again`,
+        title: err.name,
+        description: err.message,
         variant: "destructive",
       });
     },
@@ -106,10 +112,22 @@ export function AddCampaignForm() {
   return (
     <Dialog open={openForm} onOpenChange={handleCloseForm}>
       <DialogTrigger asChild>
-        <Button className="bg-blue-500 text-white mx-4" variant={"edit"}>
-          <Plus className="md:mr-2 h-4 w-4" />
-          <span className="hidden md:block">Create new campaign</span>
-        </Button>
+        {callToAction === true ? (
+          <Button
+            className="bg-blue-500 text-white mx-4 mt-12 px-8 py-8 md:px-12 md:py-12"
+            variant={"edit"}
+          >
+            <Plus className="mr-4 h-8 w-8 md:mr-4 md:h-12 md:w-12" />
+            <span className="text-lg md:block md:text-2xl">
+              Create your first campaign
+            </span>
+          </Button>
+        ) : (
+          <Button className="bg-blue-500 text-white mx-4" variant={"edit"}>
+            <Plus className="md:mr-2 h-4 w-4" />
+            <span className="hidden md:block">Create new campaign</span>
+          </Button>
+        )}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
