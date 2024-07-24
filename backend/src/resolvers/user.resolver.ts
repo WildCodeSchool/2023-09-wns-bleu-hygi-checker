@@ -233,8 +233,13 @@ export default class UserResolver {
     const m = new Message();
     try {
       const transporter = nodemailer.createTransport({
-        host: process.env.NODEMAILER,
-        port: 1025,
+        host: "smtp.gmail.com", // Nom du serveur SMTP de Gmail
+        port: 587, // Port pour STARTTLS
+        secure: false, // false pour STARTTLS sur le port 587
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
       });
 
       const options = {
