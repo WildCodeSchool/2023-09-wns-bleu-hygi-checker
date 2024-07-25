@@ -50,7 +50,7 @@ const LineChart = ({ chartData }: LineChartProps) => (
   <ResponsiveLine
     data={chartData}
     // animate={false} // uncomment to resolve the following problem :"react-spring_web.modern.mjs:58 Error: <g> attribute transform"
-    margin={{ top: 20, right: 15, bottom: 40, left: 50 }}
+    margin={{ top: 20, right: 30, bottom: 40, left: 70 }}
     colors={{ datum: "color" }}
     xScale={{ type: "point" }}
     yScale={{
@@ -77,7 +77,7 @@ const LineChart = ({ chartData }: LineChartProps) => (
       tickPadding: 5,
       tickRotation: 0,
       legend: "Response time (ms)",
-      legendOffset: -40,
+      legendOffset: -60,
       legendPosition: "middle",
       truncateTickAt: 0,
     }}

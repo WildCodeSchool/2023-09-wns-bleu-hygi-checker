@@ -353,16 +353,21 @@ export default function DesktopLayout({
               </div>
             )}
             <div className="flex flex-col justify-center items-center">
-              {pieData !== null && pieData !== undefined && (
-                <div className="w-full h-[300px] bg-slate-200 rounded-md">
-                  <PieChart chartData={pieData} />
-                </div>
-              )}
-              {lineData !== null && lineData !== undefined && (
-                <div className="w-full h-[300px] p-4 bg-slate-200 my-4 rounded-md">
-                  <LineChart chartData={lineData} />
-                </div>
-              )}
+              {pieData !== null &&
+                pieData !== undefined &&
+                lastResponses &&
+                ResponseStatusOfThisUrl && (
+                  <div className="w-full h-[300px] bg-slate-200 rounded-md">
+                    <PieChart chartData={pieData} />
+                  </div>
+                )}
+              {lineData !== null &&
+                lineData !== undefined &&
+                lineData.length > 0 && (
+                  <div className="w-full h-[300px] p-4 bg-slate-200 my-4 rounded-md">
+                    <LineChart chartData={lineData} />
+                  </div>
+                )}
               {selectedUrlId !== null &&
                 selectedUrlId !== undefined &&
                 selectedUrlId !== 0 && (

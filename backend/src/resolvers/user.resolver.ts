@@ -166,13 +166,15 @@ export default class UserResolver {
   }
   @Query(() => Message)
   async login(@Arg("infos") infos: InputLogin, @Ctx() ctx: MyContext) {
+    const m = new Message();
     const user = await new UserService().findUserByEmail(infos.email);
     if (!user) {
-      throw new Error("Error, please try again");
+      m.message = "Email or password is not valid";
+      m.success = false;
+      return m;
     }
 
     const isPasswordValid = await argon2.verify(user.password, infos.password);
-    const m = new Message();
     if (isPasswordValid) {
       const token = await new SignJWT({ email: user.email })
         .setProtectedHeader({ alg: "HS256", typ: "jwt" })
@@ -182,7 +184,7 @@ export default class UserResolver {
       const cookies = new Cookies(ctx.req, ctx.res);
       cookies.set("token", token, { httpOnly: true });
 
-      m.message = "Welcome";
+      m.message = `Welcome ${user.username}`;
       m.success = true;
     } else {
       m.message = "Check your informations !";

@@ -1,24 +1,26 @@
-import { Arg, Int, Mutation, Ctx, Query, Resolver } from "type-graphql";
+import { Arg, Ctx, Int, Mutation, Query, Resolver } from "type-graphql";
+import { MyContext } from "..";
 import Campaign, {
   InputCreateCampaign,
   InputEditCampaign,
-  InputEditCampaignImage,
   InputSwitchWorkingCampaign,
 } from "../entities/campaign.entity";
-import CampaignService from "../services/campaign.service";
-import { MyContext } from "..";
-import UserService from "../services/user.service";
 import { Message } from "../entities/user.entity";
+import CampaignService from "../services/campaign.service";
+import { CampaignManagerService } from "../services/campaingManager.service";
+import UserService from "../services/user.service";
 import AccessCheckResolver from "./accessCheck.resolver";
 
 @Resolver()
 export default class CampaignResolver {
   private campaignService: CampaignService;
   private accessChecker: AccessCheckResolver;
+  private campaignManagerService: CampaignManagerService;
 
   constructor() {
     this.campaignService = new CampaignService();
     this.accessChecker = new AccessCheckResolver();
+    this.campaignManagerService = new CampaignManagerService();
   }
 
   //@Authorized(["ADMIN"]) TODO : Uncomment this for final production => no one could see all campaigns in the db (or maybe just admin)
@@ -74,17 +76,14 @@ export default class CampaignResolver {
       if (!user) {
         throw new Error("Error, please try again");
       }
-      if (user.isPremium === false) {
-        const validation =
-          await this.accessChecker.premiumCheckCreateCampaign(user);
-
-        if (validation !== true) {
-          throw new Error(
-            "You have reached the limit of campaigns created. Unlock Premium to create new campaigns"
-          );
-        }
+      const newCampaign = await this.campaignService.createCampaign(
+        input,
+        user
+      );
+      if (newCampaign) {
+        this.campaignManagerService.initializeCampaign(newCampaign);
       }
-      return await this.campaignService.createCampaign(input, user);
+      return newCampaign;
     } else {
       throw new Error("You must be authenticated to perform this action");
     }
@@ -95,7 +94,6 @@ export default class CampaignResolver {
     @Ctx() ctx: MyContext,
     @Arg("campaignId") campaignId: number
   ) {
-    // ------------------------ START VERIFICATION -----------------------
     const validation = await this.accessChecker.verifyIfCampaignBelongToUser(
       ctx,
       campaignId
@@ -104,8 +102,8 @@ export default class CampaignResolver {
     if (validation !== true) {
       throw new Error("You can't perform this action");
     }
-    // ------------------------ END VERIFICATION -----------------------
     await this.campaignService.deleteCampaign(campaignId);
+    this.campaignManagerService.removeCampaign(campaignId);
     const m = new Message();
     m.message = "Campaign deleted successfully";
     m.success = true;
@@ -117,8 +115,6 @@ export default class CampaignResolver {
     @Ctx() ctx: MyContext,
     @Arg("input") input: InputEditCampaign
   ) {
-    const m = new Message();
-    // ------------------------ START VERIFICATION -----------------------
     const validation = await this.accessChecker.verifyIfCampaignBelongToUser(
       ctx,
       input.id
@@ -127,42 +123,12 @@ export default class CampaignResolver {
     if (validation !== true) {
       throw new Error("You can't perform this action");
     }
-    // ------------------------ END VERIFICATION -----------------------
-    if (
-      ctx.user &&
-      ctx.user.isPremium === false &&
-      input.intervalTest &&
-      input.intervalTest < 60
-    ) {
-      m.message =
-        "You cannot put this interval on this campaign. Unlock Premium to have access to all intervals";
-      m.success = false;
-    } else {
-      await this.campaignService.updateCampaign(input);
-      m.message = "Campaign updated successfully";
-      m.success = true;
+    const updatedCampaign = await this.campaignService.updateCampaign(input);
+    if (updatedCampaign) {
+      this.campaignManagerService.updateCampaign(updatedCampaign);
     }
-    return m;
-  }
-
-  @Mutation(() => Message)
-  async modifyImageOfCampaign(
-    @Ctx() ctx: MyContext,
-    @Arg("input") input: InputEditCampaignImage
-  ) {
-    // ------------------------ START VERIFICATION -----------------------
-    const validation = await this.accessChecker.verifyIfCampaignBelongToUser(
-      ctx,
-      input.id
-    );
-
-    if (validation !== true) {
-      throw new Error("You can't perform this action");
-    }
-    // ------------------------ END VERIFICATION -----------------------
-    await this.campaignService.updateImageCampaign(input);
     const m = new Message();
-    m.message = "Image of this campaign updated successfully";
+    m.message = "Campaign updated successfully";
     m.success = true;
     return m;
   }
@@ -172,7 +138,6 @@ export default class CampaignResolver {
     @Ctx() ctx: MyContext,
     @Arg("input") input: InputSwitchWorkingCampaign
   ) {
-    // ------------------------ START VERIFICATION -----------------------
     const validation = await this.accessChecker.verifyIfCampaignBelongToUser(
       ctx,
       input.campaignId
@@ -181,13 +146,15 @@ export default class CampaignResolver {
     if (validation !== true) {
       throw new Error("You can't perform this action");
     }
-    // ------------------------ END VERIFICATION -----------------------
-    await this.campaignService.switchWorking(input);
+    const updatedCampaign = await this.campaignService.switchWorking(input);
+    if (updatedCampaign) {
+      this.campaignManagerService.updateCampaign(updatedCampaign);
+    }
     const m = new Message();
     m.message =
       input.isWorking === true
         ? "Campaign is now working ▶️"
-        : "Campaign has been stopped succesfully ⏸️";
+        : "Campaign has been stopped successfully ⏸️";
     m.success = true;
     return m;
   }
