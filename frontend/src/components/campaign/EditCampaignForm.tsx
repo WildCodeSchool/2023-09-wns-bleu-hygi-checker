@@ -6,18 +6,16 @@ import { z } from "zod";
 
 // import Image from "next/image";
 import { useToast } from "@/components/ui/use-toast";
-import { useEffect, useState } from "react";
 import {
   useCampaignByIdQuery,
-  useModifyCampaignMutation,
   useGetUserProfileQuery,
+  useModifyCampaignMutation,
 } from "@/types/graphql";
 import { EditCampaignFormProps } from "@/types/interfaces";
+import { useEffect, useState } from "react";
 import { ChangeImageForm } from "./ChangeImageForm";
 // ************ IMPORT UI COMPONENTS  *****************
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Input } from "@/components/ui/input";
 import {
   Dialog,
   DialogContent,
@@ -28,12 +26,13 @@ import {
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-  FormDescription,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -41,8 +40,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Loader2, Wrench, Crown } from "lucide-react";
-// ****************************************************
+import { Switch } from "@/components/ui/switch";
+import { Crown, Loader2, Wrench } from "lucide-react";
 
 // Define the form schema for validation
 const formSchema = z.object({
@@ -161,7 +160,7 @@ export function EditCampaignForm({ campaignId }: EditCampaignFormProps) {
   }
 
   const selectItemTimes = [
-    // { times: 30, value: 0.5, unite: "seconds", forPremium: true },
+    { times: 30, value: 0.5, unite: "seconds", forPremium: true },
     { times: 1, value: 1, unite: "minutes", forPremium: true },
     { times: 5, value: 5, unite: "minutes", forPremium: true },
     { times: 10, value: 10, unite: "minutes", forPremium: true },
