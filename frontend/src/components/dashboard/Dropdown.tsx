@@ -15,9 +15,9 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Select,
@@ -114,34 +114,30 @@ export default function Dropdown({ data, refetch }: DropdownProps) {
       </DropdownMenu>
       {openDeleteModal && (
         <Dialog open={openDeleteModal} onOpenChange={handleOpen}>
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className="max-w-[425px]">
             <DialogHeader>
               <DialogTitle>Delete this URL</DialogTitle>
-              <DialogDescription>are you sure ?</DialogDescription>
+              <DialogDescription>Are you sure ?</DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
-              <DialogTrigger asChild>
-                <Button variant="outline" type="submit">
-                  No
+              <DialogFooter>
+                <Button onClick={() => setOpenDeleteModal(false)}>No</Button>
+                <Button
+                  variant="destructive"
+                  disabled={loading}
+                  onClick={deleteURL}
+                >
+                  {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {loading ? "Please wait" : "Yes"}
                 </Button>
-              </DialogTrigger>
-              <Button
-                variant="destructive"
-                disabled={loading === true}
-                onClick={deleteURL}
-              >
-                {loading === true && (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                )}
-                {loading === true ? "Please wait" : "Yes"}
-              </Button>
+              </DialogFooter>
             </div>
           </DialogContent>
         </Dialog>
       )}
       {openDetailDropdown === true && (
         <Dialog open={openDetailDropdown} onOpenChange={setOpenDetailDropdown}>
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className="max-w-[425px]">
             <DialogHeader>
               <DialogTitle>URL responses detail</DialogTitle>
               <DialogDescription>

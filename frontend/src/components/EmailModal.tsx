@@ -91,7 +91,7 @@ export function EmailModal({
           {buttonText}
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] flex flex-col gap-6 rounded-lg">
+      <DialogContent className="max-w-[425px] flex flex-col gap-6 rounded-lg">
         <DialogHeader className="flex flex-col gap-4">
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{message}</DialogDescription>

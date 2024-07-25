@@ -155,7 +155,7 @@ export function AddUrlToCampaign({
 
   return (
     <Dialog open={showAddUrlModal} onOpenChange={handleCloseForm}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Add new URL</DialogTitle>
         </DialogHeader>

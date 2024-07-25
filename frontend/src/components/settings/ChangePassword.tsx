@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -117,7 +118,7 @@ export function ChangePassword() {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Change your password</DialogTitle>
         </DialogHeader>
@@ -162,13 +163,14 @@ export function ChangePassword() {
                 </FormItem>
               )}
             />
-
-            <Button disabled={loading === true}>
-              {loading === true && (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              )}
-              {loading === true ? "Please wait" : "Change password"}
-            </Button>
+            <DialogFooter>
+              <Button disabled={loading === true}>
+                {loading === true && (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                )}
+                {loading === true ? "Please wait" : "Change password"}
+              </Button>
+            </DialogFooter>
           </form>
         </Form>
       </DialogContent>
