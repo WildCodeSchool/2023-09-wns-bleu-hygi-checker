@@ -18,7 +18,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Loader2 } from "lucide-react";
-import Email from "@/emails/index";
+import Email from "@/emails/passwordForget";
 import { renderToStaticMarkup } from "react-dom/server";
 
 // ****************************************************
