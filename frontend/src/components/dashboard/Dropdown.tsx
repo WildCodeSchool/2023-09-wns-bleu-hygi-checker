@@ -2,7 +2,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import QuickUrlTest from "../check/QuickUrlTest";
 import UrlResponsesDetailChart from "../response/UrlResponsesDetailChart";
-import { Url } from "@/types/graphql";
+import { Url, useDeleteUrlFromCampaignMutation } from "@/types/graphql";
 // ************ IMPORT UI COMPONENTS  *****************
 import { Button } from "../ui/button";
 import {
@@ -15,9 +15,9 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import {
   Select,
@@ -31,6 +31,7 @@ import { ChevronDown, Trash, Loader2, ZoomIn } from "lucide-react";
 // ****************************************************
 
 interface DropdownProps {
+  refetch: () => void;
   data: {
     id: number;
     campaign: {
@@ -40,28 +41,47 @@ interface DropdownProps {
   };
 }
 
-export default function Dropdown({ data }: DropdownProps) {
+export default function Dropdown({ data, refetch }: DropdownProps) {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false); // to show the loader in the button
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
   const [openDetailDropdown, setOpenDetailDropdown] = useState(false);
   const [choice, setChoice] = useState("status");
 
-  const deleteURL = () => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      setOpenDeleteModal(false);
-      toast({
-        title: "This URL has been deleted",
-        variant: "success",
-      });
-    }, 1500);
-  };
-
   const handleOpen = () => {
     setOpenDeleteModal(!openDeleteModal);
   };
+
+  const deleteURL = () => {
+    setLoading(true);
+    deleteUrlMutation({
+      variables: {
+        infos: {
+          id: data.id,
+        },
+      },
+    });
+  };
+
+  const [deleteUrlMutation] = useDeleteUrlFromCampaignMutation({
+    onCompleted: (data) => {
+      setTimeout(() => {
+        setLoading(false);
+        setOpenDeleteModal(false);
+        refetch();
+        toast({
+          title: data.deleteUrlFromCampaign.message,
+          variant: "success",
+        });
+      }, 1500);
+    },
+    onError: (err) => {
+      toast({
+        title: err.message,
+        variant: "destructive",
+      });
+    },
+  });
 
   return (
     <>
@@ -94,34 +114,30 @@ export default function Dropdown({ data }: DropdownProps) {
       </DropdownMenu>
       {openDeleteModal && (
         <Dialog open={openDeleteModal} onOpenChange={handleOpen}>
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className="max-w-[425px]">
             <DialogHeader>
               <DialogTitle>Delete this URL</DialogTitle>
-              <DialogDescription>are you sure ?</DialogDescription>
+              <DialogDescription>Are you sure ?</DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
-              <DialogTrigger asChild>
-                <Button variant="outline" type="submit">
-                  No
+              <DialogFooter>
+                <Button onClick={() => setOpenDeleteModal(false)}>No</Button>
+                <Button
+                  variant="destructive"
+                  disabled={loading}
+                  onClick={deleteURL}
+                >
+                  {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {loading ? "Please wait" : "Yes"}
                 </Button>
-              </DialogTrigger>
-              <Button
-                variant="destructive"
-                disabled={loading === true}
-                onClick={deleteURL}
-              >
-                {loading === true && (
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                )}
-                {loading === true ? "Please wait" : "Yes"}
-              </Button>
+              </DialogFooter>
             </div>
           </DialogContent>
         </Dialog>
       )}
       {openDetailDropdown === true && (
         <Dialog open={openDetailDropdown} onOpenChange={setOpenDetailDropdown}>
-          <DialogContent className="sm:max-w-[425px]">
+          <DialogContent className="max-w-[425px]">
             <DialogHeader>
               <DialogTitle>URL responses detail</DialogTitle>
               <DialogDescription>

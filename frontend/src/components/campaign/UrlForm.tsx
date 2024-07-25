@@ -119,7 +119,7 @@ export function UrlForm({ campaignId }: AddUrlToCampaignProps) {
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Add new URL</DialogTitle>
         </DialogHeader>

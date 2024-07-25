@@ -130,7 +130,7 @@ export default function CampaignDetail() {
                 campaignData={campaign}
                 refetch={refetchUrl}
               />
-              <MobileLayout urls={urls} />
+              <MobileLayout urls={urls} refetch={refetchUrl} />
             </>
           )}
           {/* ********************************************** */}
