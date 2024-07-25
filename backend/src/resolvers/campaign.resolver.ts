@@ -7,7 +7,7 @@ import Campaign, {
 } from "../entities/campaign.entity";
 import { Message } from "../entities/user.entity";
 import CampaignService from "../services/campaign.service";
-import { CampaignManagerService } from "../services/campaignManager.service";
+import { CampaignManagerService } from "../services/campaingManager.service";
 import UserService from "../services/user.service";
 import AccessCheckResolver from "./accessCheck.resolver";
 
