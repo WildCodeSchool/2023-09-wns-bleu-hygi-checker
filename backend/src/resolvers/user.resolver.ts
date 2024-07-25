@@ -235,7 +235,7 @@ export default class UserResolver {
     const m = new Message();
     try {
       const transporter = nodemailer.createTransport({
-        host: "smtp.gmail.com",
+        host: "in-v3.mailjet.com",
         port: 587, // Port pour STARTTLS
         secure: false, // false pour STARTTLS sur le port 587
         auth: {

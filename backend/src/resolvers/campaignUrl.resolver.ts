@@ -1,24 +1,27 @@
 import { Arg, Ctx, Mutation, Query, Resolver } from "type-graphql";
+import { MyContext } from "..";
 import CampaignUrl, {
+  CountResult,
   InputAddUrlToCampaign,
   InputDeleteUrlToCampaign,
-  CountResult,
 } from "../entities/campaignUrl.entity";
-import CampaignUrlService from "../services/campaignUrl.service";
-import UrlService from "../services/url.service";
 import { Message } from "../entities/user.entity";
-import { MyContext } from "..";
+import CampaignUrlService from "../services/campaignUrl.service";
+import ResponseService from "../services/response.service";
+import UrlService from "../services/url.service";
 import AccessCheckResolver from "./accessCheck.resolver";
 
 @Resolver()
 export default class CampaignUrlResolver {
   private campaignUrlService: CampaignUrlService;
   private urlService: UrlService;
+  private responseService: ResponseService;
   private accessChecker: AccessCheckResolver;
 
   constructor() {
     this.campaignUrlService = new CampaignUrlService();
     this.urlService = new UrlService();
+    this.responseService = new ResponseService();
     this.accessChecker = new AccessCheckResolver();
   }
 
@@ -68,11 +71,31 @@ export default class CampaignUrlResolver {
     }
   }
 
-  /** ------------------------------------------------------------------------------------------------------------------
-   * addUrlToCampaign : Add an URL to a campaign belonging to the currently logged in user
-   * @param ctx Context with user infos
-   * @param infos Object containing the URL to add and the ID of the campaign to which you want to add the url
-   * @returns a message indicating whether the request was successful
+  /**
+   * Adds a URL to a specified campaign and performs an immediate health check.
+   *
+   * This mutation handles the process of adding a new URL to a campaign, including:
+   * 1. Validating user permissions
+   * 2. Check that the user is premium
+   * 3. Checking and sanitizing the URL format
+   * 4. Verifying if the URL already exists in the database
+   * 5. Adding the URL to the specified campaign
+   * 6. Performing an immediate health check on the URL
+   * 7. Recording the health check results in the database
+   *
+   * @param {MyContext} ctx - The context object containing user information for authorization
+   * @param {InputAddUrlToCampaign} infos - An object containing:
+   *   - url: The URL to be added to the campaign
+   *   - campaignId: The ID of the campaign to which the URL will be added
+   *
+   * @returns {Promise<Message>} A Message object containing:
+   *   - message: A string describing the result of the operation
+   *   - success: A boolean indicating whether the operation was successful
+   *
+   * @throws {Error} If the user doesn't have permission to modify the campaign
+   * @throws {Error} If the URL format is invalid
+   * @throws {Error} If the URL is already present in the specified campaign
+   *
    */
   @Mutation(() => Message)
   async addUrlToCampaign(
@@ -84,7 +107,7 @@ export default class CampaignUrlResolver {
     m.message = "There is a problem. Your URL can't be added";
     m.success = false;
 
-    // ------------------------ START VERIFICATION -----------------------
+    // Access verification
     const validation = await this.accessChecker.verifyIfCampaignBelongToUser(
       ctx,
       campaignId
@@ -93,7 +116,8 @@ export default class CampaignUrlResolver {
     if (validation !== true) {
       throw new Error("You can't perform this action");
     }
-    // ------------------------ END VERIFICATION -----------------------
+
+    // Premium verification
     if (ctx.user && ctx.user.isPremium === false) {
       const count =
         await this.campaignUrlService.countUrlByCampaignId(campaignId);
@@ -104,56 +128,64 @@ export default class CampaignUrlResolver {
         );
       }
     }
-    // on enleve "/" a la fin de l'url si present
+
+    // Clean URL
     const newUrl = infos.url.replace(/\/$/, "");
 
-    // Step 1 : Verify if the URL format is correct and check if a URL matching the one in the arguments exists in the URL table.
-    const isUrlFormatIsGood = await this.urlService.validateURL(newUrl);
+    // URL validation
+    const isUrlFormatIsGood = this.urlService.validateURL(newUrl);
     if (!isUrlFormatIsGood) {
-      throw new Error("URL do not match the required format");
+      throw new Error("URL does not match the required format");
     }
-    const existingUrl = await this.urlService.findIdByUrl(newUrl);
 
-    // Step 2 : If yes, retrieve its ID and check if the combination of the URL ID and the campaign ID already exists.
-    // => If yes, it means the user already has this URL in their campaign = END.
-    // => If no, insert this URL into the URL table and then return the ID.
-    if (existingUrl) {
+    let urlEntity = await this.urlService.findIdByUrl(newUrl);
+    let campaignUrl: CampaignUrl;
+
+    if (urlEntity) {
+      // URL already exists
       const alreadyInThisCampaign =
         await this.campaignUrlService.findIfUrlIsInCampaign(
-          existingUrl.id,
+          urlEntity.id,
           campaignId
         );
       if (alreadyInThisCampaign) {
         throw new Error("This URL is already in your campaign");
-      } else {
-        const addedUrlToCampaign =
-          await this.campaignUrlService.addUrlToCampaign(
-            existingUrl.id,
-            campaignId
-          );
-        if (addedUrlToCampaign) {
-          m.message = "Your URL has been added to your campaign successfully";
-          m.success = true;
-        }
       }
+      campaignUrl = await this.campaignUrlService.addUrlToCampaign(
+        urlEntity.id,
+        campaignId
+      );
+    } else {
+      // New URL
+      urlEntity = await this.urlService.createUrl(newUrl);
+      campaignUrl = await this.campaignUrlService.addUrlToCampaign(
+        urlEntity.id,
+        campaignId
+      );
     }
 
-    // Step 3 : Finally, if the URL was just added to the table or if the combination of the URL ID and the campaign ID does not already exist,
-    //this means the URL can be added.
-    if (!existingUrl) {
-      const createdUrl = await this.urlService.createUrl(newUrl);
-      if (createdUrl) {
-        const addedUrlToCampaign =
-          await this.campaignUrlService.addUrlToCampaign(
-            createdUrl.id,
-            campaignId
-          );
-        if (addedUrlToCampaign) {
-          m.message = "Your URL has been added to your campaign successfully";
-          m.success = true;
-        }
-      }
+    // Check URL and create Response
+    const checkResult = await this.urlService.checkURL(newUrl);
+    if (checkResult.status !== null && checkResult.responseTime !== null) {
+      await this.responseService.createResponse({
+        responseTime: checkResult.responseTime,
+        statusCode: checkResult.status,
+        statusText: checkResult.statusText || "",
+        campaignUrlId: campaignUrl.id,
+        campaignId: campaignId,
+      });
+      console.info(
+        `Check result saved for URL: ${newUrl}, Campaign: ${campaignId}, Status: ${checkResult.status}, Time: ${checkResult.responseTime}ms`
+      );
+    } else {
+      console.error(
+        `Check failed for URL: ${newUrl}, Campaign: ${campaignId}, Error: ${checkResult.error}`
+      );
     }
+
+    m.message =
+      "Your URL has been added to your campaign successfully and checked";
+    m.success = true;
 
     return m;
   }
