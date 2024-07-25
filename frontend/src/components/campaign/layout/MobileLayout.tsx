@@ -25,16 +25,16 @@ export type CampaignUrl = {
 
 interface MobileLayoutProps {
   urls: CampaignUrl[];
+  refetch: () => void;
 }
 
-function MobileLayout({ urls }: MobileLayoutProps) {
+function MobileLayout({ urls, refetch }: MobileLayoutProps) {
   return (
     <div className="w-full flex justify-center gap-4 mt-5 md:hidden">
       <Table className="w-full text-white">
-        <TableHeader className="bg-stone-500 text-white">
+        <TableHeader className="bg-stone-500 text-white w-full">
           <TableRow>
-            <TableHead className="w-[100px] text-white">Url</TableHead>
-            <TableHead className="text-white">Status</TableHead>
+            <TableHead className="text-white">Url</TableHead>
             <TableHead className="text-right text-white">Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -45,11 +45,9 @@ function MobileLayout({ urls }: MobileLayoutProps) {
               <TableCell className="font-medium">
                 {urlResponse.url.urlPath}
               </TableCell>
-              <TableCell>{}</TableCell>
+
               <TableCell className="text-right gap-4">
-                <div className="flex justify-end gap-4 md:hidden">
-                  <Dropdown data={urlResponse} />
-                </div>
+                <Dropdown data={urlResponse} refetch={refetch} />
               </TableCell>
             </TableRow>
           ))}
