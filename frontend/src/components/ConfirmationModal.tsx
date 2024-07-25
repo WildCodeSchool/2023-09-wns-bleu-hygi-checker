@@ -57,14 +57,18 @@ export function ConfirmationModal({
           </span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>{message}</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <DialogFooter>
-            <Button variant="default" type="submit">
+            <Button
+              variant="default"
+              type="submit"
+              onClick={() => setOpenForm(false)}
+            >
               {noText}
             </Button>
             <Button variant="destructive" disabled={loading} onClick={onSubmit}>

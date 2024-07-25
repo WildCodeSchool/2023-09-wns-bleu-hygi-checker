@@ -131,7 +131,7 @@ export function AddCampaignForm({ callToAction }: AddCampaignFormProps) {
           </Button>
         )}
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Create new campaign</DialogTitle>
         </DialogHeader>
