@@ -23,7 +23,7 @@ import {
 } from "@/types/graphql";
 import { LOGIN } from "@/requests/queries/auth.queries";
 import { CGUModal } from "../CGUModal";
-import { PasswordForget } from "./PasswordForget";
+// import { PasswordForget } from "./PasswordForget";
 
 export function Auth() {
   const router = useRouter();
@@ -218,7 +218,7 @@ export function Auth() {
                 Log in
               </Button>
             </form>
-            <PasswordForget />
+            {/* <PasswordForget /> */}
           </CardContent>
         </Card>
       </TabsContent>
